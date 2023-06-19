@@ -4,11 +4,7 @@ require_once "../modelos/Negocio.php";
 $cnegocio = new Negocio();
 $rsptan = $cnegocio->listar();
 $regn = $rsptan->fetch_object();
-if (empty($regn)) {
-  $nombrenegocio = 'Configurar datos de su Empresa';
-} else {
-  $nombrenegocio = $regn->nombre;
-};
+if (empty($regn)) { $nombrenegocio = 'Configurar datos de su Empresa'; } else { $nombrenegocio = $regn->nombre; };
 
 ?>
 
@@ -27,8 +23,7 @@ if (empty($regn)) {
   <link rel="stylesheet" href="../public/css/font-awesome.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="../public/css/AdminLTE.min.css">
-  <!-- AdminLTE Skins. Choose a skin from the css/skins
-         folder instead of downloading all of them to reduce the load. -->
+  <!-- AdminLTE Skins. Choose a skin from the css/skins folder instead of downloading all of them to reduce the load. -->
   <link rel="stylesheet" href="../public/css/_all-skins.min.css">
   <link rel="apple-touch-icon" href="../public/img/apple-touch-icon.png">
 
@@ -44,6 +39,9 @@ if (empty($regn)) {
 
   <!-- Switchery -->
   <link rel="stylesheet" href="../public/css/switchery.css">
+
+  <!-- My stylo -->
+  <link rel="stylesheet" href="../public/css/style_new.css">
 
   <script src="../public/js/switchery.js"></script>
 
