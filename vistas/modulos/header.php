@@ -4,7 +4,11 @@ require_once "../modelos/Negocio.php";
 $cnegocio = new Negocio();
 $rsptan = $cnegocio->listar();
 $regn = $rsptan->fetch_object();
-if (empty($regn)) { $nombrenegocio = 'Configurar datos de su Empresa'; } else { $nombrenegocio = $regn->nombre; };
+if (empty($regn)) {
+  $nombrenegocio = 'Configurar datos de su Empresa';
+} else {
+  $nombrenegocio = $regn->nombre;
+};
 
 ?>
 
@@ -23,7 +27,8 @@ if (empty($regn)) { $nombrenegocio = 'Configurar datos de su Empresa'; } else { 
   <link rel="stylesheet" href="../public/css/font-awesome.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="../public/css/AdminLTE.min.css">
-  <!-- AdminLTE Skins. Choose a skin from the css/skins folder instead of downloading all of them to reduce the load. -->
+  <!-- AdminLTE Skins. Choose a skin from the css/skins
+         folder instead of downloading all of them to reduce the load. -->
   <link rel="stylesheet" href="../public/css/_all-skins.min.css">
   <link rel="apple-touch-icon" href="../public/img/apple-touch-icon.png">
 
@@ -39,9 +44,6 @@ if (empty($regn)) { $nombrenegocio = 'Configurar datos de su Empresa'; } else { 
 
   <!-- Switchery -->
   <link rel="stylesheet" href="../public/css/switchery.css">
-
-  <!-- My stylo -->
-  <link rel="stylesheet" href="../public/css/style_new.css">
 
   <script src="../public/js/switchery.js"></script>
 
@@ -164,7 +166,7 @@ if (empty($regn)) { $nombrenegocio = 'Configurar datos de su Empresa'; } else { 
       <!-- sidebar: style can be found in sidebar.less -->
       <section class="sidebar">
         <!-- Sidebar user panel -->
-        <br>
+        <br><br>
         <div class="user-panel">
           <div class="pull-left image">
             <img src="../files/personal/<?php echo $_SESSION['imagen']; ?>" class="img-circle" alt="User Image">
@@ -174,7 +176,7 @@ if (empty($regn)) { $nombrenegocio = 'Configurar datos de su Empresa'; } else { 
             <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
           </div>
         </div>
-        <br>
+        <br><br>
 
         <!-- sidebar menu: : style can be found in sidebar.less -->
         <ul class="sidebar-menu">
@@ -217,7 +219,7 @@ if (empty($regn)) { $nombrenegocio = 'Configurar datos de su Empresa'; } else { 
                  <i class="fa fa-angle-left pull-right"></i>
               </a>
               <ul class="treeview-menu">
-                <li id="navOCompra"><a href="ordenCompra.php"><i class="fa fa-plus-circle"></i> Orden Compras</a></li>
+                <li id="navOCompra"><a href="devoluciones.php"><i class="fa fa-plus-circle"></i> Devoluciones</a></li>
                 <li id="navCompra"><a href="compra.php"><i class="fa fa-plus-circle"></i> Compras</a></li>
                 <li id="navProveedor"><a href="proveedor.php"><i class="fa fa-plus-circle"></i> Proveedores</a></li>
               </ul>

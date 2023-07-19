@@ -82,9 +82,14 @@ if (!isset($_SESSION["idpersonal"])) {
         <br>
         <ol class="breadcrumb">
 
-          <li><a href="inicio.php"><i class="fa fa-dashboard"></i> Inicio</a></li>
-
-          <li class="active">Panel de control</li>
+          <li><a href="venta.php"><i class="fa fa-shopping-cart"></i> Nueva Venta</a></li>
+          <li><a href="servicio.php"><i class="fa fa-save"></i> Servicios</a></li>
+          <li><a href="cajachica.php"><i class="fa fa-money"></i> Caja Chica</a></li>
+          <li><a href="ventasfechaproducto.php"><i class="fa fa-money"></i> Utilidades</a></li>
+          <li><a href="cuentasxcobrar.php"><i class="fa fa-money"></i> Cuentas por cobrar</a></li>
+          <li><a href="producto.php"><i class="fa fa-laptop"></i> Inventario</a></li>
+          <li><a href="cotizaciones.php"><i class="fa fa-save"></i> Cotizaciones</a></li>
+          <li><a href="compra.php"><i class="fa fa-money"></i> Compras</a></li>
 
         </ol>
       </section>

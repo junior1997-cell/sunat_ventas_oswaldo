@@ -45,7 +45,7 @@ if (!isset($_SESSION["nombre"])) {
               <!-- centro -->
               <div class="panel-body table-responsive" id="listadoregistros">
 
-                <div class="form-group col-lg-2 col-md-6 col-sm-6 col-xs-12">
+                <div class="form-group col-lg-3 col-md-6 col-sm-6 col-xs-12">
                   <label>Fecha Inicio</label>
                   <div class="input-group date">
                     <div class="input-group-addon">
@@ -55,7 +55,7 @@ if (!isset($_SESSION["nombre"])) {
                   </div>
                 </div>
 
-                <div class="form-group col-lg-2 col-md-6 col-sm-6 col-xs-12">
+                <div class="form-group col-lg-3 col-md-6 col-sm-6 col-xs-12">
                   <label>Fecha Fin</label>
                   <div class="input-group date">
                     <div class="input-group-addon">
@@ -74,7 +74,7 @@ if (!isset($_SESSION["nombre"])) {
                   </div>
                 </div>
 
-                <div class="col-lg-5 left">
+                <div class="col-lg-3 left">
                   <label id="lblSucursal2">Cliente:</label>
                   <div class="form-group has-success">
 

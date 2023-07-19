@@ -308,6 +308,31 @@ function listar()
             [5,10, 25, 50, 100, -1],
             ['5 filas','10 filas', '25 filas', '50 filas','100 filas', 'Mostrar todo']
         ],
+		initComplete: function () {
+			this.api()
+				.columns([0])
+				.every(function () {
+
+					// var r = $('#tblarticulos tfoot tr');
+					// r.find('th').each(function(){
+					// 	$(this).css('padding', 0);
+					// });
+					// $('#tblarticulos thead').append(r);
+					// $('#search_0').css('text-align', 'center');
+
+					var column = this;
+					var title = column.footer().textContent;
+	 
+					// Create input element and add event listener
+					$('<input type="text" placeholder="' + title + '" />')
+						.appendTo($(column.footer()).empty())
+						.on('keyup change clear', function () {
+							if (column.search() !== this.value) {
+								column.search(this.value).draw();
+							}
+						});
+				});
+		},
 		buttons: [
 			{
                 extend: 'pageLength',
@@ -343,7 +368,7 @@ function listar()
 					}
 				},
 		"bDestroy": true,
-		"iDisplayLength": 5,//Paginación
+		"iDisplayLength":10,//Paginación
 	    "order": [[ 1, "desc" ]]//Ordenar (columna,orden)
 	}).DataTable();
 }
@@ -390,8 +415,6 @@ function mostrarKardex(idproducto){
 
 			$("#codigoProducto").val(data.codigo);
 			$("#producto").val(data.nombre);
-			
-		});
 
 		tabla=$('#tbllistadoKardex').dataTable(
 			{
@@ -407,7 +430,30 @@ function mostrarKardex(idproducto){
 					[5,10, 25, 50, 100, -1],
 					['5 filas','10 filas', '25 filas', '50 filas','100 filas', 'Mostrar todo']
 				],
-				buttons: ['pageLength','copy','excel', 'pdf'],
+				buttons: [
+					{
+						extend: 'pageLength',
+						orientation: 'landscape',
+						pageSize: 'LEGAL'
+					},
+					{
+						extend: 'pdfHtml5',
+						orientation: 'landscape',
+						title: 'Kardex - ' + data.nombre,
+						pageSize: 'LEGAL'
+					},
+					{
+						extend: 'copy',
+						orientation: 'landscape',
+						pageSize: 'LEGAL'
+					},
+					{
+						extend: 'excel',
+						orientation: 'landscape',
+						title: 'Kardex - ' + data.nombre,
+						pageSize: 'LEGAL'
+					}
+				],
 				"ajax":
 						{
 							url: '../controladores/producto.php?op=listarKardex&idproducto='+idproducto,
@@ -418,8 +464,10 @@ function mostrarKardex(idproducto){
 							}
 						},
 				"bDestroy": true,
-				"iDisplayLength": 5,//Paginación
+				"iDisplayLength":10,//Paginación
 			}).DataTable();
+
+		});
 
 }
 

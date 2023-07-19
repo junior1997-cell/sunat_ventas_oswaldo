@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>TUCELL STORE ACCESORIOS | LOGIN</title>
+  <title>MATERIALES CUPISNIQUE S.A.C.</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <!-- Bootstrap 3.3.5 -->
@@ -28,11 +28,11 @@
   <div class="login-box">
     <div class="login-logo">
       <a>
-        <h2><b>TUCELL STORE ACCESORIOS</b></h2>
+        <h2><b>MATERIALES CUPISNIQUE S.A.C.</b></h2>
       </a>
     </div><!-- /.login-logo -->
     <div class="loginBox">
-      <p class="login-box-msg">Ingrese sus datos de Acceso</p>
+      <p class="login-box-msg">DATOS DE ACCESO</p>
       <form method="post" id="frmAcceso">
         <div class="form-group has-feedback">
           <input type="text" id="logina" name="logina" class="form-control" placeholder="Usuario">

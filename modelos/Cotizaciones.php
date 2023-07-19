@@ -13,10 +13,10 @@ public function __construct(){
 }
 
 //metodo insertar registro
-public function insertar($idsucursal,$idcliente,$idpersonal,$tipo_comprobante,$serie_comprobante,$num_comprobante,$fecha_hora,$total_venta,$titulo,$saludo,$nota,$formapago,$tiempoproduccion,$idproducto,$cantidad,$precio_venta,$descuento){
+public function insertar($idsucursal,$idcliente,$idpersonal,$tipo_comprobante,$serie_comprobante,$num_comprobante,$fecha_hora,$total_venta,$titulo,$saludo,$nota,$igv,$formapago,$tiempoproduccion,$idproducto,$cantidad,$precio_venta,$descuento){
 
-	$sql="INSERT INTO cotizacion (idsucursal,idcliente,idpersonal,tipo_comprobante,serie_comprobante,num_comprobante,fecha_hora,total_venta,titulo,saludo,nota,formapago,tiempo_pro,estado) VALUES 
-	('$idsucursal','$idcliente','$idpersonal','$tipo_comprobante','$serie_comprobante','$num_comprobante','$fecha_hora','$total_venta','$titulo','$saludo','$nota','$formapago','$tiempoproduccion','EN ESPERA')";
+	$sql="INSERT INTO cotizacion (idsucursal,idcliente,idpersonal,tipo_comprobante,serie_comprobante,num_comprobante,fecha_hora,total_venta,titulo,saludo,nota,igv,formapago,tiempo_pro,estado) VALUES 
+	('$idsucursal','$idcliente','$idpersonal','$tipo_comprobante','$serie_comprobante','$num_comprobante','$fecha_hora','$total_venta','$titulo','$saludo','$nota','$igv','$formapago','$tiempoproduccion','EN ESPERA')";
 
 	 $idventanew=ejecutarConsulta_retornarID($sql);
 	 $num_elementos=0;
@@ -34,9 +34,9 @@ public function insertar($idsucursal,$idcliente,$idpersonal,$tipo_comprobante,$s
 	 return $sw;
 }
 
-public function editar($idcotizacion,$idsucursal,$idcliente,$idpersonal,$tipo_comprobante,$serie_comprobante,$num_comprobante,$fecha_hora,$total_venta,$titulo,$saludo,$nota,$formapago,$tiempoproduccion,$idproducto,$cantidad,$precio_venta,$descuento){
+public function editar($idcotizacion,$idsucursal,$idcliente,$idpersonal,$tipo_comprobante,$serie_comprobante,$num_comprobante,$fecha_hora,$total_venta,$titulo,$saludo,$nota,$igv,$formapago,$tiempoproduccion,$idproducto,$cantidad,$precio_venta,$descuento){
 
-	$sql = "UPDATE cotizacion SET idsucursal='$idsucursal',idcliente='$idcliente', idpersonal='$idpersonal', tipo_comprobante='$tipo_comprobante', serie_comprobante='$serie_comprobante', num_comprobante='$num_comprobante',fecha_hora='$fecha_hora',total_venta='$total_venta',titulo='$titulo',nota='$nota',formapago='$formapago',tiempo_pro='$tiempoproduccion' WHERE idcotizacion='$idcotizacion'";
+	$sql = "UPDATE cotizacion SET idsucursal='$idsucursal',idcliente='$idcliente', idpersonal='$idpersonal', tipo_comprobante='$tipo_comprobante', serie_comprobante='$serie_comprobante', num_comprobante='$num_comprobante',fecha_hora='$fecha_hora',total_venta='$total_venta',titulo='$titulo',nota='$nota',igv='$igv',formapago='$formapago',tiempo_pro='$tiempoproduccion' WHERE idcotizacion='$idcotizacion'";
 
 	ejecutarConsulta($sql);
 
@@ -68,7 +68,7 @@ public function eliminar($idcotizacion)
 
 //implementar un metodopara mostrar los datos de unregistro a modificar
 public function mostrar($idcotizacion){
-	$sql="SELECT c.idcotizacion,DATE(c.fecha_hora) as fecha,c.idcliente,p.nombre as cliente,c.titulo,c.nota,u.idpersonal,u.nombre as personal,p.telefono,c.tipo_comprobante,c.serie_comprobante,c.num_comprobante,c.total_venta,c.formapago,c.tiempo_pro FROM cotizacion c INNER JOIN persona p ON c.idcliente=p.idpersona INNER JOIN personal u ON c.idPersonal=u.idpersonal WHERE idcotizacion='$idcotizacion'";
+	$sql="SELECT c.idcotizacion,DATE(c.fecha_hora) as fecha,c.idcliente,p.nombre as cliente,c.titulo,c.nota,c.igv,u.idpersonal,u.nombre as personal,p.telefono,c.tipo_comprobante,c.serie_comprobante,c.num_comprobante,c.total_venta,c.formapago,c.tiempo_pro FROM cotizacion c INNER JOIN persona p ON c.idcliente=p.idpersona INNER JOIN personal u ON c.idPersonal=u.idpersonal WHERE idcotizacion='$idcotizacion'";
 	return ejecutarConsultaSimpleFila($sql);
 }
 
@@ -92,16 +92,16 @@ public function listar($fecha_inicio,$fecha_fin,$idsucursal){
 
 	if($idsucursal == "Todos" || $idsucursal == ''){
 		
-		$sql="SELECT c.idcotizacion,date_format(c.fecha_hora,'%d/%m/%y') as fecha,c.idcliente,p.nombre as cliente,u.idpersonal,u.nombre 
-		as personal, c.tipo_comprobante,c.serie_comprobante,c.num_comprobante,c.total_venta,c.estado FROM cotizacion c 
+		$sql="SELECT c.idcotizacion,date_format(c.fecha_h,'%d/%m/%y | %H:%i:%s %p') as fecha,c.idcliente,p.nombre as cliente,u.idpersonal,u.nombre 
+		as personal, c.tipo_comprobante,c.serie_comprobante,c.num_comprobante,c.total_venta,c.titulo,c.estado FROM cotizacion c 
 		INNER JOIN persona p ON c.idcliente=p.idpersona INNER JOIN personal u ON c.idPersonal=u.idpersonal 
 		WHERE c.condicion = 1 AND DATE(c.fecha_hora)>='$fecha_inicio' AND DATE(c.fecha_hora)<='$fecha_fin'
 		ORDER BY c.idcotizacion DESC";
 
 	}else{
 
-		$sql="SELECT c.idcotizacion,date_format(c.fecha_hora,'%d/%m/%y') as fecha,c.idcliente,p.nombre as cliente,u.idpersonal,u.nombre 
-		as personal, c.tipo_comprobante,c.serie_comprobante,c.num_comprobante,c.total_venta,c.estado FROM cotizacion c 
+		$sql="SELECT c.idcotizacion,date_format(c.fecha_h,'%d/%m/%y | %H:%i:%s %p') as fecha,c.idcliente,p.nombre as cliente,u.idpersonal,u.nombre 
+		as personal, c.tipo_comprobante,c.serie_comprobante,c.num_comprobante,c.total_venta,c.titulo,c.estado FROM cotizacion c 
 		INNER JOIN persona p ON c.idcliente=p.idpersona INNER JOIN personal u ON c.idPersonal=u.idpersonal 
 		WHERE c.condicion = 1 AND DATE(c.fecha_hora)>='$fecha_inicio' AND DATE(c.fecha_hora)<='$fecha_fin' AND c.idsucursal = '$idsucursal'
 		ORDER BY c.idcotizacion DESC";
@@ -117,7 +117,7 @@ public function listar2(){
 	$sql="SELECT c.idcotizacion,DATE(c.fecha_hora) as fecha,c.idcliente,p.nombre as cliente,u.idpersonal,u.nombre 
 		as personal, c.tipo_comprobante,c.serie_comprobante,c.num_comprobante,c.total_venta FROM cotizacion c 
 		INNER JOIN persona p ON c.idcliente=p.idpersona INNER JOIN personal u ON c.idPersonal=u.idpersonal 
-		WHERE c.condicion = 1
+		WHERE c.condicion = 1 and c.estado = 'EN ESPERA'
 		ORDER BY c.idcotizacion DESC";
 
 	return ejecutarConsulta($sql);

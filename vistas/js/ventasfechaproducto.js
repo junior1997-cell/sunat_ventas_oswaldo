@@ -72,7 +72,7 @@ function listar()
                 return parseFloat(a) + parseFloat(b);
             }, 0 );
 
-        $(this.api().column(3).footer()).html("S/ " + total);
+        $(this.api().column(3).footer()).html("S/ " + total.toFixed(2));
 
         cantidad = this.api()
             .column(2)//numero de columna a sumar
@@ -91,7 +91,7 @@ function listar()
 				return parseFloat(a) + parseFloat(b);
 			}, 0 );
 
-        $(this.api().column(4).footer()).html("S/ " + totalCompra);
+        $(this.api().column(4).footer()).html("S/ " + totalCompra.toFixed(2));
 
 		utilidad = this.api()
 			.column(5)
@@ -102,11 +102,11 @@ function listar()
 
 			}, 0 );
 
-        $(this.api().column(5).footer()).html("S/ " + utilidad);
+        $(this.api().column(5).footer()).html("S/ " + utilidad.toFixed(2));
             
         },
 		"bDestroy": true,
-		"iDisplayLength": 5,//Paginación
+		"iDisplayLength":10,//Paginación
 	    "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
 	}).DataTable();
 	

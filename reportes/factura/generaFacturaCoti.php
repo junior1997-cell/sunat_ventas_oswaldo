@@ -28,7 +28,7 @@
 		}
 
 
-		$query = mysqli_query($conexion,"SELECT v.idcotizacion, v.idcliente, p.nombre AS cliente, v.titulo, v.nota, v.saludo, v.fecha_h, p.direccion, p.tipo_documento, p.num_documento, p.email, p.telefono, v.idpersonal, u.nombre AS personal, v.tipo_comprobante, v.serie_comprobante, v.num_comprobante, DATE(v.fecha_hora) AS fecha, v.total_venta, v.nota, v.formapago, v.tiempo_pro FROM cotizacion v INNER JOIN persona p ON v.idcliente=p.idpersona INNER JOIN personal u ON v.idpersonal=u.idpersonal WHERE v.idcotizacion='$idventa'");
+		$query = mysqli_query($conexion,"SELECT v.idcotizacion, v.idcliente, p.nombre AS cliente, v.titulo, v.nota, v.igv, v.saludo, date_format(v.fecha_h,'%d/%m/%y') as fecha_h, p.direccion, p.tipo_documento, p.num_documento, p.email, p.telefono, v.idpersonal, u.nombre AS personal, v.tipo_comprobante, v.serie_comprobante, v.num_comprobante, date_format(v.fecha_hora,'%d/%m/%y') as fecha, v.total_venta, v.nota, v.formapago, v.tiempo_pro FROM cotizacion v INNER JOIN persona p ON v.idcliente=p.idpersona INNER JOIN personal u ON v.idpersonal=u.idpersonal WHERE v.idcotizacion='$idventa'");
 
 		$result = mysqli_num_rows($query);
 		if($result > 0){
@@ -52,7 +52,7 @@
 			// Render the HTML as PDF
 			$dompdf->render();
 			// Output the generated PDF to Browser
-			$dompdf->stream('Cotización_'.$idventa.'.pdf',array('Attachment'=>0));
+			$dompdf->stream('Cotización_N°_'.$factura['serie_comprobante'].'-'.$factura['num_comprobante'].'.pdf',array('Attachment'=>0));
 			exit;
 		}
 	}

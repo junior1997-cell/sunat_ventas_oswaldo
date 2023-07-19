@@ -49,11 +49,11 @@ if (!isset($_SESSION["idpersonal"])) {
             </button>
             <a href="../reportes/rptproductos.php" target="_blank"><button class="btn btn-danger"><i class="fa fa-file"></i> Reporte</button></a>
 
-            <a data-toggle="modal" data-target="#traslados" target="_blank"><button class="btn btn-danger" style="float: right; margin-left: 5px;"><i class="fa fa-file"></i> Traslados</button></a>
+            <a data-toggle="modal" data-target="#traslados" target="_blank"><button class="btn btn-warning"><i class="fa fa-file"></i> Traslados</button></a>
 
-            <a data-toggle="modal" data-target="#desempaquetar" target="_blank"><button class="btn btn-success" style="float: right; margin-left: 5px;" onclick="llenarProductos()"><i class="fa fa-file"></i> Desempaquetar</button></a>
+            <a data-toggle="modal" data-target="#desempaquetar" target="_blank"><button class="btn btn-success" onclick="llenarProductos()"><i class="fa fa-file"></i> Desempaquetar</button></a>
 
-            <a href="../reportes/rptproductoscompra.php" target="_blank" style="float: right"><button class="btn btn-info"><i class="fa fa-file"></i> Inversión x Producto</button></a>
+            <a href="../reportes/rptproductoscompra.php" target="_blank" button class="btn btn-info"><i class="fa fa-file"></i> Inversión x Producto</button></a>
 
             <br><br>
 
@@ -63,42 +63,42 @@ if (!isset($_SESSION["idpersonal"])) {
               </select>
             </div>
 
-            <table id="tbllistado" class="table table-striped table-bordered table-condensed table-hover" width="100%">
-              <thead>
-                <th>Nombre</th>
-                <th style="width:10px">UM</th>
-                <th>Categoría</th>
-                <th>Almacén</th>
-                <th>Código</th>
-                <th style="width:10px">Fecha Vencimiento</th>
-                <th>Stock</th>
-                <th>P. Venta</th>
-                <th>P. Compra</th>
-                <th>Fecha Creación</th>
-                <th>Imagen</th>
-                <th>Estado</th>
-                <th>Acciones</th>
-              </thead>
-              <tbody>
-              </tbody>
-              <tfoot>
-                <th>Nombre</th>
-                <th style="width:10px">UM</th>
-                <th>Categoría</th>
-                <th>Almacén</th>
-                <th>Código</th>
-                <th style="width:10px">Fecha Vencimiento</th>
-                <th>Stock</th>
-                <th>P. Venta</th>
-                <th>P. Compra</th>
-                <th>Fecha Creación</th>
-                <th>Imagen</th>
-                <th>Estado</th>
-                <th>Acciones</th>
-              </tfoot>
-            </table>
+            <div class="col-lg-12 modal-body table-responsive">
+              <table id="tbllistado" class="table table-striped table-bordered table-condensed table-hover" width="100%">
+                <thead>
+                  <th>Nombre</th>
+                  <th style="width:10px">UM</th>
+                  <th>Categoría</th>
+                  <th>Almacén</th>
+                  <th>Código</th>
+                  <th>Stock</th>
+                  <th>P. Venta</th>
+                  <th>P. Compra</th>
+                  <th>Fecha Creación</th>
+                  <th>Imagen</th>
+                  <th>Estado</th>
+                  <th>Acciones</th>
+                </thead>
+                <tbody>
+                </tbody>
+                <tfoot>
+                  <th>Nombre</th>
+                  <th style="width:10px">UM</th>
+                  <th>Categoría</th>
+                  <th>Almacén</th>
+                  <th>Código</th>
+                  <th>Stock</th>
+                  <th>P. Venta</th>
+                  <th>P. Compra</th>
+                  <th>Fecha Creación</th>
+                  <th>Imagen</th>
+                  <th>Estado</th>
+                  <th>Acciones</th>
+                </tfoot>
+              </table>
+
+            </div>
           </div>
-        </div>
       </section>
 
     </div><!-- /.content-wrapper -->
@@ -107,7 +107,7 @@ if (!isset($_SESSION["idpersonal"])) {
     <!-- Modal -->
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog">
 
-      <div class="modal-dialog" style="width: 800px">
+      <div class="modal-dialog modal-lg">
 
         <div class="modal-content">
           <!-- form -->
@@ -154,7 +154,7 @@ if (!isset($_SESSION["idpersonal"])) {
 
                 <label for="name" class="col-sm-2 control-label">Stock:</label>
                 <div class="col-sm-4">
-                  <input type="number" class="form-control" name="stock" id="stock" readonly>
+                  <input type="number" class="form-control" name="stock" id="stock">
                 </div>
 
               </div>
@@ -196,13 +196,18 @@ if (!isset($_SESSION["idpersonal"])) {
               </div>
 
               <div class="form-group col-12">
-                <label for="name" class="col-sm-2 control-label">Precio de Venta (Sin IGV)</label>
+                <label for="name" class="col-sm-2 control-label">Precio de Venta</label>
                 <div class="col-sm-4">
                   <input type="number" step="any" class="form-control" name="precio" id="precio" onkeyup="calcularPrecioIGV();" required>
                 </div>
 
-                <label for="name" class="col-sm-2 control-label">Precio de Venta (Con IGV)</label>
+                <label for="name" class="col-sm-2 control-label">Precio de Compra:</label>
                 <div class="col-sm-4">
+                  <input type="number" step="any" class="form-control" name="precioCompra" id="precioCompra" required>
+                </div>
+
+                <label for="name" class="col-sm-2 control-label" hidden>Precio de Venta</label>
+                <div class="col-sm-4" hidden>
                   <input type="number" step="any" class="form-control" name="preciocigv" id="preciocigv" required>
                 </div>
 
@@ -210,25 +215,6 @@ if (!isset($_SESSION["idpersonal"])) {
                 <div class="col-sm-4">
                   <input type="number" step="any" class="form-control" name="precioCompra" id="precioCompra" required>
                 </div> -->
-
-              </div>
-
-              <div class="form-group col-12">
-
-                <label for="name" class="col-sm-2 control-label">Precio de Compra:</label>
-                <div class="col-sm-4">
-                  <input type="number" step="any" class="form-control" name="precioCompra" id="precioCompra" required>
-                </div>
-
-                <label for="name" class="col-sm-2 control-label">Tipo Igv:</label>
-                <div class="col-sm-4">
-                  <div class="input-group">
-                    <select id="tipoigv" name="tipoigv" class="form-control" data-live-search="true" required>
-                      <option value="Gravada">Gravada</option>
-                      <option value="No Gravada">No Gravada</option>
-                    </select>
-                  </div>
-                </div>
 
               </div>
 
@@ -251,7 +237,23 @@ if (!isset($_SESSION["idpersonal"])) {
 
               </div>
 
-              <div class="form-group col-6">
+              <div class="form-group col-12">
+
+                
+
+                <label for="name" class="col-sm-2 control-label">Tipo Igv:</label>
+                <div class="col-sm-4">
+                  <div class="input-group">
+                    <select id="tipoigv" name="tipoigv" class="form-control" data-live-search="true" required>
+                      <option value="Gravada">Gravada</option>
+                      <option value="No Gravada">No Gravada</option>
+                    </select>
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="form-group col-6" hidden>
 
                 <label for="name" class="col-sm-2 control-label">Fecha de Vencimiento:</label>
                 <div class="col-sm-4">
@@ -260,7 +262,7 @@ if (!isset($_SESSION["idpersonal"])) {
 
               </div>
 
-              <div class="form-group">
+              <div class="form-group COL-6">
                 <label for="name" class="col-sm-3 control-label">Sucursales:</label>
                 <div class="col-sm-6">
                   <ul style="list-style: none;" id="sucursales">
@@ -451,7 +453,7 @@ if (!isset($_SESSION["idpersonal"])) {
                   <th>Precio</th>
                   <th>Valor</th>
                   <th>Stock Actual</th>
-                  <th>Valor Existrencia</th>
+                  <th>Stock Valorizado</th>
                 </thead>
                 <tbody>
                 </tbody>
@@ -464,7 +466,7 @@ if (!isset($_SESSION["idpersonal"])) {
                   <th>Precio</th>
                   <th>Valor</th>
                   <th>Stock Actual</th>
-                  <th>Valor Existrencia</th>
+                  <th>Stock Valorizado</th>
                 </tfoot>
               </table>
             </div>

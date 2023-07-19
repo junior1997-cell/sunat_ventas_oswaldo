@@ -11,7 +11,7 @@ function init(){
 
 	$("#fecha_inicio").change(listar);
 	$("#fecha_fin").change(listar);
-	$("#estado").change(listar);
+	$("#idcliente").change(listar);
 
     $('#navCuentasPorCobrar').addClass("treeview active");
 
@@ -21,13 +21,24 @@ function init(){
 		$('#idsucursal2').selectpicker('refresh');
 	});
 
+	//Cargamos los items al select cliente
+	$.post("../controladores/venta.php?op=selectCliente2", function(r){
+		$("#idcliente").html(r);
+		$('#idcliente').selectpicker('refresh');
+	});
+
 }
 
 //Función limpiar
 function limpiar()
 {
 	$("#montoPagar").val("");
+	$("#op").val("");
 	$("#observacion").val("");
+	$("#banco").val("");
+	$("#banco").selectpicker("refresh");
+	$("#formapago").val("");
+	$("#formapago").selectpicker("refresh");
 }
 
 //Función Listar
@@ -36,7 +47,7 @@ function listar()
 
 	var fecha_inicio = $("#fecha_inicio").val();
 	var fecha_fin = $("#fecha_fin").val();
-	var estado = $("#estado").val();
+	var idcliente = $("#idcliente").val();
 	var idsucursal = $("#idsucursal2").val();
 
 	tabla=$('#tbllistadocuentasxcobrar').dataTable(
@@ -54,11 +65,33 @@ function listar()
             [5,10, 25, 50, 100, -1],
             ['5 filas','10 filas', '25 filas', '50 filas','100 filas', 'Mostrar todo']
         ],
-        buttons: ['pageLength','copy','excel', 'pdf'],
+        buttons: [
+			{
+                extend: 'pageLength',
+                orientation: 'landscape',
+                pageSize: 'LEGAL'
+            },
+            {
+                extend: 'pdfHtml5',
+                orientation: 'landscape',
+				title: 'Lista de documentos pendientes por cobrar',
+                pageSize: 'LEGAL'
+            },
+			{
+                extend: 'copy',
+                orientation: 'landscape',
+                pageSize: 'LEGAL'
+            },
+			{
+                extend: 'excel',
+                orientation: 'landscape',
+				title: 'Lista de documentos pendientes por cobrar',
+                pageSize: 'LEGAL'
+            }],
 		"ajax":
 				{
 					url: '../controladores/cuentascobrar.php?op=listar',
-					data:{fecha_inicio: fecha_inicio,fecha_fin: fecha_fin,estado: estado,idsucursal: idsucursal},
+					data:{fecha_inicio: fecha_inicio,fecha_fin: fecha_fin,idcliente: idcliente,idsucursal: idsucursal},
 					type : "get",
 					dataType : "json",						
 					error: function(e){
@@ -66,7 +99,7 @@ function listar()
 					}
 				},
 		"bDestroy": true,
-		"iDisplayLength": 5,//Paginación
+		"iDisplayLength":10,//Paginación
 	    "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
 	}).DataTable();
 }
@@ -170,7 +203,7 @@ function mostrarAbonos(idcpc){
 					}
 				},
 		"bDestroy": true,
-		"iDisplayLength": 5,//Paginación
+		"iDisplayLength":10,//Paginación
 	}).DataTable();
 
 }

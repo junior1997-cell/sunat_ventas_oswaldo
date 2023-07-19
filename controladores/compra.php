@@ -37,11 +37,11 @@ if (!isset($_SESSION["nombre"])) {
 		switch ($_GET["op"]) {
 			case 'guardaryeditar':
 				if (empty($idcompra)) {
-					$rspta = $compra->insertar($idsucursal, $idproveedor, $idpersonal, $tipo_c, $tipo_comprobante, $serie_comprobante, $num_comprobante, $fecha, $impuesto, $total_compra, $formapago, $lugar_entrega, $motivo_compra, $documento, $nota, $comprobanteReferencia, $_POST["idproducto"], $_POST["cantidad"], $_POST["precio_compra"], $_POST["precio_venta"]);
+					$rspta = $compra->insertar($idsucursal, $idproveedor, $idpersonal, $tipo_c, $tipo_comprobante, $serie_comprobante, $num_comprobante, $fecha, $impuesto, $total_compra, $formapago, $lugar_entrega, $motivo_compra, $documento, $nota, $comprobanteReferencia, $_POST["idproducto"], $_POST["nombreProducto"],$_POST["cantidad"], $_POST["precio_compra"], $_POST["precio_venta"]);
 					echo $rspta ? "Datos registrados correctamente" : "No se pudieron registrar todos los datos";
 				} else {
 
-					$rspta = $compra->editar($idcompra, $idsucursal, $idproveedor, $tipo_comprobante, $serie_comprobante, $num_comprobante, $fecha, $impuesto, $total_compra, $formapago, $lugar_entrega, $motivo_compra, $documento, $nota, $comprobanteReferencia, $_POST["idproducto"], $_POST["cantidad"], $_POST["precio_compra"], $_POST["precio_venta"], $tipo_c);
+					$rspta = $compra->editar($idcompra, $idsucursal, $idproveedor, $tipo_comprobante, $serie_comprobante, $num_comprobante, $fecha, $impuesto, $total_compra, $formapago, $lugar_entrega, $motivo_compra, $documento, $nota, $comprobanteReferencia, $_POST["idproducto"], $_POST["nombreProducto"],$_POST["cantidad"], $_POST["precio_compra"], $_POST["precio_venta"], $tipo_c);
 					echo $rspta ? "Datos actualizados correctamente" : "No se pudieron actualizar todos los datos";
 				}
 				break;
@@ -339,6 +339,7 @@ if (!isset($_SESSION["nombre"])) {
 						$estadoC = '<span class="badge bg-yellow">POR APROBACIÓN</span>';
 							$editar = '<button class="btn btn-danger btn-xs" onclick="mostrarE(' . $reg->idcompra . ')" data-toggle="tooltip" title="" target="blanck" data-original-title="ACTUALIZAR COMPRA"><i class="fa fa-pencil"></i></button>';
 							$aprobar = '<button class="btn btn-dark btn-xs" onclick="aprobar(' . $reg->idcompra . ')" data-toggle="tooltip" title="" target="blanck" data-original-title="APROBAR"><i class="fa fa-check"></i></button> ';
+							$eliminar = '<button class="btn btn-danger btn-xs" onclick="anular(' . $reg->idcompra . ')"><i class="fa fa-close"></i></button> ';
 
 					} else if ($reg->estadoC == 'APROBADO') {
 
@@ -346,9 +347,13 @@ if (!isset($_SESSION["nombre"])) {
 						if ($_SESSION["cargo"] == 'Administrador' || $_SESSION["cargo"] == 'administrador' || $_SESSION["cargo"] == 'admin' || $_SESSION["cargo"] == 'Admin' || $_SESSION["cargo"] == 'ADMINISTRADOR' || $_SESSION["cargo"] == 'ADMIN') {
 							$editar = '<button class="btn btn-danger btn-xs" onclick="mostrarE(' . $reg->idcompra . ')" data-toggle="tooltip" title="" target="blanck" data-original-title="ACTUALIZAR COMPRA"><i class="fa fa-pencil"></i></button>';
 						}
-					} else if ($reg->estadoC == 'VENDIDO') {
+						$eliminar = '<button class="btn btn-danger btn-xs" onclick="anular(' . $reg->idcompra . ')"><i class="fa fa-close"></i></button> ';
+					} else if ($reg->estadoC == 'COMPRADO') {
 
-						$estadoC = '<span class="badge bg-blue">VENDIDO</span>';
+						$estadoC = '<span class="badge bg-blue">COMPRADO</span>';
+						$editar = '';
+						$eliminar = '';
+						$aprobar = '';
 					} else {
 
 						$estadoC = '<span class="badge bg-red">ANULADO</span>';
@@ -358,17 +363,14 @@ if (!isset($_SESSION["nombre"])) {
 						"0" => $reg->fecha_kardex,
 						"1" => $reg->proveedor,
 						"2" => $reg->personal,
-						"3" => $reg->tipo_c,
+						"3" => 'Devolución',
 						"4" => $reg->serie_comprobante . '-' . $reg->num_comprobante,
 						"5" => $reg->total_compra,
-						"6" => $estadoC,
+						"6" => '<span class="badge bg-blue">REGISTRADO</span>',
 						"7" => (($reg->estado == 'REGISTRADO') ?
-							'<button class="btn btn-danger btn-xs" onclick="anular(' . $reg->idcompra . ')"><i class="fa fa-close"></i></button> ' .
-							$aprobar .
 							'<button class="btn btn-warning btn-xs" onclick="mostrar(' . $reg->idcompra . ')"><i class="fa fa-eye"></i></button> ' .
 							$editar :
-							'<button class="btn btn-warning btn-xs" onclick="mostrar(' . $reg->idcompra . ')"><i class="fa fa-eye"></i></button>') .
-							'<a target="_blank" href="../reportes/factura/generaFacturaOrdenCompra.php?id=' . $reg->idcompra . '"> <button class="btn btn-info btn-xs"><i class="fa fa-file"></i></button></a> '
+							'<button class="btn btn-warning btn-xs" onclick="mostrar(' . $reg->idcompra . ')"><i class="fa fa-eye"></i></button>')
 					);
 				}
 				$results = array(
@@ -429,7 +431,7 @@ if (!isset($_SESSION["nombre"])) {
 						"3" => $reg->codigo,
 						"4" => $reg->stock,
 						"5" => "<img src='../files/productos/" . $reg->imagen . "' height='50px' width='50px'>",
-						"6" => '<button class="btn btn-warning" onclick="agregarDetalle(' . $reg->idproducto . ',\'' . $reg->nombre . '\',\'' . $reg->precio . '\',\'' . $reg->precio_compra . '\',\'' . $reg->unidadmedida . '\')"><span class="fa fa-plus"></span></button>'
+						"6" => '<button class="btn btn-warning" onclick="agregarDetalle(' . $reg->idproducto . ',\'' . $reg->nombre . '\',\'' . $reg->precio . '\',\'' . $reg->precio_compra . '\',\'' . $reg->unidadmedida . '\',1)"><span class="fa fa-plus"></span></button>'
 
 					);
 				}

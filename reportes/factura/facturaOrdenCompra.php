@@ -31,7 +31,7 @@ $total 		= 0;
 						$iva = $configuracion['monto_impuesto'];
 					?>
 						<div>
-							<span><h3><strong><?php echo strtoupper($configuracion['nombre']); ?></strong></h3></span>
+							<span class="h2"><?php echo $configuracion['nombre']; ?></span>
 							<p>RUC <?php echo $configuracion['documento']; ?></p>
 							<p><?php echo $configuracion['direccion']; ?></p>
 							<p>Teléfono: <?php echo $configuracion['telefono']; ?></p>
@@ -49,11 +49,10 @@ $total 		= 0;
 							</strong></h3>
 						</p>
 
-						<p><strong>
-								<h2>ORDEN DE COMPRA
-							</strong></h2>
+						<p class="h2">
+								ORDEN DE COMPRA
 						</p>
-						<p><h2><?php echo $factura['serie_comprobante'] . ' - ' . $factura['num_comprobante']; ?></h2></p>
+						<p><?php echo $factura['serie_comprobante'] . ' - ' . $factura['num_comprobante']; ?></p>
 
 					</div>
 				</td>
@@ -65,7 +64,7 @@ $total 		= 0;
 		<table id="factura_detalle" style="width: 100%;">
 			<thead>
 				<tr>
-					<th style="border: 1px solid black;">DATOS DEL PROVEEDOR</th>
+					<th style="border: 1px solid black; width: 370px; overflow: auto;">DATOS DEL PROVEEDOR</th>
 					<th style="border: 1px solid black;">CONDICIONES GENERALES</th>
 				</tr>
 			</thead>
@@ -79,12 +78,8 @@ $total 		= 0;
 					<td style="border-right: 1px solid black; padding-left: 5px;"><label><strong>Facturar a : </strong></label><?php echo $factura['documento']; ?></td>
 				</tr>
 				<tr>
-					<td style="border-right: 1px solid black; padding-left: 5px;"><label><strong>Dirección : </strong></label><?php echo $factura['direccion']; ?></td>
+					<td style="border-right: 1px solid black; padding-left: 5px; font-size: 8pt;"><label><strong>Dirección : </strong></label><?php echo $factura['direccion']; ?></td>
 					<td style="border-right: 1px solid black; padding-left: 5px;"><label><strong>Lugar de Entrega : </strong></label><?php echo $factura['lugar_entrega']; ?></td>
-				</tr>
-				<tr>
-					<td style="border-right: 1px solid black; padding-left: 5px;"><label><strong></strong></label></td>
-					<td style="border-right: 1px solid black; padding-left: 5px;"><label style="color: white;"><?php echo $factura['lugar_entrega']; ?></label></td>
 				</tr>
 			</tbody>
 			<!-- <tfoot id="detalle_totales"> -->
@@ -94,17 +89,14 @@ $total 		= 0;
 			</tr>
 		</table>
 
-		<br>
-
 		<table id="factura_detalle" style="width: 100%;">
 			<thead>
 				<tr>
-					<th style="border: 1px solid black;" width="20px">CÓDIGO.</th>
-					<th style="border: 1px solid black;" class="textcenter" width="20px">CANT.</th>
+					<th style="border: 1px solid black;" class="textcenter" width="5px">CÓDIGO.</th>
+					<th style="border: 1px solid black;" class="textcenter" width="5px">CANT.</th>
 					<th style="border: 1px solid black;" class="textcenter" width="20px">UM.</th>
-					<th style="border: 1px solid black;" class="textcenter" width="300px">DESCRIPCIÓN</th>
-					<th style="border: 1px solid black;" class="textcenter" width="20px">P.UNIT</th>
-					<th style="border: 1px solid black;" class="textcenter" width="10px">P. VENTA.</th>
+					<th style="border: 1px solid black;" class="textcenter" width="250px">DESCRIPCIÓN</th>
+					<th style="border: 1px solid black;" class="textcenter" width="80px">P.UNIT</th>
 					<th style="border: 1px solid black;" class="textcenter" width="20px">TOTAL.</th>
 				</tr>
 			</thead>
@@ -118,13 +110,12 @@ $total 		= 0;
 
 				?>
 						<tr>
-							<td style="border-right: 1px solid black;" class="textcenter" width="20px"><?php echo $row['codigo']; ?></td>
-							<td style="border-right: 1px solid black;" class="textcenter" width="20px"><?php echo round($row['cantidad'], 2); ?></td>
+							<td style="border-right: 1px solid black;" class="textcenter" width="5px"><?php echo $row['codigo']; ?></td>
+							<td style="border-right: 1px solid black;" class="textcenter" width="5px"><?php echo round($row['cantidad'], 2); ?></td>
 							<td style="border-right: 1px solid black;" class="textcenter" width="20px"><?php echo $row['unidadmedida']; ?></td>
-							<td style="border-right: 1px solid black; padding-left: 5px;" width="300px"><?php echo $row['producto']; ?></td>
-							<td style="border-right: 1px solid black;" class="textcenter" width="20px"><?php echo round($row['precio_compra'], 2); ?></td>
-							<td style="border-right: 1px solid black;" class="textcenter" width="10px"><?php echo round($row['precio_venta'], 2); ?></td>
-							<td style="border-right: 1px solid black;" class="textcenter" width="20px"><?php echo round($row['subtotal'], 2); ?></td>
+							<td style="border-right: 1px solid black; padding-left: 5px;" width="250px"><?php echo $row['nombre_producto']; ?></td>
+							<td style="border-right: 1px solid black;" class="textcenter" width="80px"><?php echo number_format($row['precio_compra'], 2, ",", ".")?></td>
+							<td style="border-right: 1px solid black;" class="textcenter" width="20px"><?php echo number_format($row['subtotal'], 2, ",", ".")?></td>
 						</tr>
 				<?php
 						$precio_total = $row['subtotal'];
@@ -145,7 +136,7 @@ $total 		= 0;
 			//Convertimos el total en letras
 			require_once "../Letras.php";
 			$V = new EnLetras();
-			$con_letra = strtoupper($V->ValorEnLetras($factura['total_compra'], "SOLES"));
+			$con_letra = strtoupper($V->ValorEnLetras($factura['total_compra'], "CON"));
 
 			if ($factura['tipo_comprobante'] == 'Boleta') {
 				$iddoc = '01';
@@ -167,24 +158,24 @@ $total 		= 0;
 			<tr>
 				<!-- <td style="border: 1px solid black;" class="textcenter"><strong></td> -->
 				<td style="border: 1px solid black; padding-left: 5px;" colspan="4"><strong> SON : </strong> <?php echo $con_letra ?></td>
-				<td style="border: 1px solid black;" colspan="2" class="textright"><span><strong> OP. GRAVADA S/</strong></span></td>
-				<td style="border: 1px solid black;" class="textcenter"><span><?php echo $tl_sniva; ?></span></td>
+				<td style="border: 1px solid black;" class="textright"><span><strong> OP. GRAVADA S/</strong></span></td>
+				<td style="border: 1px solid black;" class="textcenter"><span><?php echo number_format($tl_sniva, 2, ",", "."); ?></span></td>
 			</tr>
 			<tr>
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
-				<td style="border: 1px solid black;" colspan="2" class="textright"><span><strong> IGV (<?php echo $iva; ?> %) S/</strong></span></td>
-				<td style="border: 1px solid black;" class="textcenter"><span><?php echo $igv = round(((($factura['total_compra'])) * (($iva) / ($iva + 100))), 2); ?></span></td>
+				<td style="border: 1px solid black;" class="textright"><span><strong> IGV (<?php echo $iva; ?> %) S/</strong></span></td>
+				<td style="border: 1px solid black;" class="textcenter"><span><?php echo $igv = number_format(((($factura['total_compra'])) * (($iva) / ($iva + 100))), 2, ',', '.'); ?></span></td>
 			</tr>
 			<tr>
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
-				<td style="border: 1px solid black;" colspan="2" class="textright"><span><strong> TOTAL A PAGAR S/</strong></span></td>
-				<td style="border: 1px solid black;" class="textcenter"><span><?php echo $factura['total_compra']; ?></span></td>
+				<td style="border: 1px solid black;" class="textright"><span><strong> TOTAL A PAGAR S/</strong></span></td>
+				<td style="border: 1px solid black;" class="textcenter"><span><?php echo number_format($factura['total_compra'], 2, ",", ".")?></span></td>
 			</tr>
 			</tfoot>
 		</table>

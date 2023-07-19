@@ -1,12 +1,12 @@
-var tabla;
+let tabla;
 
 //Función que se ejecuta al inicio
 function init(){
 
 	listar();
 	mostrarCaja();
-	calcularTotalEnCaja();
-	calcularTotales();
+	// calcularTotalEnCaja();
+	// calcularTotales();
 
 	$("#myModal").on("submit",function(e)
 	{
@@ -64,9 +64,9 @@ function mostrar(idmovimiento)
 function listar()
 {
 
-	var fecha_inicio = $("#fecha_inicio").val();
-	var fecha_fin = $("#fecha_fin").val();
-	var idsucursal = $("#idsucursal2").val();
+	let fecha_inicio = $("#fecha_inicio").val();
+	let fecha_fin = $("#fecha_fin").val();
+	let idsucursal = $("#idsucursal2").val();
 
 	tabla=$('#tbllistado').dataTable(
 	{
@@ -95,16 +95,16 @@ function listar()
 					}
 				},
 		"bDestroy": true,
-		"iDisplayLength": 5,//Paginación
+		"iDisplayLength":10,//Paginación
 	    "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
 	}).DataTable();
 }
 
 function guardaryeditar(e)
 {
-	e.preventDefault(); //No se activará la acción predeterminada del evento
+	e.preventDefault(); //No se actiletá la acción predeterminada del evento
 	//$("#btnGuardar").prop("disabled",true);
-	var formData = new FormData($("#formulario")[0]);
+	let formData = new FormData($("#formulario")[0]);
 
 	$.ajax({
 		url: "../controladores/cajachica.php?op=guardaryeditar",
@@ -164,16 +164,16 @@ function mostrarCaja(){
 	limpiar();
 	$("#getCodeModal").modal('show');
 
-	var fecha_inicio = $("#fecha_inicio").val();
-	var fecha_fin = $("#fecha_fin").val();
-	var idsucursal = $("#idsucursal2").val();
+	let fecha_inicio = $("#fecha_inicio").val();
+	let fecha_fin = $("#fecha_fin").val();
+	let idsucursal = $("#idsucursal2").val();
 
 	$.post("../controladores/consultas.php?op=mostrarTotalBoletasCaja",{fecha_inicio : fecha_inicio, fecha_fin : fecha_fin, idsucursal : idsucursal}, function(data,status)
 	{
 
 		data=JSON.parse(data);
 
-		var label=document.querySelector('#boletas');
+		let label=document.querySelector('#boletas');
 		label.textContent=data.total_venta;
 			
 
@@ -184,7 +184,7 @@ function mostrarCaja(){
 
 		data=JSON.parse(data);
 		
-		var label=document.querySelector('#boletasT');
+		let label=document.querySelector('#boletasT');
 		label.textContent=data.total_venta;	
 
 	});
@@ -194,7 +194,7 @@ function mostrarCaja(){
 
 		data=JSON.parse(data);
 
-		var label=document.querySelector('#facturas');
+		let label=document.querySelector('#facturas');
 		label.textContent=data.total_venta;
 			
 
@@ -205,7 +205,7 @@ function mostrarCaja(){
 
 		data=JSON.parse(data);
 		
-		var label=document.querySelector('#facturasT');
+		let label=document.querySelector('#facturasT');
 		label.textContent=data.total_venta;	
 
 	});
@@ -215,7 +215,7 @@ function mostrarCaja(){
 
 		data=JSON.parse(data);
 
-		var label=document.querySelector('#notasVenta');
+		let label=document.querySelector('#notasVenta');
 		label.textContent=data.total_venta;
 			
 
@@ -226,7 +226,7 @@ function mostrarCaja(){
 
 		data=JSON.parse(data);
 		
-		var label=document.querySelector('#notasVentaT');
+		let label=document.querySelector('#notasVentaT');
 		label.textContent=data.total_venta;	
 
 	});
@@ -236,7 +236,7 @@ function mostrarCaja(){
 
 		data=JSON.parse(data);
 
-		var label=document.querySelector('#cuentasCobrar');
+		let label=document.querySelector('#cuentasCobrar');
 		label.textContent=data.total_venta;
 			
 
@@ -247,7 +247,7 @@ function mostrarCaja(){
 
 		data=JSON.parse(data);
 		
-		var label=document.querySelector('#cuentasCobrarT');
+		let label=document.querySelector('#cuentasCobrarT');
 		label.textContent=data.total_venta;	
 
 	});
@@ -257,7 +257,7 @@ function mostrarCaja(){
 
 		data=JSON.parse(data);
 		
-		var label=document.querySelector('#totalEfectivo');
+		let label=document.querySelector('#totalEfectivo');
 		label.textContent=data.total_venta;	
 
 	});
@@ -267,10 +267,10 @@ function mostrarCaja(){
 
 		data=JSON.parse(data);
 		
-		var label=document.querySelector('#totalTransferencia');
+		let label=document.querySelector('#totalTransferencia');
 		label.textContent=data.total_venta;	
 
-		calcularTotales();
+		// calcularTotales();
 
 	});
 
@@ -279,7 +279,7 @@ function mostrarCaja(){
 
 		data=JSON.parse(data);
 		
-		var label=document.querySelector('#totalI');
+		let label=document.querySelector('#totalI');
 		label.textContent=data.totalIngresos;
 
 	});
@@ -289,10 +289,10 @@ function mostrarCaja(){
 
 		data=JSON.parse(data);
 		
-		var label=document.querySelector('#totalE');
+		let label=document.querySelector('#totalE');
 		label.textContent=data.totalEgresos;
 
-		calcularTotalEnCaja();
+		// calcularTotalEnCaja();
 
 
 
@@ -306,11 +306,11 @@ function mostrarCaja(){
 
 		if(data.totalcuentaventa != 0){
 
-			var label=document.querySelector('#boleta_total_documentos_fac');
+			let label=document.querySelector('#boleta_total_documentos_fac');
 			label.textContent=data.totalcuentaventa;
 
 		}else{
-			var label=document.querySelector('#boleta_total_documentos_fac');
+			let label=document.querySelector('#boleta_total_documentos_fac');
 			label.textContent=null;
 		}
 
@@ -323,11 +323,11 @@ function mostrarCaja(){
 
 		if(data.totalcuentaventa != 0){
 
-			var label=document.querySelector('#boleta_total_documentos_bol');
+			let label=document.querySelector('#boleta_total_documentos_bol');
 			label.textContent=data.totalcuentaventa;
 
 		}else{
-			var label=document.querySelector('#boleta_total_documentos_bol');
+			let label=document.querySelector('#boleta_total_documentos_bol');
 			label.textContent=null;
 		}
 
@@ -340,11 +340,11 @@ function mostrarCaja(){
 
 		if(data.totalcuentaventa != 0){
 
-			var label=document.querySelector('#boleta_total_documentos_not');
+			let label=document.querySelector('#boleta_total_documentos_not');
 			label.textContent=data.totalcuentaventa;
 
 		}else{
-			var label=document.querySelector('#boleta_total_documentos_not');
+			let label=document.querySelector('#boleta_total_documentos_not');
 			label.textContent=null;
 		}
 
@@ -357,42 +357,39 @@ function mostrarCaja(){
 
 		if(data.totalcuentacobrar != 0){
 
-			var label=document.querySelector('#boleta_total_documentos_cuentas');
+			let label=document.querySelector('#boleta_total_documentos_cuentas');
 			label.textContent=data.totalcuentacobrar;
 
 		}else{
-			var label=document.querySelector('#boleta_total_documentos_cuentas');
+			let label=document.querySelector('#boleta_total_documentos_cuentas');
 			label.textContent=null;
 		}
 
 	});
 
+	// XDDDDDDDDDDD
+
+	$.post("../controladores/consultas.php?op=totalT",{fecha_inicio : fecha_inicio, fecha_fin : fecha_fin, idsucursal : idsucursal}, function(data,status)
+	{
+
+		data=JSON.parse(data);
+
+		let label=document.querySelector('#totalT');
+		label.textContent=data.totalI;
+
+	});
+
+	$.post("../controladores/consultas.php?op=totalEC",{fecha_inicio : fecha_inicio, fecha_fin : fecha_fin, idsucursal : idsucursal}, function(data,status)
+	{
+
+		data=JSON.parse(data);
+
+		let label=document.querySelector('#totalEC');
+		label.textContent=data.totalEC;
+
+	});
+
 	listar();
-
-}
-
-function calcularTotalEnCaja(){
-
-	let SubTotal = document.getElementById("totalT").innerHTML;
-
-	let TotalI = document.getElementById("totalI").innerHTML;
-
-	let TotalE = document.getElementById("totalE").innerHTML;
-
-	let TotalF;
-
-	TotalF = Number(SubTotal) + Number(TotalI) - Number(TotalE);
-
-	var labelTotalEnCaja=document.querySelector('#totalEC');
-	labelTotalEnCaja.textContent=TotalF.toFixed(2);
-
-	if (SubTotal == 0.00 && TotalI == 0.00 && totalE == 0.00) {
-
-		let c = 0;
-
-		labelTotalEnCaja.textContent=c.toFixed(2);
-
-	}
 
 }
 
@@ -406,7 +403,7 @@ function calcularTotales(){
 
 	TotalF = Number(TotalFacturas) + Number(TotalFacturasT);
 
-	var labelTotalFacturas=document.querySelector('#totalF');
+	let labelTotalFacturas=document.querySelector('#totalF');
 	labelTotalFacturas.textContent=TotalF.toFixed(2);
 
 	if (TotalFacturas == 0.00 && TotalFacturasT == 0.00) {
@@ -426,7 +423,7 @@ function calcularTotales(){
 
 	TotalB = Number(TotalBoletas) + Number(TotalBoletasT);
 
-	var labelTotalBoletas=document.querySelector('#totalB');
+	let labelTotalBoletas=document.querySelector('#totalB');
 	labelTotalBoletas.textContent=TotalB.toFixed(2);
 
 	if (TotalBoletas == 0.00 && TotalBoletasT == 0.00) {
@@ -446,7 +443,7 @@ function calcularTotales(){
 
 	TotalN = Number(TotalNotas) + Number(TotalNotasT);
 
-	var labelTotalNotas=document.querySelector('#totalNotas');
+	let labelTotalNotas=document.querySelector('#totalNotas');
 	labelTotalNotas.textContent=TotalN.toFixed(2);
 
 	if (TotalNotas == 0.00 && TotalNotasT == 0.00) {
@@ -466,7 +463,7 @@ function calcularTotales(){
 
 	TotalCuentasC = Number(TotalCuentasCobrar) + Number(TotalCuentasCobrarT);
 
-	var labelCuentasCobrar=document.querySelector('#totalCuentasCobrar');
+	let labelCuentasCobrar=document.querySelector('#totalCuentasCobrar');
 	labelCuentasCobrar.textContent=TotalCuentasC.toFixed(2);
 
 	if (TotalCuentasCobrar == 0.00 && TotalCuentasCobrarT == 0.00) {
@@ -482,11 +479,13 @@ function calcularTotales(){
 
 	let TotalEfectivoT = document.getElementById("totalTransferencia").innerHTML;
 
+	console.log("Eyyyy " + TotalEfectivo);
+
 	let Total = 0;
 
 	Total = Number(TotalEfectivo) + Number(TotalEfectivoT);
 
-	var label=document.querySelector('#totalT');
+	let label=document.querySelector('#totalT');
 	label.textContent=Total.toFixed(2);
 
 	if (TotalEfectivo == 0.00 && TotalEfectivoT == 0.00) {

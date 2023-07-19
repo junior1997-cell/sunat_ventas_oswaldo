@@ -39,7 +39,7 @@ if ($conexion)
     inner join persona c on c.idpersona=v.idcliente
     WHERE v.idventa='".$idVenta."'");
     
-    $resultadoexonerada = mysqli_query($conexion,"SELECT cast(sum((dv.precio_venta*dv.cantidad)-dv.descuento) as DECIMAL(11,2)) as importe
+    $resultadoexonerada = mysqli_query($conexion,"SELECT cast(sum((dv.precio_venta*dv.cantidad)-(dv.descuento*dv.cantidad)) as DECIMAL(11,2)) as importe
     from detalle_venta dv
     inner join producto p on p.idproducto=dv.idproducto
     WHERE dv.idventa='".$idVenta."' and p.proigv='No Gravada'");
@@ -100,10 +100,10 @@ else
     if ($almacen) {  
       foreach ($almacen as $column) {
         $Ubigeo=$column['ubigeo'];
-        $Distrito=$column['distrito'];
-        $Provincia=$column['provincia'];
-        $Departamento=$column['departamento'];
-        $Direccion=$column['direccion'];
+        $Distrito=utf8_decode($column['distrito']);
+        $Provincia=utf8_decode($column['provincia']);
+        $Departamento=utf8_decode($column['departamento']);
+        $Direccion=utf8_decode($column['direccion']);
         }	
     }
     
@@ -135,10 +135,10 @@ else
 
     $resultado2 = mysqli_query($conexion,"SELECT p.idproducto as COD, p.nombre as nombreProd, p.proigv as proigv,
     CASE WHEN p.proigv = 'No Gravada' THEN dv.precio_venta-dv.descuento ELSE CAST((dv.precio_venta-dv.descuento)/1.18 AS DECIMAL(11,2)) END as valorUnitario,
-    CAST((dv.precio_venta - dv.descuento) AS DECIMAL(11,2)) AS precioUnitario,
+    CAST((dv.precio_venta-dv.descuento) AS DECIMAL(11,2)) AS precioUnitario,
     CAST(dv.cantidad AS DECIMAL(11,3)) as cantidad,
-    CASE WHEN p.proigv = 'No Gravada' THEN cast((dv.precio_venta-dv.descuento)*dv.cantidad as DECIMAL(11,2)) ELSE cast((dv.precio_venta-dv.descuento)/ 1.18*dv.cantidad as DECIMAL(11,2)) END as importe,
-    CASE WHEN p.proigv = 'No Gravada' THEN '0' ELSE CAST(((dv.precio_venta-dv.descuento)-((dv.precio_venta-dv.descuento)/ 1.18))*dv.cantidad AS DECIMAL(11,2)) END as Igv, dv.descuento
+    CASE WHEN p.proigv = 'No Gravada' THEN cast((dv.precio_venta-dv.descuento)*dv.cantidad as DECIMAL(11,2)) ELSE cast((dv.precio_venta-(dv.descuento))/ 1.18*dv.cantidad as DECIMAL(11,2)) END as importe,
+    CASE WHEN p.proigv = 'No Gravada' THEN '0' ELSE CAST(((dv.precio_venta-dv.descuento)-((dv.precio_venta-(dv.descuento))/ 1.18))*dv.cantidad AS DECIMAL(11,2)) END as Igv, (dv.descuento*dv.cantidad) as descuento
 
     FROM detalle_venta dv 
 
@@ -197,7 +197,7 @@ else
                 $item->setCodProducto($column['COD'])
                 ->setUnidad('NIU')
                 ->setCantidad($column['cantidad'])
-                ->setDescripcion($column['nombreProd'])
+                ->setDescripcion(utf8_decode($column['nombreProd']))
                 ->setMtoBaseIgv($column['importe'])
                 ->setPorcentajeIgv($igv)
                 ->setIgv($setIgv)
@@ -284,7 +284,7 @@ $manuel = $fg->numletras($total);
 
         // Envio a SUNAT.
 
-   if  ($estadocertificado=="BETA"){
+  if  ($estadocertificado=="BETA"){
         $see = $util->getSee(SunatEndpoints::FE_BETA);
     }elseif($estadocertificado=="PRODUCCION"){
         $see = $util->getSee(SunatEndpoints::FE_PRODUCCION);

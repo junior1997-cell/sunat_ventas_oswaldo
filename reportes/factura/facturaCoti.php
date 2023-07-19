@@ -31,7 +31,7 @@ $total 		= 0;
 						$iva = $configuracion['monto_impuesto'];
 					?>
 						<div>
-							<span class="h2"><?php echo strtoupper($configuracion['nombre']); ?></span>
+							<span class="h2"><?php echo $configuracion['nombre']; ?></span>
 							<p>RUC <?php echo $configuracion['documento']; ?></p>
 							<p><?php echo $configuracion['direccion']; ?></p>
 							<p>Teléfono: <?php echo $configuracion['telefono']; ?></p>
@@ -48,9 +48,8 @@ $total 		= 0;
 								<h3>R. U. C. <?php echo $configuracion['documento']; ?>
 							</strong></h3>
 						</p>
-						<p><strong>
-								<h2>COTIZACION
-							</strong></h2>
+						<p class="h2">
+							COTIZACION
 						</p>
 						<p><?php echo $factura['serie_comprobante'] . ' - ' . $factura['num_comprobante']; ?></p>
 					</div>
@@ -58,31 +57,12 @@ $total 		= 0;
 			</tr>
 		</table>
 
-		<table id="factura_cliente">
-
-			<tr>
-				<td class="info_cliente">
-					<!-- <span class="h3">Cliente</span> -->
-					<center>
-						<p style="font-size: 20px;"><?php echo $factura['titulo']; ?></p>
-					</center>
-
-					<table class="datos_cliente">
-						<tr>
-							<td>
-							</td>
-						</tr>
-					</table>
-				</td>
-
-			</tr>
-
-		</table>
+		<label><strong>Fecha Emisión : </strong><?php echo $factura['fecha']; ?></label>
 
 		<table id="factura_detalle" style="width: 100%;">
 			<thead>
 				<tr>
-					<th style="border: 1px solid black;">DATOS DEL CLIENTE</th>
+					<th style="border: 1px solid black; width: 370px; overflow: auto;">DATOS DEL CLIENTE</th>
 					<th style="border: 1px solid black;">CONDICIONES GENERALES</th>
 				</tr>
 			</thead>
@@ -93,19 +73,19 @@ $total 		= 0;
 				</tr>
 				<tr>
 					<td style="border-right: 1px solid black; padding-left: 5px;"><label><strong><?php echo $factura['tipo_documento']; ?> : </strong></label><?php echo $factura['num_documento']; ?></td>
-					<td style="border-right: 1px solid black; padding-left: 5px;"><label><strong>Validez de la Oferta : </strong></label><?php echo $factura['nota']; ?></td>
-				</tr>
-				<tr>
-					<td style="border-right: 1px solid black; padding-left: 5px;"><label><strong>Dirección : </strong></label><?php echo $factura['direccion']; ?></td>
 					<td style="border-right: 1px solid black; padding-left: 5px;"><label><strong>Tiempo de Producción : </strong></label><?php echo $factura['tiempo_pro']; ?></td>
 				</tr>
 				<tr>
-					<td style="border-right: 1px solid black; padding-left: 5px;"><label><strong></strong></label></td>
-					<td style="border-right: 1px solid black; padding-left: 5px;"><label style="color: white;">-</label></td>
+					<td style="border-right: 1px solid black; padding-left: 5px;"><label><strong>Dirección : </strong></label><?php echo $factura['direccion']; ?></td>
+					<td style="border-right: 1px solid black; padding-left: 5px;"><label><strong>Validez de la Oferta : </strong></label><?php echo $factura['nota']; ?></td>
 				</tr>
+				<!-- <tr>
+					<td style="border-right: 1px solid black; padding-left: 5px;"><label><strong> : </strong></label><?php echo $factura['direccion']; ?></td>
+					<td style="border-right: 1px solid black; padding-left: 5px;"><label><strong>Validez de la Oferta : </strong></label><?php echo $factura['nota']; ?></td>
+				</tr> -->
 			</tbody>
 			<tr>
-				<td style="border: 1px solid black; padding-left: 2px;" colspan="2"><strong>Atención : </strong><?php echo $factura['personal']; ?></td>
+				<td style="border: 1px solid black; padding-left: 2px;" colspan="2"><strong>Nota : </strong><?php echo $factura['titulo']; ?></td>
 			</tr>
 		</table>
 
@@ -115,7 +95,7 @@ $total 		= 0;
 					<th style="border: 1px solid black;" width="20px">CÓDIGO.</th>
 					<th style="border: 1px solid black;" class="textcenter" width="20px">CANT.</th>
 					<th style="border: 1px solid black;" class="textcenter" width="20px">UM.</th>
-					<th style="border: 1px solid black;" class="textcenter" width="300px">DESCRIPCIÓN</th>
+					<th style="border: 1px solid black;" class="textcenter" width="250px">DESCRIPCIÓN</th>
 					<th style="border: 1px solid black;" class="textcenter" width="20px">P.UNIT</th>
 					<th style="border: 1px solid black;" class="textcenter" width="10px">DCTO.</th>
 					<th style="border: 1px solid black;" class="textcenter" width="20px">TOTAL.</th>
@@ -144,10 +124,10 @@ $total 		= 0;
 							<td style="border-right: 1px solid black;" class="textcenter" width="20px"><?php echo $row['codigo']; ?></td>
 							<td style="border-right: 1px solid black;" class="textcenter" width="20px"><?php echo round($row['cantidad'], 2); ?></td>
 							<td style="border-right: 1px solid black;" class="textcenter" width="20px"><?php echo $row['unidadmedida']; ?></td>
-							<td style="border-right: 1px solid black; padding-left: 5px;" width="300px"><?php echo $row['producto']; ?></td>
-							<td style="border-right: 1px solid black;" class="textcenter" width="20px"><?php echo round($row['precio_venta'], 2); ?></td>
-							<td style="border-right: 1px solid black;" class="textcenter" width="10px"><?php echo round($row['descuento'], 2); ?></td>
-							<td style="border-right: 1px solid black;" class="textcenter" width="20px"><?php echo round($row['subtotal'], 2); ?></td>
+							<td style="border-right: 1px solid black; padding-left: 5px;" width="250px"><?php echo $row['producto']; ?></td>
+							<td style="border-right: 1px solid black;" class="textcenter" width="20px"><?php echo number_format($row['precio_venta'], 2, ",", "."); ?></td>
+							<td style="border-right: 1px solid black;" class="textcenter" width="10px"><?php echo number_format($row['descuento'], 2, ",", "."); ?></td>
+							<td style="border-right: 1px solid black;" class="textcenter" width="20px"><?php echo number_format($row['subtotal'], 2, ",", "."); ?></td>
 						</tr>
 				<?php
 						$precio_total = $row['subtotal'];
@@ -169,7 +149,7 @@ $total 		= 0;
 			//Convertimos el total en letras
 			require_once "../Letras.php";
 			$V = new EnLetras();
-			$con_letra = strtoupper($V->ValorEnLetras($factura['total_venta'], "SOLES"));
+			$con_letra = strtoupper($V->ValorEnLetras($factura['total_venta'], "CON"));
 
 			if ($factura['tipo_comprobante'] == 'Boleta') {
 				$iddoc = '01';
@@ -215,7 +195,15 @@ $total 		= 0;
 				<tr>
 					<td style="border: 1px solid black; padding-left: 5px;" colspan="4"><strong> SON : </strong> <?php echo $con_letra ?></td>
 					<td style="border: 1px solid black;" colspan="2" class="textright"><span>OP. GRAVADA S/</span></td>
-					<td style="border: 1px solid black;" class="textcenter"><span><?php echo $tl_sniva; ?></span></td>
+					<td style="border: 1px solid black;" class="textcenter"><span>
+						<?php
+							if($factura['igv'] == 'Si'){
+							echo number_format($tl_sniva, 2, ",", "0");
+							}else{
+								echo '0,00';
+							} 
+						?>
+					</span></td>
 				</tr>
 				<tr>
 					<td></td>
@@ -223,15 +211,28 @@ $total 		= 0;
 					<td></td>
 					<td></td>
 					<td style="border: 1px solid black;" colspan="2" class="textright"><span>OP. EXONERADO S/</span></td>
-					<td style="border: 1px solid black;" class="textcenter"><span><?php echo $exonerado - $descuento; ?></span></td>
+					<td style="border: 1px solid black;" class="textcenter"><span>
+						<?php echo number_format($exonerado - $descuento, 2, ",", "0"); ?>
+					</span></td>
 				</tr>
 				<tr>
-					<td></td>
-					<td></td>
-					<td></td>
+				<td colspan="3" style="margin-top: 300px;">PRECIOS :<strong>
+						<?php 
+						
+						if($factura['igv'] == 'Si'){
+
+							echo 'INCLUYEN IGV';
+
+						}else{
+
+							echo 'NO INCLUYEN IGV';
+
+						}
+						
+						?></strong></td>
 					<td></td>
 					<td style="border: 1px solid black;" colspan="2" class="textright"><span>DESCUENTO S/</span></td>
-					<td style="border: 1px solid black;" class="textcenter"><span><?php echo $descuento; ?></span></td>
+					<td style="border: 1px solid black;" class="textcenter"><span><?php echo number_format($descuento, 2, ",", "0"); ?></span></td>
 				</tr>
 				<tr>
 					<td></td>
@@ -239,7 +240,16 @@ $total 		= 0;
 					<td></td>
 					<td></td>
 					<td style="border: 1px solid black;" colspan="2" class="textright"><span>IGV (<?php echo $iva; ?> %) S/</span></td>
-					<td style="border: 1px solid black;" class="textcenter"><span><?php echo $igv = round(((($factura['total_venta'] + $descuento) - $exonerado) * (($iva) / ($iva + 100))), 2); ?></span></td>
+					<td style="border: 1px solid black;" class="textcenter"><span>
+						<?php
+							if($factura['igv'] == 'Si'){
+
+								echo $igv = number_format(((($factura['total_venta'] + $descuento) - $exonerado) * (($iva) / ($iva + 100))), 2, ",", "0");
+						
+							}else{
+								echo '0,00';
+							}
+						?></span></td>
 				</tr>
 				<tr>
 					<td></td>
@@ -247,59 +257,10 @@ $total 		= 0;
 					<td></td>
 					<td></td>
 					<td style="border: 1px solid black;" colspan="2" class="textright"><span>TOTAL A PAGAR S/</span></td>
-					<td style="border: 1px solid black;" class="textcenter"><span><?php echo $factura['total_venta']; ?></span></td>
+					<td style="border: 1px solid black;" class="textcenter"><span><?php echo number_format($factura['total_venta'], 2, ",", "0"); ?></span></td>
 				</tr>
 			</tfoot>
 		</table>
-
-		<table style="width: 100%;">
-			<thead>
-				<tr>
-					<th>ACEPTACIÓN DE LA COTIZACIÓN</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td><label><strong>1. </strong></label>Si usted acepta la cotización favor de enviar la O/C al correo: ventas@imprimaya.com.</td>
-				</tr>
-				<tr>
-					<td><label><strong>2. </strong></label>El cliente proporciona imagenes y contenido que será utilizado para la producción.</td>
-				</tr>
-				<tr>
-					<td><label><strong>3. </strong></label>Los precios varian si el o los archivos digitales coinciden con los parámetros cotizados.</td>
-				</tr>
-				<tr>
-					<td><label><strong>4. </strong></label>Los precios están sujetos a variación, despues del vencimiento de la validez de la oferta.</td>
-				</tr>
-				<tr>
-					<td><label><strong>5. </strong></label>Sirvase depositar a nuestra Cuenta Corriente: BCP (S/.) 193-2485584-0-07</td>
-				</tr>
-				<tr>
-					<td><label><strong>Beneficiario : </strong></label>AIDALIA ENTERPRISE S.A.C.</td>
-				</tr>
-				<tr>
-					<td><label></label>Esperando que la misma, sea el inicio de una provechosa relación comercial, quedamos a la espera de sus gratas noticias.</td>
-				</tr>
-				<tr>
-					<td><label></label>Atentamente,</td>
-				</tr>
-				<tr>
-					<td><label style="color: white;">-</label></td>
-				</tr>
-				<tr>
-					<td><label></label>ÁREA DE VENTAS</td>
-				</tr>
-				<tr>
-					<td><label></label>(+51) 964 140 142</td>
-				</tr>
-				<tr>
-					<td><label><strong></strong></label></td>
-					<td><label style="color: white;">-</label></td>
-				</tr>
-			</tbody>
-		</table>
-
-		<!-- <h4 class="label_gracias">¡Gracias por su compra!</h4> -->
 
 	</div>
 

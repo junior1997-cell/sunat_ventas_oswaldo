@@ -1,4 +1,5 @@
 var tabla;
+var contador = 0;
 
 //funcion que se ejecuta al inicio
 function init(){
@@ -84,7 +85,7 @@ function init(){
 //funcion limpiar
 function limpiar(){
 
-	$("#idventa").val("");
+	$("#idcotizacion").val("");
 	$("#idcliente").val("");
 	$("#cliente").val("");
 	$("#serie_comprobante").val("");
@@ -111,9 +112,7 @@ function limpiar(){
 
 	$("#tipo_comprobante").selectpicker('refresh');
 
-	$("#idcliente").val('PUBLICO EN GENERAL');
-
-	$("#idcliente").selectpicker('refresh');
+	seleccionarCliente("PUBLICO EN GENERAL", 6);
 
 	$("#titulo").val("");
 	$("#nota").val("");
@@ -124,6 +123,12 @@ function limpiar(){
 
 	$("#tiempoproduccion").val('');
 	$("#tiempoproduccion").selectpicker('refresh');
+
+	$("#nota").val('');
+	$("#nota").selectpicker('refresh');
+
+	$("#igv").val('');
+	$("#igv").selectpicker('refresh');
 
 }
 
@@ -155,6 +160,27 @@ function limpiarProducto()
 	$("#idproducto").val("");
 	$("#modelo").val("");
 	$("#nserie").val("");
+}
+
+function preciosIGV(igv){
+
+	$('#btnAgregarArt').show();
+	$('#btnAgregarArt2').show();
+
+	if(contador!=0){
+
+		for(var i=0; i<=contador;i++){
+
+			$("#fila"+i).remove();
+			calcularTotales();
+			evaluar();
+			articuloAdd="";
+
+		}
+		
+	}
+
+
 }
 
 function BuscarCliente(){
@@ -297,6 +323,9 @@ function mostrarform(flag){
 		detalles=0;
 		$("#btnAgregarArt").show();
 
+		$('#btnAgregarArt').hide();
+		$('#btnAgregarArt2').hide();
+
 
 	}else{
 		$("#listadoregistros").show();
@@ -331,7 +360,17 @@ function listar(){
             [5,10, 25, 50, 100, -1],
             ['5 filas','10 filas', '25 filas', '50 filas','100 filas', 'Mostrar todo']
         ],
-        buttons: ['pageLength','copy','excel', 'pdf'],
+        buttons: ['pageLength','copy',{
+			extend: 'excel',
+			orientation: 'landscape',
+			title: 'Lista de cotizaciones',
+			pageSize: 'LEGAL'
+		}, {
+			extend: 'pdfHtml5',
+			orientation: 'landscape',
+			title: 'Lista de cotizaciones',
+			pageSize: 'LEGAL'
+		}],
 		"ajax":
 		{
 			url:'../controladores/cotizaciones.php?op=listar',
@@ -343,7 +382,7 @@ function listar(){
 			}
 		},
 		"bDestroy":true,
-		"iDisplayLength":5,//paginacion
+		"iDisplayLength":10,//paginacion
 		"order":[[0,"desc"]]//ordenar (columna, orden)
 	}).DataTable();
 }
@@ -370,7 +409,7 @@ tabla=$('#tblarticulos2').dataTable({
 		}
 	},
 	"bDestroy":true,
-	"iDisplayLength":5,//paginacion
+	"iDisplayLength":10,//paginacion
 	"order":[[1,"asc"],[2, "asc"]]//ordenar (columna, orden)
 }).DataTable();
 }
@@ -397,7 +436,7 @@ function listarArticulos(){
 			}
 		},
 		"bDestroy":true,
-		"iDisplayLength":5,//paginacion
+		"iDisplayLength":10,//paginacion
 		"order":[[0,"desc"]]//ordenar (columna, orden)
 	}).DataTable();
 }
@@ -448,10 +487,21 @@ function guardarCliente(e){
 					text:datos
 				});
      		//cargamos los items al select cliente
-		   $.post("../controladores/venta.php?op=selectCliente", function(r){
-		   	$("#idcliente").html(r);
-		   	$('#idcliente').selectpicker('refresh');
-		   });
+		    $.post("../controladores/venta.php?op=selectCliente", function(r){
+				$("#idcliente").html(r);
+				$('#idcliente').selectpicker('refresh');
+		    });
+
+			$.post("../controladores/venta.php?op=mostrarUltimoCliente", function(data,status)
+			{
+
+				data=JSON.parse(data);
+
+				seleccionarCliente(data.nombre, data.idpersona);
+				
+
+			});
+
      	}
      });
 
@@ -489,6 +539,13 @@ function guardarProducto(e)
 	});
 	limpiarProducto();
 }
+
+function seleccionarCliente(nombre, idcliente) {
+
+	$("#idcliente").val(idcliente);
+	$("#idcliente").selectpicker('refresh');
+
+  }
 
 //Función para aprobar registros
 function desistir(idcotizacion)
@@ -572,6 +629,10 @@ function mostrarEditar(idcotizacion){
 			$('#formapago').selectpicker('refresh');
 			$("#tiempoproduccion").val(data.tiempo_pro);
 			$('#tiempoproduccion').selectpicker('refresh');
+			$("#nota").val(data.nota);
+			$('#nota').selectpicker('refresh');
+			$("#igv").val(data.igv);
+			$('#igv').selectpicker('refresh');
 
 		});
 		
@@ -757,6 +818,24 @@ function buscarProductoCod(e, codigo)
 }
 
 function agregarDetalle(idproducto,producto,cant,desc,precio_venta,preciocigv,precioB,precioC,precioD,stock,unidadmedida){
+	
+	if($('#tipo_comprobante').val() != 'Nota'){
+		
+		if($('#igv').val() != 'No'){
+
+			precio_venta = preciocigv;
+
+			if(precioB != ""){precioB = (precioB * 1.18).toFixed(2)}
+			if(precioC != ""){precioC = (precioC * 1.18).toFixed(2)}
+			if(precioD != ""){precioD = (precioD * 1.18).toFixed(2)}
+
+		}
+
+	}else{
+
+		precio_venta = precio_venta;
+
+	}
 
 	//aquí preguntamos si el idarticulo ya fue agregado
     if(articuloAdd.indexOf(idproducto)!= -1)
@@ -797,18 +876,18 @@ function agregarDetalle(idproducto,producto,cant,desc,precio_venta,preciocigv,pr
 		cad = '<option value="'+precio_venta+'">'+precio_venta+'</option>';
 
 		if(precioB!='0.00'){
-			cad = cad + '<option value="'+precioB+'">B - '+precioB+'</option>';
+			cad = cad + '<option value="'+precioB+'">'+precioB+'</option>';
 		}
 
 		if(precioC!='0.00'){
-			cad = cad + '<option value="'+precioC+'">C - '+precioC+'</option>';
+			cad = cad + '<option value="'+precioC+'">'+precioC+'</option>';
 		}
 
 		if(precioD!='0.00'){
-			cad = cad + '<option value="'+precioD+'">D - '+precioD+'</option>';
+			cad = cad + '<option value="'+precioD+'">'+precioD+'</option>';
 		}
 
-		select = '<td><select style="width:140px;height:28px;" oninput="modificarSubtotales()" name="precio_venta[]" id="precio_venta[]" class="form-control" required>'+cad+'</select></td>';
+		select = '<td><select style="width:160px;height:35px;" oninput="modificarSubtotales()" name="precio_venta[]" id="precio_venta[]" class="form-control" required>'+cad+'</select></td>';
 
 	}else{
 
@@ -817,9 +896,10 @@ function agregarDetalle(idproducto,producto,cant,desc,precio_venta,preciocigv,pr
 	}
 
 	if (idproducto!="") {
+		contador=contador+1;
 		var subtotal=cantidad*precio_venta;
 		var fila='<tr class="filas" id="fila'+cont+'">'+
-        '<td><input style="text-align:center" type="hidden" name="idproducto[]" value="'+idproducto+'">'+producto+'</td>'+
+        '<td><input style="text-align:center; width: 400px;" type="hidden" name="idproducto[]" value="'+idproducto+'">'+producto+'</td>'+
         '<td><input style="text-align:center" type="hidden">'+unidadmedida+'</td>'+
         '<td><input style="text-align:center" type="number" min="1" step="1" oninput="modificarSubtotales()" name="cantidad[]" id="cantidad[]" value="'+cantidad+'"></td>'+
 		select+

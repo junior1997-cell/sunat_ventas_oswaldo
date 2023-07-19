@@ -140,7 +140,7 @@ $pdf->SetFont('Arial','B');
 //Convertimos el total en letras
 require_once "Letras.php";
 $V=new EnLetras(); 
-$con_letra=strtoupper($V->ValorEnLetras($regv->total_compra,"SOLES"));
+$con_letra=strtoupper($V->ValorEnLetras($regv->total_compra,"CON"));
 
 $pdf->SetFont('Arial','');
 $pdf->Cell(-25,28, "--- ".$con_letra,0,0,'C');

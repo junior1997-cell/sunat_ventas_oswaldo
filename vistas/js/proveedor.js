@@ -86,7 +86,7 @@ function listar()
 					}
 				},
 		"bDestroy": true,
-		"iDisplayLength": 5,//Paginación
+		"iDisplayLength":10,//Paginación
 	    "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
 	}).DataTable();
 }
@@ -182,20 +182,20 @@ function eliminar(idpersona)
 	    },function(isConfirm){
 	    if (isConfirm){
 			
-				$.post("../controladores/persona.php?op=eliminar", {idpersona : idpersona}, function(e){
+				$.post("../controladores/persona.php?op=eliminar2", {idpersona : idpersona}, function(e){
 
-					if(e == 'Persona no se puede eliminar'){
-
-	    				swal("! Alerta ¡", "Proveedor asociado a una compra", "error");
-						
-					}else{
-
+					if(e == 2){
 						swal(
-							'!!! Alerta !!!',e,'success')
-							tabla.ajax.reload();
-
+							'!!! Alerta !!!', 'Proveedor asociado a una Operación' ,'error')
+					}else if(e == 1){
+						swal(
+							'!!! Eliminado !!!', 'Proveedor Eliminado' ,'success')
+					}else{
+						swal(
+							'!!! Eliminado !!!', 'Proveedor no se pudo Eliminar' ,'error')
 					}
-					
+						
+					tabla.ajax.reload();
     	});
 	    }else {
 	    swal("! Cancelado ¡", "Se Cancelo la eliminaciòn del Proveedor", "error");

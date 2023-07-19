@@ -1,0 +1,27 @@
+[04-Jul-2023 13:09:20 America/Lima] PHP Notice:  Undefined variable: totalVenta in /home/medsfacc/materialescupisnique.medsfac.com/reportes/rptventas.php on line 80
+[04-Jul-2023 13:09:20 America/Lima] PHP Notice:  Undefined property: stdClass::$abonototal in /home/medsfacc/materialescupisnique.medsfac.com/reportes/rptventas.php on line 70
+[04-Jul-2023 13:16:19 America/Lima] PHP Notice:  Undefined variable: totalVenta in /home/medsfacc/materialescupisnique.medsfac.com/reportes/rptventas.php on line 80
+[04-Jul-2023 13:16:19 America/Lima] PHP Notice:  Undefined property: stdClass::$abonototal in /home/medsfacc/materialescupisnique.medsfac.com/reportes/rptventas.php on line 70
+[04-Jul-2023 13:21:45 America/Lima] PHP Notice:  Undefined variable: totalVenta in /home/medsfacc/materialescupisnique.medsfac.com/reportes/rptventas.php on line 80
+[04-Jul-2023 13:25:52 America/Lima] PHP Notice:  Undefined variable: totalVenta in /home/medsfacc/materialescupisnique.medsfac.com/reportes/rptventas.php on line 80
+[04-Jul-2023 13:26:47 America/Lima] PHP Notice:  Undefined variable: totalVenta in /home/medsfacc/materialescupisnique.medsfac.com/reportes/rptventas.php on line 80
+[04-Jul-2023 13:27:57 America/Lima] PHP Notice:  Undefined variable: totalVenta in /home/medsfacc/materialescupisnique.medsfac.com/reportes/rptventas.php on line 67
+[04-Jul-2023 13:28:03 America/Lima] PHP Notice:  Undefined variable: totalVenta in /home/medsfacc/materialescupisnique.medsfac.com/reportes/rptventas.php on line 67
+[04-Jul-2023 13:28:24 America/Lima] PHP Notice:  Undefined variable: totalVenta in /home/medsfacc/materialescupisnique.medsfac.com/reportes/rptventas.php on line 67
+[04-Jul-2023 18:31:05 UTC] PHP Parse error:  syntax error, unexpected 'else' (T_ELSE) in /home/medsfacc/materialescupisnique.medsfac.com/reportes/rptventas.php on line 94
+[04-Jul-2023 13:32:52 America/Lima] PHP Notice:  Undefined variable: totalVenta in /home/medsfacc/materialescupisnique.medsfac.com/reportes/rptventas.php on line 76
+[04-Jul-2023 13:33:40 America/Lima] PHP Notice:  Undefined variable: totalVenta in /home/medsfacc/materialescupisnique.medsfac.com/reportes/rptventas.php on line 76
+[04-Jul-2023 13:38:07 America/Lima] PHP Notice:  Undefined variable: totalVenta in /home/medsfacc/materialescupisnique.medsfac.com/reportes/rptventas.php on line 76
+[04-Jul-2023 13:41:53 America/Lima] PHP Notice:  Undefined variable: totalVenta in /home/medsfacc/materialescupisnique.medsfac.com/reportes/rptventas.php on line 76
+[04-Jul-2023 13:51:46 America/Lima] PHP Notice:  Undefined variable: totalVenta in /home/medsfacc/materialescupisnique.medsfac.com/reportes/rptventas.php on line 76
+[04-Jul-2023 15:03:13 America/Lima] PHP Notice:  Undefined variable: totalVenta in /home/medsfacc/materialescupisnique.medsfac.com/reportes/rptventas.php on line 76
+[04-Jul-2023 15:51:44 America/Lima] PHP Notice:  Undefined variable: totalVenta in /home/medsfacc/materialescupisnique.medsfac.com/reportes/rptventas.php on line 76
+[04-Jul-2023 16:11:46 America/Lima] PHP Notice:  Undefined variable: totalVenta in /home/medsfacc/materialescupisnique.medsfac.com/reportes/rptventas.php on line 76
+[04-Jul-2023 19:09:32 America/Lima] PHP Notice:  Undefined variable: totalVenta in /home/medsfacc/materialescupisnique.medsfac.com/reportes/rptventas.php on line 76
+[04-Jul-2023 19:10:50 America/Lima] PHP Notice:  Undefined variable: totalVenta in /home/medsfacc/materialescupisnique.medsfac.com/reportes/rptventas.php on line 76
+[04-Jul-2023 19:13:42 America/Lima] PHP Notice:  Undefined variable: totalVenta in /home/medsfacc/materialescupisnique.medsfac.com/reportes/rptventas.php on line 76
+[04-Jul-2023 19:13:56 America/Lima] PHP Notice:  Undefined variable: totalVenta in /home/medsfacc/materialescupisnique.medsfac.com/reportes/rptventas.php on line 76
+[04-Jul-2023 22:47:07 America/Lima] PHP Notice:  Undefined variable: totalVenta in /home/medsfacc/materialescupisnique.medsfac.com/reportes/rptventas.php on line 76
+[04-Jul-2023 22:51:29 America/Lima] PHP Notice:  Undefined variable: totalVenta in /home/medsfacc/materialescupisnique.medsfac.com/reportes/rptventas.php on line 76
+[05-Jul-2023 13:55:40 America/Lima] PHP Notice:  Undefined variable: totalVenta in /home/medsfacc/materialescupisnique.medsfac.com/reportes/rptventas.php on line 76
+[05-Jul-2023 18:58:03 America/Lima] PHP Notice:  Undefined variable: totalVenta in /home/medsfacc/materialescupisnique.medsfac.com/reportes/rptventas.php on line 76

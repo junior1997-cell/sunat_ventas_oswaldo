@@ -27,8 +27,14 @@
 			$configuracion = mysqli_fetch_assoc($query_config);
 		}
 
+		$sql=mysqli_query($conexion,"SELECT * FROM cuentas_por_cobrar WHERE idventa='".$idventa."'");
+		$result_config2  = mysqli_num_rows($sql);
+		if($result_config2 > 0){
+			$mostrarDeuda = mysqli_fetch_assoc($sql);
+		}
 
-		$query = mysqli_query($conexion,"SELECT v.idventa, v.idcliente, p.nombre AS cliente, p.direccion, p.tipo_documento, p.num_documento, p.email, p.telefono, v.idpersonal, u.nombre AS personal, v.tipo_comprobante, v.serie_comprobante, v.num_comprobante, DATE(v.fecha_hora) AS fecha, date_format(v.fecha_kardex,'%d/%m/%y | %H:%i:%s %p') as fecha_kardex, v.impuesto, v.total_venta, v.ventacredito, v.estado FROM venta v INNER JOIN persona p ON v.idcliente=p.idpersona INNER JOIN personal u ON v.idpersonal=u.idpersonal WHERE v.idventa='$idventa'");
+
+		$query = mysqli_query($conexion,"SELECT v.idventa, v.idcliente, p.nombre AS cliente, p.direccion, p.tipo_documento, p.num_documento, p.email, p.telefono, v.idpersonal, u.nombre AS personal, v.montoPagado, v.formaPago, date_format(v.fechadeposito, '%d/%m/%y') as fechadeposito, v.banco, v.numoperacion, v.tipo_comprobante, v.serie_comprobante, v.num_comprobante, date_format(v.fecha_hora, '%d/%m/%y') as fecha, date_format(v.fecha_kardex,'%d/%m/%y | %H:%i:%s %p') as fecha_kardex, v.impuesto, v.total_venta, v.ventacredito, v.estado FROM venta v INNER JOIN persona p ON v.idcliente=p.idpersona INNER JOIN personal u ON v.idpersonal=u.idpersonal WHERE v.idventa='$idventa'");
 
 		$query2 = mysqli_query($conexion, "SELECT idventa, fecharegistro, deudatotal, date_format(fechavencimiento,'%d/%m/%y') as fechavencimiento, abonototal FROM cuentas_por_cobrar WHERE idventa='".$idventa."'");
 
@@ -43,7 +49,7 @@
 				$anulada = '<img class="anulada" src="img/anulado.png" alt="Anulada">';
 			}
 
-			$query_productos = mysqli_query($conexion,"SELECT a.idproducto,a.nombre AS producto, um.nombre as unidadmedida, a.proigv, CASE WHEN a.codigo = 'SIN CODIGO' THEN '-' ELSE a.codigo END as codigo, d.cantidad, d.precio_venta, (d.descuento + v.descuento) AS descuento, (d.cantidad*d.precio_venta-d.descuento) AS subtotal, a.stock 
+			$query_productos = mysqli_query($conexion,"SELECT a.idproducto,a.nombre AS producto, d.nombre_producto, um.nombre as unidadmedida, a.proigv, CASE WHEN a.codigo = 'SIN CODIGO' THEN '-' ELSE a.codigo END as codigo, d.cantidad, d.precio_venta, (d.descuento + v.descuento) AS descuento, (d.cantidad*d.precio_venta-d.descuento) AS subtotal, a.stock 
 			FROM detalle_venta d 
 			INNER JOIN producto a ON 
 			d.idproducto=a.idproducto 
@@ -69,7 +75,12 @@
 			// Render the HTML as PDF
 			$dompdf->render();
 			// Output the generated PDF to Browser
-			$dompdf->stream('Comprobante_'.$idventa.'.pdf',array('Attachment'=>0));
+			if($factura['tipo_comprobante'] == 'NCB' || $factura['tipo_comprobante'] == 'NCF'){
+				$tipodoc = 'Nota de Crédito';
+			}else{
+				$tipodoc = $factura['tipo_comprobante'];
+			}
+			$dompdf->stream($tipodoc.'_N°_'.$factura['serie_comprobante'].'-'.$factura['num_comprobante'].'.pdf',array('Attachment'=>0));
 			exit;
 		}
 	}

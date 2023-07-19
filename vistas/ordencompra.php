@@ -1,5 +1,4 @@
 <?php
-//Activamos el almacenamiento en el buffer
 ob_start();
 session_start();
 
@@ -80,9 +79,9 @@ if (!isset($_SESSION["nombre"])) {
                 <th>Personal</th>
                 <th>Tipo Documento</th>
                 <th>Número</th>
-                <th>Total Orden de Compra</th>
+                <th>Total</th>
                 <th>Estado</th>
-                <th>Acciones</th>
+                <th style="width: 120px;">Acciones</th>
               </thead>
               <tbody>
               </tbody>
@@ -92,9 +91,9 @@ if (!isset($_SESSION["nombre"])) {
                 <th>Personal</th>
                 <th>Tipo Documento</th>
                 <th>Número</th>
-                <th>Total Orden de Compra</th>
+                <th>Total</th>
                 <th>Estado</th>
-                <th>Acciones</th>
+                <th style="width: 120px;">Acciones</th>
               </tfoot>
             </table>
           </div>
@@ -234,7 +233,7 @@ if (!isset($_SESSION["nombre"])) {
               <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
                 <table id="detalles" class="table table-striped table-bordered table-condensed table-hover text-center" width="100%">
                   <thead>
-                    <th>Producto</th>
+                    <th style="width: 100px;">Producto</th>
                     <th>UM</th>
                     <th>Cantidad</th>
                     <th>Precio Compra</th>
@@ -289,13 +288,6 @@ if (!isset($_SESSION["nombre"])) {
                 <br><br>
                 <label>Facturar a:</label>
                 <input style="border-color: #FFC7BB;" type="text" class="form-control" name="documento" id="documento" placeholder="12345678911 - RAZON SOCIAL">
-              </div>
-
-              <div class="form-group col-lg-6 col-md-2 col-sm-6 col-xs-12">
-                <br><br>
-                <label>Nota:</label>
-                <textarea style="letter-spacing: 1px; padding: 10px; max-width: 100%; line-height: 1.5; border-radius: 5px; border: 1px solid #ccc; box-shadow: 1px 1px 1px #999;" type="text" class="form-control" name="nota" id="nota" rows="2" cols="25">
-                    </textarea>
               </div>
 
               <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">

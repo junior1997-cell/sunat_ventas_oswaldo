@@ -12,7 +12,7 @@ Class Compra
 
 	//Implementamos un método para insertar registros
 	//Incluyendo los detalles del ingreso
-	public function insertar($idsucursal,$idproveedor,$idpersonal,$tipo_c,$tipo_comprobante,$serie_comprobante,$num_comprobante,$fecha_hora,$impuesto,$total_compra,$formapago,$lugar_entrega,$motivo_compra,$documento,$nota,$comprobanteReferencia,$idproducto,$cantidad,$precio_compra,$precio_venta)
+	public function insertar($idsucursal,$idproveedor,$idpersonal,$tipo_c,$tipo_comprobante,$serie_comprobante,$num_comprobante,$fecha_hora,$impuesto,$total_compra,$formapago,$lugar_entrega,$motivo_compra,$documento,$nota,$comprobanteReferencia,$idproducto,$nombre_producto,$cantidad,$precio_compra,$precio_venta)
 	{
 
 		if($tipo_c == 'Orden Compra'){
@@ -23,7 +23,7 @@ Class Compra
 
 		if($comprobanteReferencia != ''){
 
-			$sql3 = "UPDATE compra SET estadoC= 'VENDIDO' WHERE idcompra='$comprobanteReferencia'";
+			$sql3 = "UPDATE compra SET estadoC= 'COMPRADO' WHERE idcompra='$comprobanteReferencia'";
 			ejecutarConsulta($sql3);
 
 		}
@@ -41,15 +41,15 @@ Class Compra
 		//cuenta cuantos indices tiene el array idproducto
 		while ($num_elementos < count($idproducto))
 		{
-			$sql_detalle = "INSERT INTO detalle_compra(idsucursal,idcompra,idproducto,cantidad,precio_compra,precio_venta,tipo_c) VALUES ('$idsucursal','$idingresonew', '$idproducto[$num_elementos]','$cantidad[$num_elementos]','$precio_compra[$num_elementos]','$precio_venta[$num_elementos]','$tipo_c')";
+			$sql_detalle = "INSERT INTO detalle_compra(idsucursal,idcompra,idproducto,nombre_producto,cantidad,precio_compra,precio_venta,tipo_c) VALUES ('$idsucursal','$idingresonew', '$idproducto[$num_elementos]','$nombre_producto[$num_elementos]','$cantidad[$num_elementos]','$precio_compra[$num_elementos]','$precio_venta[$num_elementos]','$tipo_c')";
 			ejecutarConsulta($sql_detalle) or $sw = false;
 			$num_elementos=$num_elementos + 1;
 		}
 
 		return $sw;
 	}
-
-	public function editar($idcompra,$idsucursal,$idproveedor,$tipo_comprobante,$serie_comprobante,$num_comprobante,$fecha_hora,$impuesto,$total_compra,$formapago,$lugar_entrega,$motivo_compra,$documento,$nota,$idproducto,$cantidad,$precio_compra,$precio_venta,$tipo_c)
+	
+	public function editar($idcompra,$idsucursal,$idproveedor,$tipo_comprobante,$serie_comprobante,$num_comprobante,$fecha_hora,$impuesto,$total_compra,$formapago,$lugar_entrega,$motivo_compra,$documento,$nota,$comprobanteReferencia,$idproducto,$nombre_producto,$cantidad,$precio_compra,$precio_venta,$tipo_c)
 	{
 		$sql="UPDATE compra SET idsucursal ='$idsucursal', idproveedor='$idproveedor', fecha_hora = '$fecha_hora', impuesto = '$impuesto', total_compra = '$total_compra', formapago = '$formapago', lugar_entrega = '$lugar_entrega', motivo_compra = '$motivo_compra', documento = '$documento', nota = '$nota' WHERE idcompra = '$idcompra'";		
 
@@ -65,7 +65,7 @@ Class Compra
 		//cuenta cuantos indices tiene el array idproducto
 		while ($num_elementos < count($idproducto))
 		{
-			$sql_detalle = "INSERT INTO detalle_compra(idsucursal,idcompra,idproducto,cantidad,precio_compra,precio_venta) VALUES ('$idsucursal','$idcompra', '$idproducto[$num_elementos]','$cantidad[$num_elementos]','$precio_compra[$num_elementos]','$precio_venta[$num_elementos]')";
+			$sql_detalle = "INSERT INTO detalle_compra(idsucursal,idcompra,idproducto,nombre_producto,cantidad,precio_compra,precio_venta,tipo_c) VALUES ('$idsucursal','$idcompra', '$idproducto[$num_elementos]','$nombre_producto[$num_elementos]','$cantidad[$num_elementos]','$precio_compra[$num_elementos]','$precio_venta[$num_elementos]','$tipo_c')";
 			ejecutarConsulta($sql_detalle) or $sw = false;
 			$num_elementos=$num_elementos + 1;
 		}

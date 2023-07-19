@@ -52,9 +52,9 @@ final class Util
      public function abrirConexion()
     {
         $server = "localhost";
-        $usuario = "root";
-        $clave = "";
-        $database = "tocell";
+        $usuario = "medsfacc_usermurruparquitectos";
+        $clave = "MURRUPARQUITECTOS";
+        $database = "medsfacc_ferreteriasp";
         $conexion = mysqli_connect($server, $usuario, $clave, $database);
 
         return $conexion;
@@ -92,19 +92,19 @@ final class Util
 
             // Para pruebas
             
-            $pfx = file_get_contents(__DIR__ .'/certificado.pem');
+            // $pfx = file_get_contents(__DIR__ .'/certificado.pem');
 
-            $see->setCertificate($pfx);
+            // $see->setCertificate($pfx);
             
 
             // Para producción
 
-            // $pfx = file_get_contents(__DIR__ . '/certificado.p12');
+            $pfx = file_get_contents(__DIR__ . '/C23062785268.pfx');
 
-            // $password = $contrasenacertificado;
-            // $certificate = new X509Certificate($pfx, $password);
+            $password = $contrasenacertificado;
+            $certificate = new X509Certificate($pfx, $password);
 
-            // $see->setCertificate($certificate->export(X509ContentType::PEM));
+            $see->setCertificate($certificate->export(X509ContentType::PEM));
 
            
             $see->setCredentials($ruc.''.$usuario, $contrasena);

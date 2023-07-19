@@ -1,0 +1,9 @@
+[06-Jul-2023 03:24:17 UTC] PHP Notice:  Undefined variable: serie_comp_tic in /home/medsfacc/materialescupisnique.medsfac.com/controladores/compra.php on line 173
+[06-Jul-2023 03:24:17 UTC] PHP Notice:  Undefined variable: num_comp_tic in /home/medsfacc/materialescupisnique.medsfac.com/controladores/compra.php on line 174
+[06-Jul-2023 03:24:17 UTC] PHP Notice:  Undefined variable: num_comp_tic in /home/medsfacc/materialescupisnique.medsfac.com/controladores/compra.php on line 132
+[06-Jul-2023 03:37:02 UTC] PHP Notice:  Undefined variable: serie_comp_tic in /home/medsfacc/materialescupisnique.medsfac.com/controladores/compra.php on line 173
+[06-Jul-2023 03:37:02 UTC] PHP Notice:  Undefined variable: num_comp_tic in /home/medsfacc/materialescupisnique.medsfac.com/controladores/compra.php on line 174
+[06-Jul-2023 03:37:02 UTC] PHP Notice:  Undefined variable: num_comp_tic in /home/medsfacc/materialescupisnique.medsfac.com/controladores/compra.php on line 132
+[06-Jul-2023 03:39:09 UTC] PHP Notice:  Undefined variable: serie_comp_tic in /home/medsfacc/materialescupisnique.medsfac.com/controladores/compra.php on line 173
+[06-Jul-2023 03:39:09 UTC] PHP Notice:  Undefined variable: num_comp_tic in /home/medsfacc/materialescupisnique.medsfac.com/controladores/compra.php on line 174
+[06-Jul-2023 03:39:09 UTC] PHP Notice:  Undefined variable: num_comp_tic in /home/medsfacc/materialescupisnique.medsfac.com/controladores/compra.php on line 132

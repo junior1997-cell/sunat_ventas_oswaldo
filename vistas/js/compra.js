@@ -248,7 +248,7 @@ function listar()
 					}
 				},
 		"bDestroy": true,
-		"iDisplayLength": 5,//Paginación
+		"iDisplayLength":10,//Paginación
 	    "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
 	}).DataTable();
 }
@@ -409,43 +409,59 @@ function mostrar2(idcompra){
 
 }
 
-function mostrarE(){
-	let idcompra = $('#comprobanteReferencia').val();
+function mostrarE(idcompra){
+	
+	mostrarform(true);
+
 	$.post("../controladores/compra.php?op=mostrar2",{idcompra : idcompra}, function(data,status)
-	{
+		{
 			data=JSON.parse(data);
+
+			// console.log(data);
+
+			$("#eliminar").val('Si');
 			
+			$("#idcompra").val(data.idcompra);
+			$("#estadoC").val(data.estadoC);
 			$("#idsucursal").val(data.idsucursal);
 			$('#idsucursal').selectpicker('refresh');
 			$("#idproveedor").val(data.idproveedor);
 			$('#idproveedor').selectpicker('refresh');
-			// $("#fecha").val(data.fecha);	
+			$("#fecha").val(data.fecha);	
 			$("#tipo_comprobantem").val(data.tipo_comprobante);
 			$("#impuesto").val(data.impuesto);
 			$("#serie_comprobante").val(data.serie_comprobante);
 			$("#num_comprobante").val(data.num_comprobante);
 
+			$("#formapago").val(data.formapago);
+			$('#formapago').selectpicker('refresh');
+			$("#lugar_entrega").val(data.lugar_entrega);
+			$("#motivo_compra").val(data.motivo_compra);
+			$("#documento").val(data.documento);
+			$("#nota").val(data.nota);
 
-	});
-	$.post("../controladores/compra.php?op=listarDetalleCompra",{idcompra : idcompra}, function(data,status)
-	{
-		data=JSON.parse(data);
+			$("#mostrarE").show();
 
-		console.log(data);
 
-		for(var y=0; y<contador;y++){
+		});
+		
+		$.post("../controladores/compra.php?op=listarDetalleCompra",{idcompra : idcompra}, function(data,status)
+		{
+			data=JSON.parse(data);
 
-			eliminarDetalle(y);
+			console.log(data);
 
-		}
+			for(var i=0; i < data.length; i++){
+				
+				agregarDetalle(data[i][0],data[i][1],data[i][4],data[i][3],data[i][5],data[i][2])
 
-		for(var i=0; i < data.length; i++){
 
-			agregarDetalle(data[i][0],data[i][1],data[i][4],data[i][3],data[i][5],data[i][2])
+			}
 
-		}
+		});
 
-	});
+		$("#btnEliminarD").hide();
+
 }
 
 //Función para anular registros
@@ -498,7 +514,7 @@ function listarArticulos(){
 			}
 		},
 		"bDestroy":true,
-		"iDisplayLength":5,//paginacion
+		"iDisplayLength":10,//paginacion
 		"order":[[0,"desc"]]//ordenar (columna, orden)
 	}).DataTable();
 }
@@ -572,7 +588,7 @@ function marcarImpuesto()
 		contador=contador+1;
     	var subtotal=cantidad*precio_compra;
 		var fila='<tr class="filas" id="fila'+cont+'">'+
-        '<td><input style="text-align:center" type="hidden" name="idproducto[]" value="'+idproducto+'"><input style="text-align:center;width: 200px;" type="text" name="nombreProducto[]" value="'+producto+'"></td>'+
+        '<td><input style="text-align:center" type="hidden" name="idproducto[]" value="'+idproducto+'"><input style="width: 300px;" type="text" name="nombreProducto[]" value="'+producto+'"></td>'+
         '<td><input style="text-align:center" type="hidden">'+unidadmedida+'</td>'+
         '<td><input style="text-align:center" type="number" step="0.01" onchange="modificarSubtotales()" name="cantidad[]" id="cantidad[]" value="'+cantidad+'"></td>'+
         '<td><input style="text-align:center" type="number" step="0.01" onchange="modificarSubtotales()" name="precio_compra[]" id="precio_compra[]" value="'+precioCompra+'"></td>'+

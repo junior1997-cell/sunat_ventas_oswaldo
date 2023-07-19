@@ -40,6 +40,10 @@ $productoTrasladar=isset($_POST["idproducto2"])? limpiarCadena($_POST["idproduct
 $productoTraslado=isset($_POST["idproducto3"])? limpiarCadena($_POST["idproducto3"]):"";
 $cantidadTrasladar=isset($_POST["cantidadT"])? limpiarCadena($_POST["cantidadT"]):"";
 
+$precioV=isset($_POST["precioV"])? $_POST["precioV"]:"";
+$rangoI=isset($_POST["rangoI"])? $_POST["rangoI"]:"";
+$rangoF=isset($_POST["rangoF"])? $_POST["rangoF"]:"";
+
 switch ($_GET["op"]){
 	case 'guardaryeditar':
 
@@ -57,11 +61,11 @@ switch ($_GET["op"]){
 			}
 		}
 		if (empty($idproducto)){
-			$rspta=$producto->insertar($idsucursal,$idcategoria,$idunidad_medida,$codigo,strtoupper($nombre),$stock,$stockMinimo,$precio,$preciocigv,$precioB,$precioC,$precioD,$precioCompra,$fecha,$descripcion,$imagen,$modelo,$nserie,$tipoigv,$_POST['sucursales']);
+			$rspta=$producto->insertar($idsucursal,$idcategoria,$idunidad_medida,$codigo,strtoupper($nombre),$stock,$stockMinimo,$precio,$preciocigv,$precioB,$precioC,$precioD,$precioCompra,$fecha,$descripcion,$imagen,$modelo,$nserie,$tipoigv,$precioV,$rangoI,$rangoF,$_POST['sucursales']);
 			echo $rspta ? "Datos registrados correctamente" : "No se pudo completar el registro";
 		}
 		else {
-			$rspta=$producto->editar($idproducto,$idsucursal,$idcategoria,$idunidad_medida,$codigo,$nombre,$stock,$stockMinimo,$precio,$preciocigv,$precioB,$precioC,$precioD,$precioCompra,$fecha,$descripcion,$imagen,$modelo,$nserie,$tipoigv,$_POST['sucursales']);
+			$rspta=$producto->editar($idproducto,$idsucursal,$idcategoria,$idunidad_medida,$codigo,$nombre,$stock,$stockMinimo,$precio,$preciocigv,$precioB,$precioC,$precioD,$precioCompra,$fecha,$descripcion,$imagen,$modelo,$nserie,$tipoigv,$precioV,$rangoI,$rangoF,$_POST['sucursales']);
 			echo $rspta ? "Datos actualizados" : "No se pudo actualizar";
 		}
 	break;
@@ -142,12 +146,12 @@ switch ($_GET["op"]){
  				"0"=>$reg->fecha,
 				"1"=>$reg->motivo,
  				"2"=>$reg->comprobante,
- 				"3"=>$reg->cantidad,
- 				"4"=>$reg->salida,
+ 				"3"=>'<span class="badge bg-green">'.$reg->cantidad.'</span>',
+ 				"4"=>'<span class="badge bg-red">'.$reg->salida.'</span>',
  				"5"=>$reg->precio,
  				"6"=>$reg->valor,
  				"7"=>$reg->stock,
- 				"8"=>$reg->stock * $reg->precio
+ 				"8"=>number_format($reg->stock * $reg->precio,2, ".", ",")
  			);
 
 			$contador = $contador + 1;
@@ -238,16 +242,15 @@ switch ($_GET["op"]){
  				"2"=>$reg->categoria,
  				"3"=>$reg->almacen,
  				"4"=>$reg->codigo,
- 				"5"=>($reg->fecha != $fechaActual)?$reg->fecha:'<span class="badge bg-red">'.$reg->fecha.'</span>',
- 				"6"=>($reg->stock > $reg->stock_minimo)?$reg->stock:
+ 				"5"=>($reg->stock > $reg->stock_minimo)?$reg->stock:
  				'<span class="badge bg-red">'.$reg->stock.'</span>',
- 				"7"=>$reg->precio,
- 				"8"=>$reg->precio_compra,
- 				"9"=>$reg->fechac,
- 				"10"=>"<img src='../files/productos/".$reg->imagen."' height='50px' width='50px' >",
- 				"11"=>($reg->condicion)?'<span class="badge bg-green">ACTIVADO</span>':
+ 				"6"=>$reg->precio,
+ 				"7"=>$reg->precio_compra,
+ 				"8"=>$reg->fechac,
+ 				"9"=>"<img src='../files/productos/".$reg->imagen."' height='50px' width='50px' >",
+ 				"10"=>($reg->condicion)?'<span class="badge bg-green">ACTIVADO</span>':
  				'<span class="badge bg-red">DESACTIVADO</span>',
- 				"12"=>($reg->condicion)?'<button class="btn btn-primary btn-xs" onclick="mostrarKardex('.$reg->idproducto.')"><i class="fa fa-eye"></i></button> '. '<button class="btn btn-warning btn-xs" onclick="mostrar('.$reg->idproducto.')"><i class="fa fa-pencil"></i></button>'.
+ 				"11"=>($reg->condicion)?'<button class="btn btn-warning btn-xs" onclick="mostrar('.$reg->idproducto.')"><i class="fa fa-pencil"></i></button>'.
  					' <button class="btn btn-danger btn-xs" onclick="desactivar('.$reg->idproducto.')"><i class="fa fa-close"></i></button>':
  					'<button class="btn btn-warning btn-xs" onclick="mostrar('.$reg->idproducto.')"><i class="fa fa-pencil"></i></button>'.
  					' <button class="btn btn-primary btn-xs" onclick="activar('.$reg->idproducto.')"><i class="fa fa-check"></i></button>'

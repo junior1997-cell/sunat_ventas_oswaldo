@@ -343,7 +343,7 @@ function listar()
 					}
 				},
 		"bDestroy": true,
-		"iDisplayLength": 5,//Paginación
+		"iDisplayLength":10,//Paginación
 	    "order": [[ 1, "desc" ]]//Ordenar (columna,orden)
 	}).DataTable();
 }
@@ -418,7 +418,7 @@ function mostrarKardex(idproducto){
 							}
 						},
 				"bDestroy": true,
-				"iDisplayLength": 5,//Paginación
+				"iDisplayLength":10,//Paginación
 			}).DataTable();
 
 }

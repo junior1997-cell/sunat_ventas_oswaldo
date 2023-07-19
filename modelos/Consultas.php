@@ -1,5 +1,5 @@
 <?php 
-//IncluÃ­mos inicialmente la conexiÃ³n a la base de datos
+//Inclu¨ªmos inicialmente la conexi¨®n a la base de datos
 require "../configuraciones/Conexion.php";
 
 Class Consultas
@@ -24,24 +24,77 @@ Class Consultas
 
 		return ejecutarConsulta($sql);		
 	}
+
+	public function deudasfechacliente($fecha_inicio,$fecha_fin,$idcliente,$idsucursal)
+	{
+
+		if($idsucursal == "Todos" AND $idcliente == "Todos"){
+
+			$sql="SELECT v.idcliente,p.nombre as cliente, SUM(cc.deudatotal) as deudatotal
+			FROM venta v
+			INNER JOIN cuentas_por_cobrar cc
+			ON v.idventa = cc.idventa
+			INNER JOIN persona p
+			ON v.idcliente = p.idpersona
+			WHERE DATE(v.fecha_hora)>='$fecha_inicio' AND DATE(v.fecha_hora)<='$fecha_fin'
+			GROUP BY v.idcliente";
+
+		}else if($idsucursal == "Todos" AND $idcliente != "Todos"){
+
+			$sql="SELECT v.idcliente,p.nombre as cliente, SUM(cc.deudatotal) as deudatotal
+			FROM venta v
+			INNER JOIN cuentas_por_cobrar cc
+			ON v.idventa = cc.idventa
+			INNER JOIN persona p
+			ON v.idcliente = p.idpersona
+			WHERE DATE(v.fecha_hora)>='$fecha_inicio' AND DATE(v.fecha_hora)<='$fecha_fin' AND v.idcliente = '$idcliente'
+			GROUP BY v.idcliente";
+
+		}else if($idsucursal != "Todos" AND $idcliente == "Todos"){ 
+		
+			$sql="SELECT v.idcliente,p.nombre as cliente, SUM(cc.deudatotal) as deudatotal
+			FROM venta v
+			INNER JOIN cuentas_por_cobrar cc
+			ON v.idventa = cc.idventa
+			INNER JOIN persona p
+			ON v.idcliente = p.idpersona
+			WHERE DATE(v.fecha_hora)>='$fecha_inicio' AND DATE(v.fecha_hora)<='$fecha_fin' AND v.idsucursal = '$idsucursal'
+			GROUP BY v.idcliente";
+		
+		}else{
+
+			$sql="SELECT v.idcliente,p.nombre as cliente, SUM(cc.deudatotal) as deudatotal
+			FROM venta v
+			INNER JOIN cuentas_por_cobrar cc
+			ON v.idventa = cc.idventa
+			INNER JOIN persona p
+			ON v.idcliente = p.idpersona
+			WHERE DATE(v.fecha_hora)>='$fecha_inicio' AND DATE(v.fecha_hora)<='$fecha_fin' AND v.idsucursal = '$idsucursal' AND v.idcliente = '$idcliente'
+			GROUP BY v.idcliente";
+
+		}
+
+		return ejecutarConsulta($sql);		
+	}
+
 	public function ventasfechacliente($fecha_inicio,$fecha_fin,$idcliente,$idsucursal)
 	{
 
 		if($idsucursal == "Todos" AND $idcliente == "Todos"){
 
-			$sql="SELECT v.idventa,DATE(v.fecha_hora) as fecha,u.nombre as personal, p.nombre as cliente,v.tipo_comprobante,v.serie_comprobante,v.num_comprobante,v.total_venta,v.impuesto,v.estado FROM venta v INNER JOIN persona p ON v.idcliente=p.idpersona INNER JOIN personal u ON v.idpersonal=u.idpersonal WHERE DATE(v.fecha_hora)>='$fecha_inicio' AND DATE(v.fecha_hora)<='$fecha_fin' AND v.tipo_comprobante IN ('Factura','Boleta','Nota')";
+			$sql="SELECT v.idventa,DATE(v.fecha_hora) as fecha,u.nombre as personal, p.nombre as cliente,v.tipo_comprobante,v.serie_comprobante,v.num_comprobante,v.total_venta,v.impuesto,v.ventacredito,v.estado FROM venta v INNER JOIN persona p ON v.idcliente=p.idpersona INNER JOIN personal u ON v.idpersonal=u.idpersonal WHERE DATE(v.fecha_hora)>='$fecha_inicio' AND DATE(v.fecha_hora)<='$fecha_fin' AND v.tipo_comprobante IN ('Factura','Boleta','Nota')";
 
 		}else if($idsucursal == "Todos" AND $idcliente != "Todos"){
 
-			$sql="SELECT v.idventa,DATE(v.fecha_hora) as fecha,u.nombre as personal, p.nombre as cliente,v.tipo_comprobante,v.serie_comprobante,v.num_comprobante,v.total_venta,v.impuesto,v.estado FROM venta v INNER JOIN persona p ON v.idcliente=p.idpersona INNER JOIN personal u ON v.idpersonal=u.idpersonal WHERE DATE(v.fecha_hora)>='$fecha_inicio' AND DATE(v.fecha_hora)<='$fecha_fin' AND v.idcliente='$idcliente' AND v.tipo_comprobante IN ('Factura','Boleta','Nota')";
+			$sql="SELECT v.idventa,DATE(v.fecha_hora) as fecha,u.nombre as personal, p.nombre as cliente,v.tipo_comprobante,v.serie_comprobante,v.num_comprobante,v.total_venta,v.impuesto,v.ventacredito,v.estado FROM venta v INNER JOIN persona p ON v.idcliente=p.idpersona INNER JOIN personal u ON v.idpersonal=u.idpersonal WHERE DATE(v.fecha_hora)>='$fecha_inicio' AND DATE(v.fecha_hora)<='$fecha_fin' AND v.idcliente='$idcliente' AND v.tipo_comprobante IN ('Factura','Boleta','Nota')";
 
 		}else if($idsucursal != "Todos" AND $idcliente == "Todos"){ 
 		
-			$sql="SELECT v.idventa,DATE(v.fecha_hora) as fecha,u.nombre as personal, p.nombre as cliente,v.tipo_comprobante,v.serie_comprobante,v.num_comprobante,v.total_venta,v.impuesto,v.estado FROM venta v INNER JOIN persona p ON v.idcliente=p.idpersona INNER JOIN personal u ON v.idpersonal=u.idpersonal WHERE DATE(v.fecha_hora)>='$fecha_inicio' AND DATE(v.fecha_hora)<='$fecha_fin' AND v.tipo_comprobante IN ('Factura','Boleta','Nota') AND v.idsucursal = '$idsucursal'";
+			$sql="SELECT v.idventa,DATE(v.fecha_hora) as fecha,u.nombre as personal, p.nombre as cliente,v.tipo_comprobante,v.serie_comprobante,v.num_comprobante,v.total_venta,v.impuesto,v.ventacredito,v.estado FROM venta v INNER JOIN persona p ON v.idcliente=p.idpersona INNER JOIN personal u ON v.idpersonal=u.idpersonal WHERE DATE(v.fecha_hora)>='$fecha_inicio' AND DATE(v.fecha_hora)<='$fecha_fin' AND v.tipo_comprobante IN ('Factura','Boleta','Nota') AND v.idsucursal = '$idsucursal'";
 		
 		}else{
 
-			$sql="SELECT v.idventa,DATE(v.fecha_hora) as fecha,u.nombre as personal, p.nombre as cliente,v.tipo_comprobante,v.serie_comprobante,v.num_comprobante,v.total_venta,v.impuesto,v.estado FROM venta v INNER JOIN persona p ON v.idcliente=p.idpersona INNER JOIN personal u ON v.idpersonal=u.idpersonal WHERE DATE(v.fecha_hora)>='$fecha_inicio' AND DATE(v.fecha_hora)<='$fecha_fin' AND v.idcliente='$idcliente' AND v.tipo_comprobante IN ('Factura','Boleta','Nota') AND v.idsucursal = '$idsucursal'";
+			$sql="SELECT v.idventa,DATE(v.fecha_hora) as fecha,u.nombre as personal, p.nombre as cliente,v.tipo_comprobante,v.serie_comprobante,v.num_comprobante,v.total_venta,v.impuesto,v.ventacredito,v.estado FROM venta v INNER JOIN persona p ON v.idcliente=p.idpersona INNER JOIN personal u ON v.idpersonal=u.idpersonal WHERE DATE(v.fecha_hora)>='$fecha_inicio' AND DATE(v.fecha_hora)<='$fecha_fin' AND v.idcliente='$idcliente' AND v.tipo_comprobante IN ('Factura','Boleta','Nota') AND v.idsucursal = '$idsucursal'";
 
 		}
 
@@ -270,13 +323,13 @@ Class Consultas
 	public function totalcuentasporcobrar($fecha_inicio, $fecha_fin, $idvendedor, $idsucursal)
 	{
 		if($idvendedor=="Todos" || $idvendedor == null AND $idsucursal == "Todos" || $idsucursal == null){
-			$sql="SELECT IFNULL(SUM(deudatotal - abonototal),0) as totaldeuda FROM cuentas_por_cobrar where condicion=1 AND DATE(fecharegistro)>='$fecha_inicio' AND DATE(fecharegistro)<='$fecha_fin'";
+			$sql="SELECT IFNULL(SUM(deudatotal),0) as totaldeuda FROM cuentas_por_cobrar where condicion=1 AND DATE(fecharegistro)>='$fecha_inicio' AND DATE(fecharegistro)<='$fecha_fin'";
 		}else if($idvendedor != "Todos" AND $idsucursal == "Todos"){	
-			$sql="SELECT IFNULL(SUM(deudatotal - abonototal),0) as totaldeuda FROM cuentas_por_cobrar where condicion=1 AND idpersonal = '$idvendedor' AND DATE(fecharegistro)>='$fecha_inicio' AND DATE(fecharegistro)<='$fecha_fin'";
+			$sql="SELECT IFNULL(SUM(deudatotal),0) as totaldeuda FROM cuentas_por_cobrar where condicion=1 AND idpersonal = '$idvendedor' AND DATE(fecharegistro)>='$fecha_inicio' AND DATE(fecharegistro)<='$fecha_fin'";
 		}else if($idvendedor == "Todos" AND $idsucursal != "Todos"){
-			$sql="SELECT IFNULL(SUM(deudatotal - abonototal),0) as totaldeuda FROM cuentas_por_cobrar where condicion=1 AND idsucursal = '$idsucursal' AND DATE(fecharegistro)>='$fecha_inicio' AND DATE(fecharegistro)<='$fecha_fin'";
+			$sql="SELECT IFNULL(SUM(deudatotal),0) as totaldeuda FROM cuentas_por_cobrar where condicion=1 AND idsucursal = '$idsucursal' AND DATE(fecharegistro)>='$fecha_inicio' AND DATE(fecharegistro)<='$fecha_fin'";
 		}else{
-			$sql="SELECT IFNULL(SUM(deudatotal - abonototal),0) as totaldeuda FROM cuentas_por_cobrar where condicion=1 AND idpersonal = '$idvendedor' AND idsucursal = '$idsucursal' AND DATE(fecharegistro)>='$fecha_inicio' AND DATE(fecharegistro)<='$fecha_fin'";
+			$sql="SELECT IFNULL(SUM(deudatotal),0) as totaldeuda FROM cuentas_por_cobrar where condicion=1 AND idpersonal = '$idvendedor' AND idsucursal = '$idsucursal' AND DATE(fecharegistro)>='$fecha_inicio' AND DATE(fecharegistro)<='$fecha_fin'";
 		}
 		return ejecutarConsultaSimpleFila($sql);
 	}
@@ -641,6 +694,73 @@ Class Consultas
 		}else{
 
 			$sql="SELECT IFNULL(count(idcpc),0) as totalcuentacobrar FROM cuentas_por_cobrar WHERE condicion = 1 AND DATE(fecharegistro)>='$fecha_inicio' AND DATE(fecharegistro)<='$fecha_fin' AND idsucursal='$idsucursal'";
+
+		}
+
+
+		return ejecutarConsultaSimpleFila($sql);
+
+	}
+
+	public function totalT($fecha_inicio,$fecha_fin,$idsucursal){
+
+		if($idsucursal == "Todos" || $idsucursal == null){
+
+			$sql="SELECT ((select ifnull(sum(total_venta),0) from venta WHERE DATE(fecha_hora)>='$fecha_inicio' AND DATE(fecha_hora)<='$fecha_fin' AND formapago = 'Efectivo' AND tipo_comprobante = 'Boleta' AND ventacredito= 'no' AND estado IN ('Aceptado', 'Por Enviar', 'Activado')) + 
+			(select ifnull(sum(total_venta),0) from venta WHERE DATE(fecha_hora)>='$fecha_inicio' AND DATE(fecha_hora)<='$fecha_fin' AND formapago = 'Efectivo' AND tipo_comprobante = 'Factura' AND ventacredito= 'no' AND estado IN ('Aceptado', 'Por Enviar', 'Activado')) +
+		   (select ifnull(sum(total_venta),0) from venta WHERE DATE(fecha_hora)>='$fecha_inicio' AND DATE(fecha_hora)<='$fecha_fin' AND formapago = 'Efectivo' AND tipo_comprobante = 'Nota' AND ventacredito= 'no' AND estado IN ('Aceptado', 'Por Enviar', 'Activado')) +
+		   (select ifnull(sum(dcc.montopagado),0) from detalle_cuentas_por_cobrar dcc INNER JOIN cuentas_por_cobrar cc ON cc.idcpc = dcc.idcpc WHERE DATE(fechapago)>='$fecha_inicio' AND DATE(fechapago)<='$fecha_fin' AND formapago = 'Efectivo' AND cc.condicion = 1)
+		   ) + ((select ifnull(sum(total_venta),0) from venta WHERE DATE(fecha_hora)>='$fecha_inicio' AND DATE(fecha_hora)<='$fecha_fin' AND formapago != 'Efectivo' AND tipo_comprobante = 'Boleta' AND ventacredito= 'no' AND estado IN ('Aceptado', 'Por Enviar', 'Activado')) + 
+        (select ifnull(sum(total_venta),0) from venta WHERE DATE(fecha_hora)>='$fecha_inicio' AND DATE(fecha_hora)<='$fecha_fin' AND formapago != 'Efectivo' AND tipo_comprobante = 'Factura' AND ventacredito= 'no' AND estado IN ('Aceptado', 'Por Enviar', 'Activado')) +
+       (select ifnull(sum(total_venta),0) from venta WHERE DATE(fecha_hora)>='$fecha_inicio' AND DATE(fecha_hora)<='$fecha_fin' AND formapago != 'Efectivo' AND tipo_comprobante = 'Nota' AND ventacredito= 'no' AND estado IN ('Aceptado', 'Por Enviar', 'Activado')) +
+       (select ifnull(sum(montopagado),0) from detalle_cuentas_por_cobrar WHERE DATE(fechapago)>='$fecha_inicio' AND DATE(fechapago)<='$fecha_fin' AND formapago != 'Efectivo')
+       ) AS totalI";
+
+		}else{
+
+			$sql="SELECT ((select ifnull(sum(total_venta),0) from venta WHERE DATE(fecha_hora)>='$fecha_inicio' AND DATE(fecha_hora)<='$fecha_fin' AND formapago = 'Efectivo' AND tipo_comprobante = 'Boleta' AND ventacredito= 'no' AND estado IN ('Aceptado', 'Por Enviar', 'Activado') AND idsucursal='$idsucursal') + 
+			(select ifnull(sum(total_venta),0) from venta WHERE DATE(fecha_hora)>='$fecha_inicio' AND DATE(fecha_hora)<='$fecha_fin' AND formapago = 'Efectivo' AND tipo_comprobante = 'Factura' AND ventacredito= 'no' AND estado IN ('Aceptado', 'Por Enviar', 'Activado') AND idsucursal='$idsucursal') +
+		   (select ifnull(sum(total_venta),0) from venta WHERE DATE(fecha_hora)>='$fecha_inicio' AND DATE(fecha_hora)<='$fecha_fin' AND formapago = 'Efectivo' AND tipo_comprobante = 'Nota' AND ventacredito= 'no' AND estado IN ('Aceptado', 'Por Enviar', 'Activado') AND idsucursal='$idsucursal') +
+		   (select ifnull(sum(dcc.montopagado),0) from detalle_cuentas_por_cobrar dcc INNER JOIN cuentas_por_cobrar cc ON cc.idcpc = dcc.idcpc WHERE DATE(fechapago)>='$fecha_inicio' AND DATE(fechapago)<='$fecha_fin' AND formapago = 'Efectivo' AND cc.condicion = 1)
+		   ) + ((select ifnull(sum(total_venta),0) from venta WHERE DATE(fecha_hora)>='$fecha_inicio' AND DATE(fecha_hora)<='$fecha_fin' AND formapago != 'Efectivo' AND tipo_comprobante = 'Boleta' AND ventacredito= 'no' AND estado IN ('Aceptado', 'Por Enviar', 'Activado') AND idsucursal='$idsucursal') + 
+        (select ifnull(sum(total_venta),0) from venta WHERE DATE(fecha_hora)>='$fecha_inicio' AND DATE(fecha_hora)<='$fecha_fin' AND formapago != 'Efectivo' AND tipo_comprobante = 'Factura' AND ventacredito= 'no' AND estado IN ('Aceptado', 'Por Enviar', 'Activado') AND idsucursal='$idsucursal') +
+       (select ifnull(sum(total_venta),0) from venta WHERE DATE(fecha_hora)>='$fecha_inicio' AND DATE(fecha_hora)<='$fecha_fin' AND formapago != 'Efectivo' AND tipo_comprobante = 'Nota' AND ventacredito= 'no' AND estado IN ('Aceptado', 'Por Enviar', 'Activado') AND idsucursal='$idsucursal') +
+       (select ifnull(sum(montopagado),0) from detalle_cuentas_por_cobrar WHERE DATE(fechapago)>='$fecha_inicio' AND DATE(fechapago)<='$fecha_fin' AND formapago != 'Efectivo')
+       ) AS totalI";
+
+		}
+
+
+		return ejecutarConsultaSimpleFila($sql);
+
+	}
+
+	public function totalEC($fecha_inicio,$fecha_fin,$idsucursal){
+
+		if($idsucursal == "Todos" || $idsucursal == null){
+
+			$sql="SELECT (IFNULL( (SELECT sum(monto) as totalIngresos FROM movimiento WHERE DATE(fecha)>='$fecha_inicio' AND DATE(fecha)<='$fecha_fin' AND tipo = 'Ingresos'), 0) + 
+			((select ifnull(sum(total_venta),0) from venta WHERE DATE(fecha_hora)>='$fecha_inicio' AND DATE(fecha_hora)<='$fecha_fin' AND formapago = 'Efectivo' AND tipo_comprobante = 'Boleta' AND ventacredito= 'no' AND estado IN ('Aceptado', 'Por Enviar', 'Activado')) + 
+			(select ifnull(sum(total_venta),0) from venta WHERE DATE(fecha_hora)>='$fecha_inicio' AND DATE(fecha_hora)<='$fecha_fin' AND formapago = 'Efectivo' AND tipo_comprobante = 'Factura' AND ventacredito= 'no' AND estado IN ('Aceptado', 'Por Enviar', 'Activado')) +
+		   (select ifnull(sum(total_venta),0) from venta WHERE DATE(fecha_hora)>='$fecha_inicio' AND DATE(fecha_hora)<='$fecha_fin' AND formapago = 'Efectivo' AND tipo_comprobante = 'Nota' AND ventacredito= 'no' AND estado IN ('Aceptado', 'Por Enviar', 'Activado')) +
+		   (select ifnull(sum(dcc.montopagado),0) from detalle_cuentas_por_cobrar dcc INNER JOIN cuentas_por_cobrar cc ON cc.idcpc = dcc.idcpc WHERE DATE(fechapago)>='$fecha_inicio' AND DATE(fechapago)<='$fecha_fin' AND formapago = 'Efectivo' AND cc.condicion = 1)
+		   ) + ((select ifnull(sum(total_venta),0) from venta WHERE DATE(fecha_hora)>='$fecha_inicio' AND DATE(fecha_hora)<='$fecha_fin' AND formapago != 'Efectivo' AND tipo_comprobante = 'Boleta' AND ventacredito= 'no' AND estado IN ('Aceptado', 'Por Enviar', 'Activado')) + 
+        (select ifnull(sum(total_venta),0) from venta WHERE DATE(fecha_hora)>='$fecha_inicio' AND DATE(fecha_hora)<='$fecha_fin' AND formapago != 'Efectivo' AND tipo_comprobante = 'Factura' AND ventacredito= 'no' AND estado IN ('Aceptado', 'Por Enviar', 'Activado')) +
+       (select ifnull(sum(total_venta),0) from venta WHERE DATE(fecha_hora)>='$fecha_inicio' AND DATE(fecha_hora)<='$fecha_fin' AND formapago != 'Efectivo' AND tipo_comprobante = 'Nota' AND ventacredito= 'no' AND estado IN ('Aceptado', 'Por Enviar', 'Activado')) +
+       (select ifnull(sum(montopagado),0) from detalle_cuentas_por_cobrar WHERE DATE(fechapago)>='$fecha_inicio' AND DATE(fechapago)<='$fecha_fin' AND formapago != 'Efectivo')
+       )) - IFNULL( (SELECT sum(monto) as totalIngresos FROM movimiento WHERE DATE(fecha)>='$fecha_inicio' AND DATE(fecha)<='$fecha_fin' AND tipo = 'Egresos'), 0) AS totalEC";
+
+		}else{
+
+			$sql="SELECT (IFNULL( (SELECT sum(monto) as totalIngresos FROM movimiento WHERE DATE(fecha)>='$fecha_inicio' AND DATE(fecha)<='$fecha_fin' AND tipo = 'Ingresos'), 0) + ((select ifnull(sum(total_venta),0) from venta WHERE DATE(fecha_hora)>='$fecha_inicio' AND DATE(fecha_hora)<='$fecha_fin' AND formapago = 'Efectivo' AND tipo_comprobante = 'Boleta' AND ventacredito= 'no' AND estado IN ('Aceptado', 'Por Enviar', 'Activado') AND idsucursal='$idsucursal') + 
+			(select ifnull(sum(total_venta),0) from venta WHERE DATE(fecha_hora)>='$fecha_inicio' AND DATE(fecha_hora)<='$fecha_fin' AND formapago = 'Efectivo' AND tipo_comprobante = 'Factura' AND ventacredito= 'no' AND estado IN ('Aceptado', 'Por Enviar', 'Activado') AND idsucursal='$idsucursal') +
+		   (select ifnull(sum(total_venta),0) from venta WHERE DATE(fecha_hora)>='$fecha_inicio' AND DATE(fecha_hora)<='$fecha_fin' AND formapago = 'Efectivo' AND tipo_comprobante = 'Nota' AND ventacredito= 'no' AND estado IN ('Aceptado', 'Por Enviar', 'Activado') AND idsucursal='$idsucursal') +
+		   (select ifnull(sum(dcc.montopagado),0) from detalle_cuentas_por_cobrar dcc INNER JOIN cuentas_por_cobrar cc ON cc.idcpc = dcc.idcpc WHERE DATE(fechapago)>='$fecha_inicio' AND DATE(fechapago)<='$fecha_fin' AND formapago = 'Efectivo' AND cc.condicion = 1)
+		   ) + ((select ifnull(sum(total_venta),0) from venta WHERE DATE(fecha_hora)>='$fecha_inicio' AND DATE(fecha_hora)<='$fecha_fin' AND formapago != 'Efectivo' AND tipo_comprobante = 'Boleta' AND ventacredito= 'no' AND estado IN ('Aceptado', 'Por Enviar', 'Activado') AND idsucursal='$idsucursal') + 
+        (select ifnull(sum(total_venta),0) from venta WHERE DATE(fecha_hora)>='$fecha_inicio' AND DATE(fecha_hora)<='$fecha_fin' AND formapago != 'Efectivo' AND tipo_comprobante = 'Factura' AND ventacredito= 'no' AND estado IN ('Aceptado', 'Por Enviar', 'Activado') AND idsucursal='$idsucursal') +
+       (select ifnull(sum(total_venta),0) from venta WHERE DATE(fecha_hora)>='$fecha_inicio' AND DATE(fecha_hora)<='$fecha_fin' AND formapago != 'Efectivo' AND tipo_comprobante = 'Nota' AND ventacredito= 'no' AND estado IN ('Aceptado', 'Por Enviar', 'Activado') AND idsucursal='$idsucursal') +
+       (select ifnull(sum(montopagado),0) from detalle_cuentas_por_cobrar WHERE DATE(fechapago)>='$fecha_inicio' AND DATE(fechapago)<='$fecha_fin' AND formapago != 'Efectivo')
+       )) - IFNULL( (SELECT sum(monto) as totalIngresos FROM movimiento WHERE DATE(fecha)>='$fecha_inicio' AND DATE(fecha)<='$fecha_fin' AND tipo = 'Egresos'), 0) AS totalEC";
 
 		}
 

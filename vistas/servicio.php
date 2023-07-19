@@ -49,10 +49,6 @@ if (!isset($_SESSION["idpersonal"])) {
             </button>
             <a href="../reportes/rptservicios.php" target="_blank"><button class="btn btn-danger"><i class="fa fa-file"></i> Reporte</button></a>
 
-            <!-- <a data-toggle="modal" data-target="#traslados" target="_blank"><button class="btn btn-danger" style="float: right; margin-left: 5px;"><i class="fa fa-file"></i> Traslados</button></a> -->
-
-            <!-- <a data-toggle="modal" data-target="#desempaquetar" target="_blank"><button class="btn btn-success" style="float: right; margin-left: 5px;" onclick="llenarProductos()"><i class="fa fa-file"></i> Desempaquetar</button></a> -->
-
             <br><br>
 
             <div class="form-group col-lg-3 col-md-3 col-sm-3 col-xs-12">

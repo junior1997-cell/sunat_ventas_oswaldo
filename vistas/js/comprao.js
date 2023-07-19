@@ -66,6 +66,9 @@ function limpiar()
     //Marcamos el primer tipo_documento
     $("#tipo_comprobante").val("Boleta");
 	$("#tipo_comprobante").selectpicker('refresh');
+
+	$("#idcompra").val("");
+
 }
 
 function mostrarE(idcompra){
@@ -108,9 +111,12 @@ function mostrarE(idcompra){
 		{
 			data=JSON.parse(data);
 
-			for(var i=0; i < data.length; i++){
+			console.log(data);
 
+			for(var i=0; i < data.length; i++){
+				
 				agregarDetalle(data[i][0],data[i][1],data[i][4],data[i][3],data[i][5],data[i][2])
+
 
 			}
 
@@ -251,7 +257,7 @@ function listar()
 					}
 				},
 		"bDestroy": true,
-		"iDisplayLength": 5,//Paginación
+		"iDisplayLength": 25,//Paginación
 	    "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
 	}).DataTable();
 }
@@ -389,7 +395,7 @@ function listarArticulos(){
 			}
 		},
 		"bDestroy":true,
-		"iDisplayLength":5,//paginacion
+		"iDisplayLength":10,//paginacion
 		"order":[[0,"desc"]]//ordenar (columna, orden)
 	}).DataTable();
 }
@@ -439,7 +445,7 @@ function marcarImpuesto()
         no_aplica=0;	}
   }
 
-  function agregarDetalle(idproducto,producto,precioVenta,precioCompra,unidadmedida)
+  function agregarDetalle(idproducto,producto,precioVenta,precioCompra,unidadmedida,cantidad)
   {
   	//aquí preguntamos si el idarticulo ya fue agregado
     if(articuloAdd.indexOf(idproducto)!= -1)
@@ -448,7 +454,6 @@ function marcarImpuesto()
     }
     else
     {
-  	var cantidad=1;
     var precio_compra=1;
     var precio_venta=1;
 
@@ -456,7 +461,7 @@ function marcarImpuesto()
     {
     	var subtotal=cantidad*precio_compra;
 		var fila='<tr class="filas" id="fila'+cont+'">'+
-        '<td><input style="text-align:center" type="hidden" name="idproducto[]" value="'+idproducto+'"><input style="text-align:center;width: 200px;" type="text" name="nombreProducto[]" value="'+producto+'"></td>'+
+        '<td><input type="hidden" name="idproducto[]" value="'+idproducto+'"><input style="width: 300px;" type="text" name="nombreProducto[]" value="'+producto+'"></td>'+
         '<td><input style="text-align:center" type="hidden">'+unidadmedida+'</td>'+
         '<td><input style="text-align:center" type="number" step="0.01" onchange="modificarSubtotales()" name="cantidad[]" id="cantidad[]" value="'+cantidad+'"></td>'+
         '<td><input style="text-align:center" type="number" step="0.01" onchange="modificarSubtotales()" name="precio_compra[]" id="precio_compra[]" value="'+precioCompra+'"></td>'+

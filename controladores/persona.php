@@ -27,7 +27,26 @@ switch ($_GET["op"]){
 
 	case 'eliminar':
 		$rspta=$persona->eliminar($idpersona);
- 		echo $rspta ? "Persona eliminado" : "Persona no se puede eliminar";
+		if($rspta == 2){
+			$res = 2;
+		}else if($rspta == 1){
+			$res = 1;
+		}else{
+			$res = 3;
+		}
+ 		echo $res;
+	break;
+
+	case 'eliminar2':
+		$rspta=$persona->eliminar2($idpersona);
+		if($rspta == 2){
+			$res = 2;
+		}else if($rspta == 1){
+			$res = 1;
+		}else{
+			$res = 3;
+		}
+ 		echo $res;
 	break;
 
 	case 'mostrar':

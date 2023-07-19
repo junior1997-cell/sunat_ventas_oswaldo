@@ -30,23 +30,23 @@ if (!isset($_SESSION["nombre"])) {
     $pdf->SetFont('Arial', 'B', 12);
 
     $pdf->Cell(40, 6, '', 0, 0, 'C');
-    $pdf->Cell(100, 6, 'LISTA DE VENTAS X CLIENTE', 1, 0, 'C');
+    $pdf->Cell(100, 6, 'REPORTE POR COBRAR CONSOLIDADO', 1, 0, 'C');
     $pdf->Ln(16);
 
     $pdf->SetFont('Arial', '', 10);
-    $pdf->Cell(0, 2, 'FECHA INICIO    :     ' . utf8_decode($fecha_inicio));
+    $pdf->Cell(0, 2, 'FECHA INICIO    :     ' . date("d/m/Y", strtotime($fecha_inicio)));
 
     $pdf->Ln(6);
 
     $pdf->SetFont('Arial', '', 10);
-    $pdf->Cell(0, 2, 'FECHA FIN         :     ' . utf8_decode($fecha_inicio));
-
-    $pdf->Ln(6);
-
-    $pdf->SetFont('Arial', 'B', 10);
-    $pdf->Cell(0, 2, 'DEUDA TOTAL    :     ' . $estadocuenta);
+    $pdf->Cell(0, 2, 'FECHA FIN         :     ' . date("d/m/Y", strtotime($fecha_fin)));
 
     $pdf->Ln(10);
+
+    $pdf->SetFont('Arial', 'B', 10);
+    $pdf->Cell(0, 2, 'DETALLE DE DEUDA  :     ');
+
+    $pdf->Ln(6);
 
     //Comenzamos a crear las filas de los registros según la consulta mysql
     require_once "../modelos/Consultas.php";
@@ -71,7 +71,7 @@ if (!isset($_SESSION["nombre"])) {
       $contador = 0;
 
       //Creamos las celdas para los títulos de cada columna y le asignamos un fondo gris y el tipo de letra
-      $pdf->SetFillColor(232, 232, 232);
+      $pdf->SetFillColor(200, 200, 200);
       $pdf->SetFont('Arial', 'B', 10);
       $pdf->Cell(58, 6, 'Cliente', 1, 0, 'C', 1);
       $pdf->Cell(67, 6, utf8_decode('Comprobante'), 1, 0, 'C', 1);
@@ -102,20 +102,16 @@ if (!isset($_SESSION["nombre"])) {
 
       $pdf->Ln(4);
 
-
-      $pdf->Cell(0, 2, 'DETALLE    :     ');
-
-      $pdf->Ln(4);
-
       $pdf->SetFontSize(10);
-      $pdf->SetFillColor(250, 250, 250);
+      $pdf->SetFillColor(37, 198, 229);
       // $pdf->SetTextColor(40, 40, 40);
       // $pdf->SetDrawColor(88, 88, 88);
+      $pdf->SetTextColor(255);
       $pdf->SetFont('Arial', 'B');
       $pdf->Cell(20, 7, 'CODIGO', 1, 0, 'C', 1);
       $pdf->Cell(105, 7, 'PRODUCTO ', 1, 0, 'C', 1);
-      $pdf->Cell(10, 7, 'CANT', 1, 0, 'C', 1);
-      $pdf->Cell(15, 7, 'P.U', 1, 0, 'C', 1);
+      $pdf->Cell(12, 7, 'CANT', 1, 0, 'C', 1);
+      $pdf->Cell(13, 7, 'P.U', 1, 0, 'C', 1);
       $pdf->Cell(15, 7, 'DESC', 1, 0, 'C', 1);
       $pdf->Cell(20, 7, 'TOTAL', 1, 0, 'C', 1);
       $pdf->SetLineWidth(0.02);
@@ -125,6 +121,12 @@ if (!isset($_SESSION["nombre"])) {
       // $pdf->SetTextColor(40, 40, 40);
       // $pdf->SetDrawColor(88, 88, 88);
       $pdf->Ln();
+
+      if($regv->deudatotal > 0){
+        $deudatotal = $regv->deudatotal - $regv->abonototal;
+      }else{
+        $deudatotal = 0;
+      }
 
       while ($regd = $rsptad->fetch_object()) {
 
@@ -140,35 +142,38 @@ if (!isset($_SESSION["nombre"])) {
 
         }
 
+        $pdf->SetFillColor(250, 250, 250);
+        $pdf->SetTextColor(0);
+
         $pdf->Cell(20, 7, "$codigo", 1, 0, 'C', 1);
         $pdf->Cell(105, 7, utf8_decode("$regd->producto"), 1, 0, 'L', 1);
-        $pdf->Cell(10, 7, "$regd->cantidad", 1, 0, 'C', 1);
-        $pdf->Cell(15, 7, "$regd->precio_venta", 1, 0, 'C', 1);
+        $pdf->Cell(12, 7, "$regd->cantidad", 1, 0, 'C', 1);
+        $pdf->Cell(13, 7, "$regd->precio_venta", 1, 0, 'C', 1);
         $pdf->Cell(15, 7, "$regd->descuento", 1, 0, 'C', 1);
         $pdf->Cell(20, 7, "$regd->subtotal", 1, 0, 'C', 1);
         $pdf->Ln();
+        $pdf->Cell(185, 7, "DEUDA PENDIENTE    :   $deudatotal", 1, 0, 'C', 1);
       }
 
       $pdf->Ln(4);
 
-      if($regv->deudatotal > 0){
-        $deudatotal = $regv->deudatotal;
-      }else{
-        $deudatotal = 0;
-      }
+      
 
-      $pdf->Cell(0, 2, 'DEUDA PENDIENTE    :     ' . $deudatotal);
+      $pdf->Cell(0, 2, );
 
       $pdf->Ln(4);
 
       $pdf->Ln(8);
 
-      $estadocuenta += $regv->deudatotal;
+      $estadocuenta += $deudatotal;
 
     }
 
+    $pdf->SetFillColor(200, 200, 200);
+
     $pdf->SetFont('Arial', 'B', 10);
-    $pdf->Cell(0, 2, 'DEUDA TOTAL    :     ' . $estadocuenta);
+
+    $pdf->Cell(185, 7, "DEUDA TOTAL    :   $estadocuenta", 0, 0, 'C', 1);
 
     //Mostramos el documento pdf
     $pdf->Output();

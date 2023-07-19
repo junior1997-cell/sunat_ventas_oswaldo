@@ -11,7 +11,7 @@ Class Producto
 	}
 
 	//Implementamos un método para insertar registros
-	public function insertar($idsucursal,$idcategoria,$idunidad_medida,$codigo,$nombre,$stock,$stockMinimo,$precio,$preciocigv,$precioB,$precioC,$precioD,$precioCompra,$fecha,$descripcion,$imagen,$modelo,$nserie,$tipoigv,$sucursales)
+	public function insertar($idsucursal,$idcategoria,$idunidad_medida,$codigo,$nombre,$stock,$stockMinimo,$precio,$preciocigv,$precioB,$precioC,$precioD,$precioCompra,$fecha,$descripcion,$imagen,$modelo,$nserie,$tipoigv,$precios,$rangoI,$rangoF,$sucursales)
 	{
 
 		if($codigo==""){
@@ -26,11 +26,27 @@ Class Producto
 
 			$sql="INSERT INTO producto (idsucursal,idcategoria,idunidad_medida,codigo,nombre,stock,stock_minimo,precio,preciocigv,precioB,precioC,precioD,precio_compra,fecha,descripcion,imagen,modelo,numserie,proigv,condicion)
 			VALUES ('$sucursales[$num_elementos]','$idcategoria','$idunidad_medida','$codigo','$nombre','$stock','$stockMinimo','$precio','$preciocigv','$precioB','$precioC','$precioD','$precioCompra','$fecha','$descripcion','$imagen','$modelo','$nserie','$tipoigv','1')";
-			return ejecutarConsulta($sql);
+			$idproductonew = ejecutarConsulta_retornarID($sql) or $sw = false;
+			$num_elementos=$num_elementos + 1;
 
 		}
+		
+		$num_elementos2=0;
+		$sw2=true;
 
-		return $sql;
+		if($precios != null){
+
+			while ($num_elementos2 < count($precios))
+			{
+				$sql2="INSERT INTO precios(idproducto,precio,rangoI,rangoT)
+				VALUES ('$idproductonew',$precios[$num_elementos2],'$rangoI[$num_elementos2]','$rangoF[$num_elementos2]')";
+				ejecutarConsulta($sql2) or $sw2 = false;
+				$num_elementos2=$num_elementos2 + 1;
+
+			}
+		}
+
+		return $sw;
 	}
 
 	//Implementamos un método para editar registros
@@ -120,9 +136,16 @@ Class Producto
 		return ejecutarConsulta($sql);		
 	}
 
+	public function detallePrecios($idproducto){
+
+		$sql="SELECT * FROM precios WHERE idproducto ='$idproducto'";
+        return ejecutarConsulta($sql);
+		
+	}
+
 	public function listarKardex($idproducto){
 		$sql="select date_format(c.fecha_kardex,'%d/%m/%y | %H:%i:%s %p') as fecha, CONCAT('Compra Nacional') as motivo,concat_ws('-', c.serie_comprobante, c.num_comprobante) as comprobante, dt.cantidad as cantidad, CONCAT('0') as salida, dt.precio_compra as precio,
-		dt.precio_compra * dt.cantidad as valor, CONCAT('0') as stock, CONCAT('0') as valorexis
+		format(dt.precio_compra * dt.cantidad,2) as valor, CONCAT('0') as stock, CONCAT('0') as valorexis
 		from compra c
 		INNER JOIN detalle_compra dt
 		ON c.idcompra = dt.idcompra
@@ -131,13 +154,13 @@ Class Producto
 		UNION ALL
 		
 		select date_format(c.fecha_kardex,'%d/%m/%y | %H:%i:%s %p') as fecha, CONCAT('Venta Nacional') as motivo,concat_ws('-', c.serie_comprobante, c.num_comprobante) as comprobante, CONCAT('0') as cantidad,  dt.cantidad as salida, p.precio_compra as precio,
-		p.precio_compra * dt.cantidad as valor, CONCAT('0') as stock, CONCAT('0') as valorexis
+		format(p.precio_compra * dt.cantidad,2) as valor, CONCAT('0') as stock, CONCAT('0') as valorexis
 		from venta c
 		INNER JOIN detalle_venta dt
 		ON c.idventa = dt.idventa
 		INNER JOIN producto p
 		ON dt.idproducto = p.idproducto
-		where dt.idproducto = '$idproducto'
+		where dt.tipo != 'generar' AND dt.idproducto = '$idproducto'
 		
 		ORDER BY fecha asc";
 		return ejecutarConsulta($sql);
@@ -299,7 +322,7 @@ Class Producto
 	public function listarActivosVenta($idsucursal)
 	{
 		// $sql="SELECT a.idproducto,a.idcategoria,c.nombre as categoria,a.codigo, a.nombre,a.stock,(SELECT precio FROM detalle_compra WHERE idproducto=a.idproducto ORDER BY iddetalle_compra DESC LIMIT 0,1) AS precio,a.descripcion,a.imagen,a.condicion FROM producto a INNER JOIN Categoria c ON a.idcategoria=c.idcategoria WHERE a.condicion='1'";
-		$sql="SELECT a.idproducto,a.idcategoria,um.nombre as unidadmedida,a.idunidad_medida,c.nombre as categoria,a.codigo, a.fecha, a.nombre,a.stock,a.precio as precio_venta, a.preciocigv,a.precioB,a.precioC,a.precioD,a.descripcion,a.imagen,a.proigv,a.condicion FROM producto a INNER JOIN categoria c ON a.idcategoria=c.idcategoria INNER JOIN unidad_medida um on a.idunidad_medida = um.idunidad_medida WHERE a.condicion='1' AND c.nombre != 'SERVICIO' AND a.idsucursal = '$idsucursal'";
+		$sql="SELECT a.idproducto,a.idcategoria,um.nombre as unidadmedida,a.idunidad_medida,c.nombre as categoria,a.codigo, a.fecha, a.nombre,a.stock,a.precio as precio_venta, a.precio_compra, a.preciocigv,a.precioB,a.precioC,a.precioD,a.descripcion,a.imagen,a.proigv,a.condicion FROM producto a INNER JOIN categoria c ON a.idcategoria=c.idcategoria INNER JOIN unidad_medida um on a.idunidad_medida = um.idunidad_medida WHERE a.condicion='1' AND c.nombre != 'SERVICIO' AND a.idsucursal = '$idsucursal'";
 		return ejecutarConsulta($sql);		
 	}
 

@@ -195,7 +195,7 @@ $imagen = $regn->logo;
         <td colspan="4">
         <br> 
                         SON: <?php 
-                        echo $con_letra=strtoupper($V->ValorEnLetras($reg->total_venta,"SOLES")); 
+                        echo $con_letra=strtoupper($V->ValorEnLetras($reg->total_venta,"CON")); 
                         ?> 
         </td>
     </tr>

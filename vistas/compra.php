@@ -193,19 +193,19 @@ if (!isset($_SESSION["nombre"])) {
                 </div>
               </div>
 
-              <div class="col-lg-12" style="padding-left: 0px;">
+              <!--<div class="col-lg-12" style="padding-left: 0px;">-->
 
-                <div class="form-group col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                  <label>Importar Orden de Compra:</label>
-                  <div class="input-group">
-                    <span class="input-group-addon"><i class="fa fa-file"></i></span>
-                    <select id="comprobanteReferencia" name="comprobanteReferencia" class="form-control selectpicker" data-live-search="true" onchange="mostrarE();" title="Seleccionar Comprobante">
-                    </select>
+              <!--  <div class="form-group col-lg-3 col-md-4 col-sm-4 col-xs-12">-->
+              <!--    <label>Importar Orden de Compra:</label>-->
+              <!--    <div class="input-group">-->
+              <!--      <span class="input-group-addon"><i class="fa fa-file"></i></span>-->
+              <!--      <select id="comprobanteReferencia" name="comprobanteReferencia" class="form-control selectpicker" data-live-search="true" onchange="mostrarE();" title="Seleccionar Comprobante">-->
+              <!--      </select>-->
 
-                  </div>
-                </div>
+              <!--    </div>-->
+              <!--  </div>-->
 
-              </div>
+              <!--</div>-->
 
               <div class="form-group col-lg-12 col-md-3 col-sm-6 col-xs-12">
                 <a data-toggle="modal" href="#myModal">

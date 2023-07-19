@@ -22,6 +22,8 @@ $titulo = isset($_POST["titulo"]) ? limpiarCadena($_POST["titulo"]) : "";
 $saludo = isset($_POST["saludo"]) ? limpiarCadena($_POST["saludo"]) : "";
 $nota = isset($_POST["nota"]) ? limpiarCadena($_POST["nota"]) : "";
 
+$igv = isset($_POST["igv"]) ? limpiarCadena($_POST["igv"]) : "";
+
 require_once "../modelos/Persona.php";
 
 $persona = new Persona();
@@ -44,10 +46,10 @@ switch ($_GET["op"]) {
 	case 'guardaryeditar':
 
 		if (empty($idcotizacion)) {
-			$rspta = $venta->insertar($idsucursal, $idcliente, $idpersonal, $tipo_comprobante, $serie_comprobante, $num_comprobante, $fecha, $total_venta, $titulo, $saludo, $nota, $formapago, $tiempoproduccion, $_POST["idproducto"], $_POST["cantidad"], $_POST["precio_venta"], $_POST["descuento"]);
+			$rspta = $venta->insertar($idsucursal, $idcliente, $idpersonal, $tipo_comprobante, $serie_comprobante, $num_comprobante, $fecha, $total_venta, $titulo, $saludo, $nota, $igv, $formapago, $tiempoproduccion, $_POST["idproducto"], $_POST["cantidad"], $_POST["precio_venta"], $_POST["descuento"]);
 			echo $rspta ? "Datos registrados correctamente" : "No se pudo registrar los datos";
 		} else {
-			$rspta = $venta->editar($idcotizacion, $idsucursal, $idcliente, $idpersonal, $tipo_comprobante, $serie_comprobante, $num_comprobante, $fecha, $total_venta, $titulo, $saludo, $nota, $formapago, $tiempoproduccion, $_POST["idproducto"], $_POST["cantidad"], $_POST["precio_venta"], $_POST["descuento"]);
+			$rspta = $venta->editar($idcotizacion, $idsucursal, $idcliente, $idpersonal, $tipo_comprobante, $serie_comprobante, $num_comprobante, $fecha, $total_venta, $titulo, $saludo, $nota, $igv, $formapago, $tiempoproduccion, $_POST["idproducto"], $_POST["cantidad"], $_POST["precio_venta"], $_POST["descuento"]);
 			echo $rspta ? "Datos editados correctamente" : "No se pudo editar la Cotización";
 		}
 
@@ -280,14 +282,20 @@ switch ($_GET["op"]) {
 			if($reg->estado == 'EN ESPERA'){
 
 				$estado = '<span class="badge bg-yellow">EN ESPERA</span>';
+				$editar = '<button class="btn btn-success btn-xs" onclick="mostrarEditar(' . $reg->idcotizacion . ')" data-toggle="tooltip" title="" target="blanck" data-original-title="EDITAR COTIZACIÓN"><i class="fa fa-pencil"></i></button> ';
+				$desistir = '<button class="btn btn-dark btn-xs" onclick="desistir(' . $reg->idcotizacion . ')" data-toggle="tooltip" title="" target="blanck" data-original-title="DESISTIR"><i class="fa fa-close"></i></button>';
 
 			}else if($reg->estado == 'VENDIDO'){
 
 				$estado = '<span class="badge bg-green">VENDIDO</span>';
+				$editar = '';
+				$desistir = '';
 
 			}else{
 
 				$estado = '<span class="badge bg-red">DESISTIÓ</span>';
+				$editar = '';
+				$desistir = '';
 
 			}
 
@@ -298,13 +306,14 @@ switch ($_GET["op"]) {
 				"3" => $reg->tipo_comprobante,
 				"4" => $reg->serie_comprobante . '-' . $reg->num_comprobante,
 				"5" => $reg->total_venta,
-				"6" => $estado,
-				"7" => '<button class="btn btn-warning btn-xs" onclick="mostrar(' . $reg->idcotizacion . ')" data-toggle="tooltip" title="" target="blanck" data-original-title="VER"><i class="fa fa-eye"></i></button>' . ' ' .
-					'<button class="btn btn-success btn-xs" onclick="mostrarEditar(' . $reg->idcotizacion . ')" data-toggle="tooltip" title="" target="blanck" data-original-title="EDITAR COTIZACIÓN"><i class="fa fa-pencil"></i></button> ' .
+				"6" => '<span class="badge bg-green">'.$reg->titulo.'</span>',
+				"7" => $estado,
+				"8" => '<button class="btn btn-warning btn-xs" onclick="mostrar(' . $reg->idcotizacion . ')" data-toggle="tooltip" title="" target="blanck" data-original-title="VER"><i class="fa fa-eye"></i></button>' . ' ' .
+					$editar .
 					'<button class="btn btn-danger btn-xs" onclick="mostrarE(' . $reg->idcotizacion . ')" data-toggle="tooltip" title="" target="blanck" data-original-title="DUPLICAR COTIZACIÓN"><i class="fa fa-copy"></i></button>' .
 					'<a target="_blank" href="' . $url2 . $reg->idcotizacion . '" data-toggle="tooltip" title="" target="blanck" data-original-title="PDF"> <button class="btn btn-info btn-xs"><i class="fa fa-file"></i></button></a>' .
-					'<a target="_blank" data-toggle="tooltip" title="" target="blanck" data-original-title="ENVIAR COMPROBANTE"> <button class="btn btn-success btn-xs" onclick="EnviarComprobante(' . $reg->idcotizacion . ')"><i class="fa fa-whatsapp"></i></button></a> ' .
-					'<button class="btn btn-dark btn-xs" onclick="desistir(' . $reg->idcotizacion . ')" data-toggle="tooltip" title="" target="blanck" data-original-title="DESISTIR"><i class="fa fa-close"></i></button>'
+					'' .
+					$desistir
 			);
 		}
 		$results = array(
@@ -365,7 +374,7 @@ switch ($_GET["op"]) {
 
 		while ($reg = $rspta->fetch_object()) {
 			$data[] = array(
-				"0" => (($reg->stock == 0) ? '<button class="btn btn-danger" onclick="nostock()"> <span class="fa fa-shopping-cart"></span></button>' : '<button class="btn btn-success" onclick="agregarDetalle(' . $reg->idproducto . ',\'' . $reg->nombre . '\',1,0,\'' . $reg->precio_venta . '\',\'' . $reg->preciocigv . '\',\'' . $reg->precioB . '\',\'' . $reg->precioC . '\',\'' . $reg->precioD . '\',\'' . $reg->stock . '\',\'' . $reg->unidadmedida . '\')"><span class="fa fa-shopping-cart"></span></button>'),
+				"0" => '<button class="btn btn-success" onclick="agregarDetalle(' . $reg->idproducto . ',\'' . $reg->nombre . '\',1,0,\'' . $reg->precio_venta . '\',\'' . $reg->preciocigv . '\',\'' . $reg->precioB . '\',\'' . $reg->precioC . '\',\'' . $reg->precioD . '\',\'' . $reg->stock . '\',\'' . $reg->unidadmedida . '\')"><span class="fa fa-shopping-cart"></span></button>',
 				"1" => $reg->nombre,
 				"2" => $reg->categoria,
 				"3" => $reg->codigo,

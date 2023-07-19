@@ -28,8 +28,61 @@ Class Persona
 	//Implementamos un método para eliminar categorías
 	public function eliminar($idpersona)
 	{
-		$sql="DELETE FROM persona WHERE idpersona='$idpersona'";
-		return ejecutarConsulta($sql);
+
+		$clienteExiste = "SELECT * FROM venta v WHERE v.idcliente = '$idpersona'";
+
+		$existeCliente = ejecutarConsulta($clienteExiste);
+
+		$var = 0;
+
+		while ($reg = $existeCliente->fetch_object()) {
+
+			$var = $reg->idventa;
+		}
+
+		if($var > 0){
+
+			$sql = 2;
+
+		}else{
+			
+			$sql="DELETE FROM persona WHERE idpersona='$idpersona'";
+			ejecutarConsulta($sql);
+			$sql = 1;
+
+		}
+
+		return $sql;
+	}
+
+	//Implementamos un método para eliminar categorías
+	public function eliminar2($idpersona)
+	{
+
+		$clienteExiste = "SELECT * FROM compra c WHERE c.idproveedor = '$idpersona'";
+
+		$existeCliente = ejecutarConsulta($clienteExiste);
+
+		$var = 0;
+
+		while ($reg = $existeCliente->fetch_object()) {
+
+			$var = $reg->idcompra;
+		}
+
+		if($var > 0){
+
+			$sql = 2;
+
+		}else{
+			
+			$sql="DELETE FROM persona WHERE idpersona='$idpersona'";
+			ejecutarConsulta($sql);
+			$sql = 1;
+
+		}
+
+		return $sql;
 	}
 
 	//Implementar un método para mostrar los datos de un registro a modificar
@@ -62,6 +115,12 @@ Class Persona
 	public function listarc3($numero)
 	{
 		$sql="SELECT * FROM persona WHERE num_documento='$numero' AND tipo_persona = 'Proveedor'";
+		return ejecutarConsultaSimpleFila($sql);		
+	}
+
+	public function listarc4($numero)
+	{
+		$sql="SELECT * FROM persona WHERE idpersona='$numero'";
 		return ejecutarConsultaSimpleFila($sql);		
 	}
 

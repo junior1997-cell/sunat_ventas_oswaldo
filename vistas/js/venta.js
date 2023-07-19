@@ -3,7 +3,7 @@ var contador = 0;
 
 //funcion que se ejecuta al inicio
 function init(){
-   mostrar_impuesto();
+   marcarImpuesto();
    mostrarform(false);
    listar();
 
@@ -66,23 +66,34 @@ function init(){
 	$('#navVentasV').addClass("treeview active");
     $('#navVentasLi').addClass("active");
 
-	  $('form').keypress(function(e){   
-	    if(e == 13){
-	      return false;
-	    }
-	  });
+}
 
-	  $('input').keypress(function(e){
-	    if(e.which == 13){
-	      return false;
-	    }
-	  });
-
+function generarReporte(){
+	var fecha_inicio = $("#fecha_inicio").val();
+	var fecha_fin = $("#fecha_fin").val();
+	window.open(origin+'/'+lastPath+'/'+'reportes/rptventas.php?fechai='+fecha_inicio + '&fechaf='+fecha_fin);
 }
 
 function generarComprobante(idventa){
 
+	limpiar();
+
 	mostrarform(true);
+	
+	numBoleta();
+	numSerieBoleta();
+
+	$("#tipo_comprobante").val('Boleta');
+
+	$("#tipo_comprobante").selectpicker('refresh');
+
+	$('#tipo').val('generar');
+
+	$.post("../controladores/venta.php?op=updateFactura",{idventa : idventa}, function(data,status)
+	{
+		data=JSON.parse(data);
+
+	});
 
 	$.post("../controladores/venta.php?op=mostrar",{idventa : idventa}, function(data,status)
 	{
@@ -109,11 +120,39 @@ function generarComprobante(idventa){
 
 		for(var i=0; i < data.length; i++){
 
-			agregarDetalle(data[i][0],data[i][1],data[i][2],data[i][3],data[i][4],data[i][5],0.00,0.00,0.00,data[i][6],data[i][7],data[i][8])
+			agregarDetalle(data[i][0],data[i][9],data[i][2],data[i][3],data[i][4],data[i][4],0.00,0.00,0.00,data[i][6],data[i][7],data[i][8])
 
 		}
 
 	});
+
+}
+
+function anularComprobante(idventa){
+
+	swal({
+		title: "¿Anular?",
+		text: "¿Está seguro Que Desea anular la Venta?",
+		type: "warning",
+		showCancelButton: true,
+			cancelButtonText: "No",
+			cancelButtonColor: '#FF0000',
+		confirmButtonText: "Si",
+		confirmButtonColor: "#0004FA",
+		closeOnConfirm: false,
+		closeOnCancel: false,
+		showLoaderOnConfirm: true
+		},function(isConfirm){
+		if (isConfirm){
+				$.post("../controladores/venta.php?op=anular", {idventa : idventa}, function(e){
+					swal(
+						'!!! Anulado !!!',e,'success')
+			tabla.ajax.reload();
+		});
+		}else {
+		swal("! Cancelado ¡", "Se Cancelo la anulación de la Venta", "error");
+		 }
+		});
 
 }
 
@@ -127,6 +166,8 @@ function generarComprobante2(idventa){
 
 	$("#tipo_comprobante").selectpicker('refresh');
 
+	$('#tipo').val('generar');
+
 	$("#listadoregistros").hide();
 	$("#formularioregistros").show();
 	$("#btnagregar").hide();
@@ -135,6 +176,12 @@ function generarComprobante2(idventa){
 	$("#btnCancelar").show();
 	detalles=0;
 	$("#btnAgregarArt").show();
+
+	$.post("../controladores/venta.php?op=updateBoleta",{idventa : idventa}, function(data,status)
+	{
+		data=JSON.parse(data);
+
+	});
 
 	$.post("../controladores/venta.php?op=mostrar",{idventa : idventa}, function(data,status)
 	{
@@ -161,7 +208,7 @@ function generarComprobante2(idventa){
 
 		for(var i=0; i < data.length; i++){
 
-			agregarDetalle(data[i][0],data[i][1],data[i][2],data[i][3],data[i][4],data[i][5],0.00,0.00,0.00,data[i][6],data[i][7],data[i][8])
+			agregarDetalle(data[i][0],data[i][9],data[i][2],data[i][3],data[i][4],data[i][4],0.00,0.00,0.00,data[i][6],data[i][7],data[i][8])
 
 		}
 
@@ -322,7 +369,29 @@ function Ticket(tipoc,idventa,idcol){
 
 }
 
-function limpiarDetalle(){
+function limpiarDetalle(comprobante){
+
+	let id = $('#idcliente').val();
+
+	$.post("../controladores/venta.php?op=selectCliente5&id="+id,function(data, status){
+
+		data=JSON.parse(data);
+
+		if(comprobante == 'Factura'){
+			if(data.tipo_documento != 'RUC'){
+				swal({
+					title: '¡Aviso!',
+					type: 'error',
+					  text:'El tipo de documento del cliente debe ser RUC'
+				});
+			}
+			numFactura();
+			numSerie();
+			$("#tipo_comprobante").val('Factura');
+			$("#tipo_comprobante").selectpicker('refresh');
+		}
+
+	});
 
 	$("#comprobanteReferencia").val('Seleccionar Comprobante');
 
@@ -387,7 +456,35 @@ function limpiar(){
 
 	$("#comprobanteReferencia").selectpicker('refresh');
 
+	$("#totalrecibido").val(0);
+	$("#vuelto").val("");
 
+	$('#n1').hide();
+	$('#n2').hide();
+	$('#n3').hide();
+	$("#f1").hide();
+	$('#n5').hide();
+	$('#n6').hide();
+	$('#fechadeposito').hide();
+	$('#banco').hide();
+	$('#fechadeposito').hide();
+	$('#banco').hide();
+
+	$('#formapago').val('Efectivo');
+
+	$("#porcentaje").val("");
+	$("#nroOperacion").val("");
+	$("#totalrecibido").val("");
+	$("#vuelto").val("");
+	$("#observaciones").val("");
+
+	$("#tipopago").val("No");
+	$("#montoPagado").val("");
+
+	$("#fechaDepostivo").val("");
+
+	mostrar_impuesto();
+	
 }
 
 //Función limpiar
@@ -406,7 +503,7 @@ function BuscarCliente(){
 
     let numero=$("#num_documento").val();
 
-	$.post("../controladores/venta.php?op=selectCliente3&numero="+numero,function(data, status){
+    $.post("../controladores/venta.php?op=selectCliente3&numero="+numero,function(data, status){
 
 		data=JSON.parse(data);
 
@@ -676,11 +773,24 @@ function listar()
             ['5 filas','10 filas', '25 filas', '50 filas','100 filas', 'Mostrar todo']
         ],
         buttons: [
-			'pageLength',
-			'copy',
-			'excel', 
 			{
+                extend: 'pageLength',
+                orientation: 'landscape',
+                pageSize: 'LEGAL'
+            },
+            {
                 extend: 'pdfHtml5',
+                orientation: 'landscape',
+				title: 'Lista de ventas',
+                pageSize: 'LEGAL'
+            },
+			{
+                extend: 'copy',
+                orientation: 'landscape',
+                pageSize: 'LEGAL'
+            },
+			{
+                extend: 'excel',
                 orientation: 'landscape',
 				title: 'Lista de ventas',
                 pageSize: 'LEGAL'
@@ -696,7 +806,7 @@ function listar()
 			}
 		},
 		"bDestroy":true,
-		"iDisplayLength":5,//paginacion
+		"iDisplayLength":10,//paginacion
 		"order":[[0,"desc"]]//ordenar (columna, orden)
 	}).DataTable();
 }
@@ -723,7 +833,7 @@ tabla=$('#tblarticulos2').dataTable({
 		}
 	},
 	"bDestroy":true,
-	"iDisplayLength":5,//paginacion
+	"iDisplayLength":10,//paginacion
 	"order":[[1,"asc"],[2, "asc"]]//ordenar (columna, orden)
 }).DataTable();
 }
@@ -735,10 +845,28 @@ function listarArticulos(){
 	tabla=$('#tblarticulos').dataTable({
 		"aProcessing": true,//activamos el procedimiento del datatable
 		"aServerSide": true,//paginacion y filrado realizados por el server
-		dom: 'Bfrtip',//definimos los elementos del control de la tabla
+		dom: 'B<"float-left"i><"float-right"f>t<"float-left"l><"float-right"p><"clearfix">',
 		buttons: [
 
 		],
+		initComplete: function () {
+			this.api()
+				.columns([1])
+				.every(function () {
+
+					var column = this;
+					var title = column.footer().textContent;
+	 
+					// Create input element and add event listener
+					$('<input type="text" placeholder="' + title + '" />')
+						.appendTo($(column.footer()).empty())
+						.on('keyup change clear', function () {
+							if (column.search() !== this.value) {
+								column.search(this.value).draw();
+							}
+						});
+				});
+		},
 		"ajax":
 		{
 			url:'../controladores/venta.php?op=listarArticulos',
@@ -750,10 +878,20 @@ function listarArticulos(){
 			}
 		},
 		"bDestroy":true,
-		"iDisplayLength":5,//paginacion
+		"iDisplayLength":10,//paginacion
 		"order":[[1,"asc"],[2, "asc"]]//ordenar (columna, orden)
 	}).DataTable();
+
+	// $('.filtro').keyup(function(){
+
+	// 	var tabla = $('#tblarticulos').DataTable();
+
+	// 	tabla.search( this.value ).draw();
+	
+	// });
+
 }
+
 //funcion para guardaryeditar
 function guardaryeditar(e){
      e.preventDefault();//no se activara la accion predeterminada 
@@ -800,11 +938,21 @@ function guardarCliente(e){
 				  type: 'success',
 					text:datos
 				});
-     		//cargamos los items al select cliente
-		   $.post("../controladores/venta.php?op=selectCliente", function(r){
-		   	$("#idcliente").html(r);
-		   	$('#idcliente').selectpicker('refresh');
-		   });
+				//cargamos los items al select cliente
+				$.post("../controladores/venta.php?op=selectCliente", function(r){
+					$("#idcliente").html(r);
+					$('#idcliente').selectpicker('refresh');
+				});
+	
+				$.post("../controladores/venta.php?op=mostrarUltimoCliente", function(data,status)
+				{
+	
+					data=JSON.parse(data);
+	
+					seleccionarCliente(data.nombre, data.idpersona);
+					
+	
+				});
      	}
      });
 
@@ -812,6 +960,13 @@ function guardarCliente(e){
 
      limpiarCliente();
 }
+
+function seleccionarCliente(nombre, idcliente) {
+
+	$("#idcliente").val(idcliente);
+	$("#idcliente").selectpicker('refresh');
+
+  }
 
 function cambiarEstado(estadoS){
 
@@ -994,6 +1149,7 @@ function marcarImpuesto()
 		numSerieTicket();
 		// $("#serie_comprobante").val( "P001" );
 	}
+	console.log(no_aplica);
   }
 
   // Buscar producto por código
@@ -1030,20 +1186,6 @@ function buscarProductoCod(e, codigo)
 
 function agregarDetalle(idproducto,producto,cant,desc,precio_venta,preciocigv,precioB,precioC,precioD,stock,proigv,unidadmedida){
 
-	if($('#tipo_comprobante').val() != 'Nota'){
-
-		precio_venta = preciocigv;
-
-		if(precioB != ""){precioB = (precioB * 1.18).toFixed(2)}
-		if(precioC != ""){precioC = (precioD * 1.18).toFixed(2)}
-		if(precioD != ""){precioD = (precioD * 1.18).toFixed(2)}
-
-	}else{
-
-		precio_venta = precio_venta;
-
-	}
-
 	//aquí preguntamos si el idarticulo ya fue agregado
     if(articuloAdd.indexOf(idproducto)!= -1)
     { //reporta -1 cuando no existe
@@ -1061,7 +1203,7 @@ function agregarDetalle(idproducto,producto,cant,desc,precio_venta,preciocigv,pr
 
      		document.getElementsByName("cantidad[]")[i].value=total;
 
-     		modificarSubtotales();
+     		modificarSubtotales(i);
 
      	}
 
@@ -1081,22 +1223,22 @@ function agregarDetalle(idproducto,producto,cant,desc,precio_venta,preciocigv,pr
 		cad = '<option value="'+precio_venta+'">'+precio_venta+'</option>';
 
 		if(precioB!='0.00'){
-			cad = cad + '<option value="'+precioB+'">B - '+precioB+'</option>';
+			cad = cad + '<option value="'+precioB+'">'+precioB+'</option>';
 		}
 
 		if(precioC!='0.00'){
-			cad = cad + '<option value="'+precioC+'">C - '+precioC+'</option>';
+			cad = cad + '<option value="'+precioC+'">'+precioC+'</option>';
 		}
 
 		if(precioD!='0.00'){
-			cad = cad + '<option value="'+precioD+'">D - '+precioD+'</option>';
+			cad = cad + '<option value="'+precioD+'">'+precioD+'</option>';
 		}
 
-		select = '<td><select style="width:140px;height:28px;" oninput="modificarSubtotales()" name="precio_venta[]" id="precio_venta[]" class="form-control" required>'+cad+'</select></td>';
+		select = '<td><select style="width:150px;height:35px;" onchange="modificarSubtotales(cont)" name="precio_venta[]" id="precio_venta[]" class="form-control" required>'+cad+'</select></td>';
 
 	}else{
 
-		select = '<td><input style="text-align:center; width: 80px;" type="number" step="0.01" oninput="modificarSubtotales()" name="precio_venta[]" id="precio_venta[]" value="'+precio_venta+'"></td>';
+		select = '<td><input style="text-align:center; width: 80px;" type="number" step="0.01" onchange="modificarSubtotales(cont)" name="precio_venta[]" id="precio_venta[]" value="'+precio_venta+'"></td>';
 
 	}
 
@@ -1106,23 +1248,25 @@ function agregarDetalle(idproducto,producto,cant,desc,precio_venta,preciocigv,pr
 		contador=contador+1;
 		var subtotal=cantidad*precio_venta;
 		var fila='<tr class="filas" id="fila'+cont+'">'+
-        '<td><input style="text-align:center" type="hidden" name="idproducto[]" value="'+idproducto+'"><input style="text-align:center;width: 200px;" type="text" name="nombreProducto[]" value="'+producto+'"></td>'+
+        '<td><input type="hidden" name="idproducto[]" value="'+idproducto+'"><input style="width: 400px;" type="text" name="nombreProducto[]" value="'+producto+'"></td>'+
         '<td><input style="text-align:center" type="hidden">'+unidadmedida+'</td>'+
-        '<td><input style="text-align:center; width: 80px;" type="number" step="0.01" oninput="modificarSubtotales()" name="cantidad[]" id="cantidad[]" value="'+cantidad+'"></td>'+
-        // '<td><input style="text-align:center; width: 80px;" type="number" step="0.01" oninput="modificarSubtotales()" name="precio_venta[]" id="precio_venta[]" value="'+precio_venta+'"></td>'+
+        '<td><input style="text-align:center; width: 50px;" type="number" step="0.01" onchange="modificarSubtotales('+cont+')" name="cantidad[]" id="cantidad[]" value="'+cantidad+'"></td>'+
+        // '<td><input style="text-align:center; width: 80px;" type="number" step="0.01" onchange="modificarSubtotales()" name="precio_venta[]" id="precio_venta[]" value="'+precio_venta+'"></td>'+
         select+
 
-        '<td><input style="text-align:center; width: 80px;" type="number" step="0.01" oninput="modificarSubtotales()" name="descuento[]" value="'+descuento+'"></td>'+    
-        '<td><input style="text-align:center; width: 80px;" type="text" readonly="readonly" name="stock[]" value="'+stock+'"></td>'+
+		'<input style="text-align:center" type="hidden" id="precio_ventaI[]" name="precio_ventaI[]" value="10">' +
+
+        '<td><input style="text-align:center; width: 50px;" type="number" step="0.01" onchange="modificarSubtotales('+cont+')" name="descuento[]" value="'+descuento+'"></td>'+    
+        '<td><input style="text-align:center; width: 50px;" type="text" readonly="readonly" name="stock[]" value="'+stock+'"></td>'+
         '<td><span style="text-align:center" id="subtotal'+cont+'" name="subtotal">'+subtotal+'</span></td>'+
         '<td><center><button type="button" class="btn btn-danger" onclick="eliminarDetalle('+cont+')"><i class="fa fa-trash"></i></button></center></td>'+
         '<td><span style="text-align:center" id="proigv'+cont+'" name="proigv">'+proigv+'</span></td>'+
 		'</tr>';
-		cont++;
 		detalles=detalles+1;
 		articuloAdd= articuloAdd + idproducto + "-"; //aca concatemanos los idarticulos xvg: 1-2-5-12-20
 		$('#detalles').append(fila);
-		modificarSubtotales();
+		modificarSubtotales(cont);
+		cont++;
 		// $('#tipo_comprobante').attr('disabled',true);
 
 	}else{
@@ -1135,7 +1279,7 @@ function nostock(){
   	swal("Sin Stock");
   }
 
-function modificarSubtotales(e)
+function modificarSubtotales(cont)
 {
 	var cant = document.getElementsByName("cantidad[]");
     var prec = document.getElementsByName("precio_venta[]");
@@ -1143,34 +1287,38 @@ function modificarSubtotales(e)
     var sub = document.getElementsByName("subtotal");
     var Stoc =document.getElementsByName("stock[]");
 
-
+	
 	for (var i = 0; i < cant.length; i++) {
+
 		var inpC=cant[i];
     	var inpP=prec[i];
     	var inpD=desc[i];
     	var inpS=sub[i];
         var inpSt=Stoc[i];
 
-
-		var subtl =inpS.value=(inpC.value * inpP.value)-inpD.value;
+		var subtl =inpS.value=(inpC.value * inpP.value)-(inpD.value*inpC.value);
         var subfinal= subtl.toFixed(2);
-        
 
-        if(Number(inpC.value) > Number(inpSt.value)){
+		if($('#tipo').val() == 'venta'){
+
+			if(Number(inpC.value) > Number(inpSt.value)){
             
-            swal("No hay suficiente stock!");
-             inpC.style.backgroundColor="#00CC00";
-             inpSt.style.backgroundColor="#CC0000";
-           $("#btnGuardar").hide(); 
-            e.preventDefault();
+				swal("No hay suficiente stock!");
+				 inpC.style.backgroundColor="#00CC00";
+				 inpSt.style.backgroundColor="#CC0000";
+			   $("#btnGuardar").hide(); 
+				e.preventDefault();
+			
+			}
+			else{
+			
+				 inpC.style.backgroundColor="#FFFFFF";
+				 inpSt.style.backgroundColor="#FFFFFF";
+			document.getElementsByName("subtotal")[i].innerHTML=subfinal;
+			}
+
+		}
         
-        }
-        else{
-        
-             inpC.style.backgroundColor="#FFFFFF";
-             inpSt.style.backgroundColor="#FFFFFF";
-		document.getElementsByName("subtotal")[i].innerHTML=subfinal;
-	}
 	}
 
 	calcularTotales();
@@ -1180,10 +1328,11 @@ function modificarSubtotales(e)
 function calcularTotales(){
 
 	var sub = document.getElementsByName("subtotal");
-	var total=0.0;
-  	var total_monto=0.0;
-  	var igv_dec =0.0;
-  	var totalConIgv=0.0;
+	var total=0;
+  	var total_monto=0;
+  	var igv_dec =0;
+  	var totalConIgv=0;
+	var igv = 0;
 
 	for (var i = 0; i < sub.length; i++) {
 		
@@ -1193,10 +1342,9 @@ function calcularTotales(){
 
 		if(proigv == "Gravada"){
 			totalConIgv += document.getElementsByName("subtotal")[i].value;
-			var igv=totalConIgv*(no_aplica)/(no_aplica+100);
-			var total_monto=(totalConIgv-(igv)).toFixed(2);
-			var igv_dec=igv.toFixed(2);
-		}else{
+			igv=totalConIgv*(no_aplica)/(no_aplica+100);
+			total_monto=(totalConIgv-(igv)).toFixed(2);
+			igv_dec=igv.toFixed(2);
 		}
 
 
@@ -1211,14 +1359,15 @@ function calcularTotales(){
 		simbolo=sim;
 		total2=total-igv;
 
-		$("#total").html(simbolo + total.toFixed(2));
+		$("#total").html(total.toFixed(2));
 		$("#total_venta").val(total.toFixed(2));
 		$("#most_total2").val(total.toFixed(2));
 		$("#most_total").html(esnulo(total2).toFixed(2));
 
 		$("#montoDeuda").val(total);
 
-		$("#most_imp").html(igv_dec);
+		$("#most_imp").html(esnulo(igv_dec));
+		console.log("Aquiiiiii " + igv_dec);
 		evaluar();
 
 
@@ -1238,12 +1387,76 @@ function esnulo(v){
 
 $("#formapago").change(function(){
 
-	if($("#formapago").val() == "Efectivo"){
+	if($("#formapago").val() == "Reposicion" || $("#formapago").val() == "Costo0"){
 
 		// $("#n1").hide();
 		$("#f1").hide();
 		$('#n5').hide();
 		$('#n6').hide();
+		$('#fechadeposito').hide();
+		$('#banco').hide();
+		$('#n1').hide();
+		$('#n2').hide();
+		$('#n3').hide();
+		$('#fechadeposito').hide();
+		$('#banco').hide();
+
+	}else if($("#formapago").val() == "Efectivo" && $("#tipopago").val() == "No"){
+
+		$('#n1').hide();
+		$('#n2').hide();
+		$('#n3').hide();
+		$("#f1").hide();
+		$('#n5').hide();
+		$('#n6').hide();
+		$('#fechadeposito').hide();
+		$('#banco').hide();
+		$('#fechadeposito').hide();
+		$('#banco').hide();
+
+	}else if($("#formapago").val() == "Efectivo" && $("#tipopago").val() == "Si"){
+
+		$('#n1').show();
+		$('#n2').show();
+		$('#n3').show();
+		$("#f1").hide();
+		$('#n5').hide();
+		$('#n6').hide();
+		$('#fechadeposito').hide();
+		$('#banco').hide();
+		$('#fechadeposito').hide();
+		$('#banco').hide();
+
+	}else if($("#formapago").val() == "Tarjeta" && $("#tipopago").val() == "No"){
+
+		$('#n6').show();
+		$("#f1").hide();
+		$('#n5').hide();
+		$('#fechadeposito').hide();
+		$('#banco').hide();
+
+	}else if($("#formapago").val() == "Reposicion" && $("#tipopago").val() == "Si"){
+
+		$("#f1").hide();
+		$('#n5').hide();
+		$('#n6').hide();
+		$('#fechadeposito').hide();
+		$('#banco').hide();
+		$('#n1').show();
+		$('#n2').show();
+		$('#n3').show();
+
+	}else if($("#formapago").val() == "Tarjeta" && $("#tipopago").val() == "Si"){
+		
+		$('#f1').show();
+		$('#n5').show();
+		$('#n6').show();
+		$('#fechadeposito').show();
+		$('#banco').show();
+		$('#banco').hide();
+		$('#n1').show();
+		$('#n2').show();
+		$('#n3').show();
 
 	}else{
 
@@ -1251,6 +1464,8 @@ $("#formapago").change(function(){
 		$('#f1').show();
 		$('#n5').show();
 		$('#n6').show();
+		$('#fechadeposito').show();
+		$('#banco').show();
 
 	}
 
@@ -1292,6 +1507,10 @@ $("#tipopago").change(function(){
 });
 
 function calcularDeuda(){
+
+	$('#totalrecibido').val(0);
+
+	$('#vuelto').val(0);
 
 	montoDeuda= $("#total_venta").val();
 
@@ -1339,7 +1558,7 @@ function calcularVuelto(){
 
 	let montoPagado = $('#montoPagado').val();
 
-	if(montoPagado > 0){
+	if(montoPagado > 0 || montoPagado == null){
 
 		let vuelto = totalrecibido - montoPagado;
 
@@ -1381,6 +1600,9 @@ function evaluar(){
 		cont=0;
 		igv=0;
 		igv_dec=0;
+		total=0;
+		totalConIgv=0;
+		igv = 0;
 		$('#most_total').val('0');
 		$('#most_imp').val('0');
 	}

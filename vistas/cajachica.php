@@ -99,7 +99,7 @@ if (!isset($_SESSION["nombre"])) {
 
 									<section class="content table-responsive">
 
-										<table id="tablaCaja" class="table table-striped table-sm table-hover table-lg table-responsive table-bordered" style="width: 100%;">
+										<table id="tablaCaja" class="table table-striped table-sm table-hover table-lg table-responsive" style="width: 100%;">
 
 											<thead style="background: #3C8DBC; color: white;">
 
@@ -115,9 +115,7 @@ if (!isset($_SESSION["nombre"])) {
 													Tarjeta / Transferencia
 												</th>
 
-												<th style="text-align: center; width: 300px;">
-													Total
-												</th>
+												
 
 											</thead>
 
@@ -129,7 +127,6 @@ if (!isset($_SESSION["nombre"])) {
 													</td>
 													<td style="text-align: center;"><label for="facturas" id="facturas">0</label></td>
 													<td style="text-align: center;"><label for="facturasT" id="facturasT">0</label></td>
-													<td style="text-align: center;"><label for="totalF" id="totalF">0.00</label></td>
 												</tr>
 
 												<tr>
@@ -138,7 +135,6 @@ if (!isset($_SESSION["nombre"])) {
 													</td>
 													<td style="text-align: center;"><label for="boletas" id="boletas">0</label></td>
 													<td style="text-align: center;"><label for="boletasT" id="boletasT">0</label></td>
-													<td style="text-align: center;"><label for="totalB" id="totalB">0.00</label></td>
 												</tr>
 
 												<tr>
@@ -147,7 +143,6 @@ if (!isset($_SESSION["nombre"])) {
 													</td>
 													<td style="text-align: center;"><label for="notasVenta" id="notasVenta">0</label></td>
 													<td style="text-align: center;"><label for="notasVentaT" id="notasVentaT">0</label></td>
-													<td style="text-align: center;"><label for="totalNotas" id="totalNotas">0.00</label></td>
 												</tr>
 
 												<tr>
@@ -156,14 +151,16 @@ if (!isset($_SESSION["nombre"])) {
 													</td>
 													<td style="text-align: center;"><label for="cuentasCobrar" id="cuentasCobrar">0</label></td>
 													<td style="text-align: center;"><label for="cuentasCobrarT" id="cuentasCobrarT">0</label></td>
-													<td style="text-align: center;"><label for="totalCuentasCobrar" id="totalCuentasCobrar">0.00</label></td>
+													<th style="text-align: center; width: 300px; background: #3C8DBC; color: white;">
+														Total
+													</th>
 												</tr>
 
 												<tr>
 													<td><img src="https://protechperu.com/facturacion/public/img/svg/subtotales.svg" style="width: 25px;margin-left: 30px;"> SubTotales</td>
 													<td style="text-align: center;"><label for="totalEfectivo" id="totalEfectivo">0</label></td>
 													<td style="text-align: center;"><label for="totalTransferencia" id="totalTransferencia">0</label></td>
-													<td style="text-align: center;"><label for="totalT" id="totalT">0.00</label></td>
+													<td style="text-align: center;"><label for="totalT" id="totalT"></label></td>
 												</tr>
 
 												<tr>
@@ -200,7 +197,7 @@ if (!isset($_SESSION["nombre"])) {
 										<table id="tbllistado" class="table table-striped table-bordered table-condensed table-hover" width="100%">
 											<thead>
 												<th>Fecha</th>
-												<th>Descripción</th>
+												<th>Descripci車n</th>
 												<th>Tipo</th>
 												<th>Monto</th>
 												<th>Acciones</th>
@@ -209,7 +206,7 @@ if (!isset($_SESSION["nombre"])) {
 											</tbody>
 											<tfoot>
 												<th>Fecha</th>
-												<th>Descripción</th>
+												<th>Descripci車n</th>
 												<th>Tipo</th>
 												<th>Monto</th>
 												<th>Acciones</th>
@@ -272,7 +269,7 @@ if (!isset($_SESSION["nombre"])) {
 								<input type="number" step="any" class="form-control" id="montoPagar" name="montoPagar" required="">
 							</div>
 							<div class="form-group col-lg-8">
-								<label class="col-form-label">Descripción:</label>
+								<label class="col-form-label">Descripci車n:</label>
 								<input class="form-control pull-right" type="text" name="descripcion" id="descripcion">
 							</div>
 						</div>

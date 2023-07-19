@@ -69,7 +69,7 @@ if (!isset($_SESSION["idpersonal"])) {
     <!-- Modal -->
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog">
 
-      <div class="modal-dialog" style="width: 480px">
+      <div class="modal-dialog">
 
         <div class="modal-content">
           <!-- form -->

@@ -55,7 +55,7 @@ class Comprobantes
 	//listar y mostrar en selct
 	public function selectDocumentos()
 	{
-		$sql = "SELECT idventa, serie_comprobante, num_comprobante FROM venta WHERE dov_Estado='ACEPTADO' AND (estado != 'Nota Credito' AND estado !='Anulado') AND tipo_comprobante IN ('Boleta','Factura','Nota')";
+		$sql = "SELECT idventa, serie_comprobante, num_comprobante FROM venta WHERE dov_Estado='ACEPTADO' AND (estado != 'Nota Credito' AND estado != 'Anulado' AND estado != 'Activado') AND tipo_comprobante IN ('Boleta','Factura')";
 		return ejecutarConsulta($sql);
 	}
 

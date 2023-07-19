@@ -14,7 +14,7 @@ class Venta
 	}
 
 	//metodo insertar registro
-	public function insertar($idsucursal, $idcliente, $idpersonal, $tipo_comprobante, $serie_comprobante, $num_comprobante, $fecha_hora, $impuesto, $total_venta, $tipopago, $formapago, $nroOperacion, $fechaDepostivo, $porcentaje, $totalrecibido, $vuelto, $tipo, $idproducto, $nombre, $cantidad, $precio_venta, $descuento, $fechaOperacion, $montoDeuda, $montoPagado, $comprobanteReferencia, $idmotivo, $observaciones)
+	public function insertar($idsucursal, $idcliente, $idpersonal, $tipo_comprobante, $serie_comprobante, $num_comprobante, $fecha_hora, $impuesto, $total_venta, $tipopago, $formapago, $nroOperacion, $fechaDepostivo, $porcentaje, $totalrecibido, $vuelto, $tipo, $banco, $idproducto, $nombre, $cantidad, $precio_venta, $descuento, $fechaOperacion, $montoDeuda, $montoPagado, $comprobanteReferencia, $idmotivo, $observaciones)
 	{
 		$dovEstado = "";
 
@@ -27,19 +27,45 @@ class Venta
 			$dovEstado = "ACEPTADO";
 		} else {
 			$estado = "Por Enviar";
-			// $estado="Aceptado";
-			// $dovEstado="ACEPTADO";
 		}
 
 		if ($serie_comprobante == "-" and $num_comprobante == "-") {
 			$tipo_comprobante = "Anular";
 		}
+		
+		if($num_comprobante == '' || $num_comprobante == null){
 
-		$existeComprobante = "SELECT * FROM venta v WHERE v.serie_comprobante = '$serie_comprobante' AND v.num_comprobante = '$num_comprobante'";
+			$numc="SELECT serie_comprobante, num_comprobante FROM venta WHERE tipo_comprobante='$tipo_comprobante' 
+			AND idsucursal = '$idsucursal'
+			ORDER BY idventa DESC limit 1";
+
+			$existeNum = ejecutarConsulta($numc);
+
+			$v = 0;
+
+			while ($regn = $existeNum->fetch_object()) {
+
+				$c = $regn->serie_comprobante;
+				$v = $regn->num_comprobante;
+			}
+
+			if($v != '' || $v != null){
+				$serie_comprobante = $c;
+				$num = $v + 1;
+				$length = 7;
+				$num_comprobante= substr(str_repeat(0, $length).$num, - $length);
+			}else{
+				$num_comprobante = '0000001';
+			}
+
+		}
+
+		$existeComprobante = "SELECT * FROM venta v WHERE v.serie_comprobante = '$serie_comprobante' AND v.num_comprobante = '$num_comprobante' AND v.idsucursal = '$idsucursal'";
 
 		$existeCompro = ejecutarConsulta($existeComprobante);
 
 		$var = 0;
+		$var2 = 0;
 
 		while ($reg = $existeCompro->fetch_object()) {
 
@@ -47,23 +73,40 @@ class Venta
 		}
 
 		if ($var > 0) {
-			$num_comprobante = $num_comprobante + 1;
 
-			$num_comprobante = str_pad($num_comprobante, 7, "0", STR_PAD_LEFT);
+			$sqlUltimoC = "SELECT idventa, num_comprobante FROM venta WHERE tipo_comprobante='Boleta' 
+			AND idsucursal = '$idsucursal'
+			ORDER BY idventa DESC limit 1 ";
+
+			$ultimoComprobante = ejecutarConsulta($sqlUltimoC);
+
+			while ($reg = $ultimoComprobante->fetch_object()) {
+
+				$var2 = $reg->num_comprobante;
+			}
+
+			if($var2 > 0){
+
+				$num_comprobante = $var2 + 1;
+
+				$num_comprobante = str_pad($num_comprobante, 7, "0", STR_PAD_LEFT);
+
+			}
+
 		}
 
-		// $fechaActual = date('y-m-d h:i:s');
+		$fechaActual = date('y-m-d h:i:s');
 
 		$sql = "INSERT INTO venta (idsucursal,idcliente,idpersonal,idmotivo_nota,tipo_comprobante,serie_comprobante,num_comprobante,fecha_hora,impuesto,total_venta,ventacredito,formapago,numoperacion,fechadeposito,
-	descuento,totalrecibido,vuelto,estado,documento_rel,dov_Estado,observacion) VALUES 
-	('$idsucursal','$idcliente','$idpersonal','$idmotivo','$tipo_comprobante','$serie_comprobante','$num_comprobante','$fecha_hora','$impuesto','$total_venta','$tipopago','$formapago','$nroOperacion','$fechaDepostivo','$porcentaje','$totalrecibido','$vuelto','$estado','$comprobanteReferencia','$dovEstado','$observaciones')";
+	descuento,totalrecibido,vuelto,banco,montoPagado,estado,documento_rel,dov_Estado,observacion,fecha_kardex) VALUES 
+	('$idsucursal','$idcliente','$idpersonal','$idmotivo','$tipo_comprobante','$serie_comprobante','$num_comprobante','$fecha_hora','$impuesto','$total_venta','$tipopago','$formapago','$nroOperacion','$fechaDepostivo','$porcentaje','$totalrecibido','$vuelto','$banco','$montoPagado','$estado','$comprobanteReferencia','$dovEstado','$observaciones','$fechaActual')";
 
 		$idventanew = ejecutarConsulta_retornarID($sql);
 		$num_elementos = 0;
 		$sw = true;
 		while ($num_elementos < count($idproducto)) {
 
-			$sql_detalle = "INSERT INTO detalle_venta (idsucursal,idventa,idproducto,nombre_producto,cantidad,precio_venta,descuento) VALUES('$idsucursal','$idventanew','$idproducto[$num_elementos]','$nombre[$num_elementos]','$cantidad[$num_elementos]','$precio_venta[$num_elementos]','$descuento[$num_elementos]')";
+			$sql_detalle = "INSERT INTO detalle_venta (idsucursal,idventa,idproducto,nombre_producto,cantidad,precio_venta,descuento,tipo) VALUES('$idsucursal','$idventanew','$idproducto[$num_elementos]','$nombre[$num_elementos]','$cantidad[$num_elementos]','$precio_venta[$num_elementos]','$descuento[$num_elementos]','$tipo')";
 
 			ejecutarConsulta($sql_detalle) or $sw = false;
 
@@ -114,7 +157,7 @@ class Venta
 
 			if ($montoPagado > 0) {
 
-				$sql_detalle2 = "INSERT INTO detalle_cuentas_por_cobrar (idcpc, montopagado, observacion) VALUES ('$idcpcnew','$montoPagado', '')";
+				$sql_detalle2 = "INSERT INTO detalle_cuentas_por_cobrar (idcpc, montopagado, formapago, fechapago, banco, op,observacion) VALUES ('$idcpcnew','$montoPagado', '$formapago', '$fechaDepostivo','$banco','$nroOperacion','')";
 
 				ejecutarConsulta($sql_detalle2);
 			}
@@ -155,12 +198,26 @@ class Venta
 		ejecutarConsulta($sql);
 
 		$sql1 = "UPDATE cuentas_por_cobrar SET condicion='0' WHERE idventa='$idventa'";
-		return ejecutarConsulta($sql1);
+		ejecutarConsulta($sql1);
+
+		$sql2 = "DELETE FROM detalle_venta WHERE idventa='$idventa'";
+		return ejecutarConsulta($sql2);
+
 	}
 
 	public function cambiarEstado($idventa, $estado)
 	{
 		$sql = "UPDATE venta SET estadoS='$estado' WHERE idventa='$idventa'";
+		return ejecutarConsulta($sql);
+	}
+
+	public function updateBoleta($idventa){
+		$sql = "UPDATE venta SET estado='Boleta Emitida' WHERE idventa='$idventa'";
+		return ejecutarConsulta($sql);
+	}
+
+	public function updateFactura($idventa){
+		$sql = "UPDATE venta SET estado='Factura Emitida' WHERE idventa='$idventa'";
 		return ejecutarConsulta($sql);
 	}
 
@@ -175,6 +232,13 @@ class Venta
 	{
 		$sql = "SELECT dv.idventa,dv.idproducto,a.nombre,dv.cantidad,dv.precio_venta,dv.descuento,(dv.cantidad*dv.precio_venta-dv.descuento) as subtotal, v.total_venta, v.impuesto, p.nombre as cliente, v.num_comprobante FROM detalle_venta dv INNER JOIN producto a ON dv.idproducto=a.idproducto INNER JOIN venta v ON v.idventa=dv.idventa INNER JOIN persona p ON v.idcliente=p.idpersona WHERE dv.idventa='$idventa'";
 		return ejecutarConsulta($sql);
+	}
+
+	public function mostrarUltimoCliente(){
+
+		$sql = "SELECT * FROM persona order by idpersona desc limit 1";
+		return ejecutarConsultaSimpleFila($sql);
+
 	}
 
 	public function listarDetalle($idventa)
@@ -360,11 +424,22 @@ class Venta
 		return ejecutarConsulta($sql);
 	}
 
-	//listar registros
-	public function listarTodo()
+    public function listarTodo($fecha_inicio, $fecha_fin)
 	{
 
-		$sql = "SELECT v.idventa,DATE(v.fecha_hora) as fecha,v.idcliente,p.nombre as cliente,u.idpersonal,u.nombre as personal, v.tipo_comprobante,v.serie_comprobante,v.num_comprobante,v.total_venta,v.ventacredito,v.impuesto,v.dov_Nombre,v.estado FROM venta v INNER JOIN persona p ON v.idcliente=p.idpersona INNER JOIN personal u ON v.idpersonal=u.idpersonal WHERE v.tipo_comprobante IN ('Boleta','Factura','Nota') AND v.serie_comprobante != '-' ORDER BY v.idventa DESC";
+		$sql = "SELECT v.idventa,DATE(v.fecha_hora) as fecha,v.idcliente,p.nombre as cliente,u.idpersonal,u.nombre as personal, v.tipo_comprobante,v.serie_comprobante,v.num_comprobante,v.total_venta,v.ventacredito,v.impuesto,v.dov_Nombre,v.estado, cc.deudatotal, cc.abonototal FROM venta v 
+		INNER JOIN persona p 
+		ON v.idcliente=p.idpersona 
+		INNER JOIN personal u 
+		ON v.idpersonal=u.idpersonal
+		LEFT JOIN cuentas_por_cobrar cc
+		ON cc.idventa = v.idventa
+		WHERE v.tipo_comprobante IN ('Boleta','Factura','Nota')
+		AND v.estado != 'Anulado'
+		AND v.serie_comprobante != '-'
+		AND DATE(v.fecha_hora)>='$fecha_inicio' 
+		AND DATE(v.fecha_hora)<='$fecha_fin'
+		ORDER BY v.idventa DESC;";
 
 		return ejecutarConsulta($sql);
 	}
@@ -394,7 +469,14 @@ class Venta
 
 	public function ventacabecera($idventa)
 	{
-		$sql = "SELECT v.idventa, v.idcliente, p.nombre AS cliente, p.direccion, p.tipo_documento, p.num_documento, p.email, p.telefono, v.idpersonal, u.nombre AS personal, v.tipo_comprobante, v.serie_comprobante, v.num_comprobante, DATE(v.fecha_hora) AS fecha, v.fecha_kardex, v.impuesto, v.total_venta, v.ventacredito FROM venta v INNER JOIN persona p ON v.idcliente=p.idpersona INNER JOIN personal u ON v.idpersonal=u.idpersonal WHERE v.idventa='$idventa'";
+		$sql = "SELECT v.idventa, v.idcliente, p.nombre AS cliente, s.nombre as sucursal, v.banco, p.direccion, v.observacion, p.tipo_documento, p.num_documento, p.email, p.telefono, v.idpersonal, v.montoPagado, v.formapago, v.numoperacion, date_format(v.fechadeposito,'%d/%m/%y') as fechadeposito, u.nombre AS personal, v.tipo_comprobante, v.serie_comprobante, v.num_comprobante, DATE(v.fecha_hora) AS fecha, date_format(v.fecha_kardex,'%d/%m/%y | %H:%i:%s %p') as fecha_kardex, v.impuesto, v.total_venta, v.ventacredito 
+		FROM venta v 
+		INNER JOIN persona p 
+		ON v.idcliente=p.idpersona 
+		INNER JOIN personal u 
+		ON v.idpersonal=u.idpersonal
+		INNER JOIN sucursal s
+		ON s.idsucursal = v.idsucursal WHERE v.idventa='$idventa'";
 		return ejecutarConsulta($sql);
 	}
 

@@ -126,7 +126,7 @@
 					<td style="border-right: 1px solid black;" class="textcenter" width="20px"><?php echo $row['codigo']; ?></td>
 					<td style="border-right: 1px solid black;" class="textcenter" width="20px"><?php echo round($row['cantidad'],2); ?></td>
 					<td style="border-right: 1px solid black;" class="textcenter" width="20px"><?php echo $row['unidadmedida']; ?></td>
-					<td style="border-right: 1px solid black;" width="300px"><?php echo $row['producto']; ?></td>
+					<td style="border-right: 1px solid black; padding-left: 5px;" width="300px"><?php echo $row['nombre_producto']; ?></td>
 					<td style="border-right: 1px solid black;" class="textcenter" width="20px"><?php echo round($row['precio_compra'],2); ?></td>
 					<td style="border-right: 1px solid black;" class="textcenter" width="10px"><?php echo round($row['precio_venta'],2); ?></td>
 					<td style="border-right: 1px solid black;" class="textcenter" width="20px"><?php echo round($row['subtotal'],2); ?></td>
@@ -149,7 +149,7 @@
 				//Convertimos el total en letras
 				require_once "../Letras.php";
 				$V=new EnLetras(); 
-				$con_letra=strtoupper($V->ValorEnLetras($factura['total_compra'],"SOLES"));
+				$con_letra=strtoupper($V->ValorEnLetras($factura['total_compra'],"CON"));
 
 				if($factura['tipo_comprobante']=='Boleta'){
 					$iddoc='01';

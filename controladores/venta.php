@@ -38,6 +38,8 @@ $estadoS = isset($_POST["estadoS"]) ? limpiarCadena($_POST["estadoS"]) : "";
 
 $tipo = isset($_POST["tipo"]) ? limpiarCadena($_POST["tipo"]) : "";
 
+$banco = isset($_POST["banco"]) ? limpiarCadena($_POST["banco"]) : "";
+
 require_once "../modelos/Persona.php";
 
 $persona = new Persona();
@@ -57,7 +59,7 @@ switch ($_GET["op"]) {
 	case 'guardaryeditar':
 
 		if (empty($idventa)) {
-			$rspta = $venta->insertar($idsucursal, $idcliente, $idpersonal, $tipo_comprobante, $serie_comprobante, $num_comprobante, $fecha, $impuesto, $total_venta, $tipopago, $formapago, $nroOperacion, $fechaDepostivo, $porcentaje, $totalrecibido, $vuelto, $tipo, $_POST["idproducto"], $_POST["nombreProducto"], $_POST["cantidad"], $_POST["precio_venta"], $_POST["descuento"], $fechaOperacion, $montoDeuda, $montoPagado, $comprobanteReferencia, $idmotivo, $observaciones);
+			$rspta = $venta->insertar($idsucursal, $idcliente, $idpersonal, $tipo_comprobante, $serie_comprobante, $num_comprobante, $fecha, $impuesto, $total_venta, $tipopago, $formapago, $nroOperacion, $fechaDepostivo, $porcentaje, $totalrecibido, $vuelto, $tipo, $banco, $_POST["idproducto"], $_POST["nombreProducto"], $_POST["cantidad"], $_POST["precio_venta"], $_POST["descuento"], $fechaOperacion, $montoDeuda, $montoPagado, $comprobanteReferencia, $idmotivo, $observaciones);
 			echo $rspta ? "Datos registrados correctamente" : "No se pudo registrar los datos";
 		} else {
 			$rspta = $venta->editar($idventa, $idsucursal, $idcliente, $idpersonal, $tipo_comprobante, $serie_comprobante, $num_comprobante, $fecha, $impuesto, $total_venta, $tipopago, $formapago, $nroOperacion, $fechaDepostivo, $porcentaje, $totalrecibido, $vuelto, $_POST["idproducto"], $_POST["nombreProducto"], $_POST["cantidad"], $_POST["precio_venta"], $_POST["descuento"], $fechaOperacion, $montoDeuda, $montoPagado, $estado, $comprobanteReferencia);
@@ -76,7 +78,17 @@ switch ($_GET["op"]) {
 
 	case 'anular':
 		$rspta = $venta->anular($idventa);
-		echo $rspta ? "Ingreso anulado correctamente" : "No se pudo anular el ingreso";
+		echo $rspta ? "Venta anulado correctamente" : "No se pudo anular el Venta";
+		break;
+
+	case 'updateFactura':
+		$rspta = $venta->updateBoleta($idventa);
+		echo json_encode($rspta);
+		break;
+
+	case 'updateBoleta':
+		$rspta = $venta->updateFactura($idventa);
+		echo json_encode($rspta);
 		break;
 
 	case 'mostrar':
@@ -667,8 +679,16 @@ switch ($_GET["op"]) {
 				$estado = '<span class="badge bg-red">RECHAZADO</span>';
 				$pdf = '<a target="_blank" href="' . $url2 . $reg->idventa . '" data-toggle="tooltip" title="" target="blanck" data-original-title="PDF"> <button class="btn btn-info btn-xs"><i class="fa fa-file"></i></button></a>';
 				$ticket = '<a target="_blank" href="' . $url1 . $reg->idventa . '" data-toggle="tooltip" title="" target="blanck" data-original-title="Ticket"> <button class="btn btn-primary btn-xs"><i class="fa fa-file-text"></i></button></a>';
-			} else {
+			} else if($reg->estado == 'Activado'){
 				$estado = '<span class="badge bg-blue">ACTIVADO</span>';
+				$pdf = '<a target="_blank" href="' . $url2 . $reg->idventa . '" data-toggle="tooltip" title="" target="blanck" data-original-title="PDF"> <button class="btn btn-info btn-xs"><i class="fa fa-file"></i></button></a>';
+				$ticket = '<a target="_blank" href="' . $url1 . $reg->idventa . '" data-toggle="tooltip" title="" target="blanck" data-original-title="Ticket"> <button class="btn btn-primary btn-xs"><i class="fa fa-file-text"></i></button></a>';
+			} else if($reg->estado == 'Boleta Emitida'){
+				$estado = '<span class="badge bg-yellow">BOLETA EMITIDA</span>';
+				$pdf = '<a target="_blank" href="' . $url2 . $reg->idventa . '" data-toggle="tooltip" title="" target="blanck" data-original-title="PDF"> <button class="btn btn-info btn-xs"><i class="fa fa-file"></i></button></a>';
+				$ticket = '<a target="_blank" href="' . $url1 . $reg->idventa . '" data-toggle="tooltip" title="" target="blanck" data-original-title="Ticket"> <button class="btn btn-primary btn-xs"><i class="fa fa-file-text"></i></button></a>';
+			} else{
+				$estado = '<span class="badge bg-yellow">FACTURA EMITIDA</span>';
 				$pdf = '<a target="_blank" href="' . $url2 . $reg->idventa . '" data-toggle="tooltip" title="" target="blanck" data-original-title="PDF"> <button class="btn btn-info btn-xs"><i class="fa fa-file"></i></button></a>';
 				$ticket = '<a target="_blank" href="' . $url1 . $reg->idventa . '" data-toggle="tooltip" title="" target="blanck" data-original-title="Ticket"> <button class="btn btn-primary btn-xs"><i class="fa fa-file-text"></i></button></a>';
 			}
@@ -689,12 +709,16 @@ switch ($_GET["op"]) {
 				$comprobarEstado = '<center><a data-toggle="tooltip" title="" data-original-title="Comprobar Estado" onclick="comprobarEstado(' . $reg->idventa . ',' . $reg->idpersonal . ');"> <button class="btn btn-warning btn-xs"><i class="fa fa-exclamation"></i></button></a></center>';
 			}
 
-			if ($reg->estadoS == 'TERMINADO' || $reg->estadoS == 'ENTREGADO') {
+			if ($reg->estado != 'Anulado') {
+				$mostrarResumen = '<button class="btn btn-warning btn-xs" onclick="mostrar(' . $reg->idventa . ')"><i class="fa fa-eye"></i></button>';
+				$enviarComprobante = '';
 				$mostrar = $pdf . $ticket;
 				$sunatE = $sunat;
 			} else {
-				$mostrar = "";
-				$sunatE = "";
+				$mostrarResumen = '';
+				$enviarComprobante = '';
+				$mostrar = "-";
+				$sunatE = "-";
 			}
 
 			if ($reg->estadoS == '') {
@@ -714,7 +738,7 @@ switch ($_GET["op"]) {
 			$factura = 'Factura';
 
 			$data[] = array(
-				"0" => $reg->fecha_kardex,
+				"0" => $reg->idventa,
 				"1" => $reg->cliente . ' - ' . $reg->num_documento,
 				"2" => $reg->sucursal,
 				"3" => $reg->tipo_comprobante . ' - ' . $reg->serie_comprobante . ' - ' . $reg->num_comprobante,
@@ -730,16 +754,14 @@ switch ($_GET["op"]) {
 					<ul class="dropdown-menu">
 					<li style="cursor:pointer;"><a onclick="generarComprobante(' . $reg->idventa . ')">Generar Boleta</a></li>
 					<li style="cursor:pointer;"><a onclick="generarComprobante2(' . $reg->idventa . ')">Generar Factura</a></li>
+					<li style="cursor:pointer;"><a onclick="anularComprobante(' . $reg->idventa . ')">Anular</a></li>
 					</ul>
 
-					<button class="btn btn-warning btn-xs" onclick="mostrar(' . $reg->idventa . ')"><i class="fa fa-eye"></i></button>
+					<button class="btn btn-warning btn-xs" onclick="mostrar(' . $reg->idventa . ')"><i class="fa fa-eye"></i></button>' :
 
-					<a target="_blank" data-toggle="tooltip" title="" target="blanck" data-original-title="Enviar Comprobantes"> <button class="btn btn-success btn-xs" onclick="EnviarComprobante(' . $reg->idventa . ')"><i class="fa fa-whatsapp"></i></button></a>
-				 ' :
+					$mostrarResumen .
 
-					'<button class="btn btn-warning btn-xs" onclick="mostrar(' . $reg->idventa . ')"><i class="fa fa-eye"></i></button>' .
-
-					'<a target="_blank" data-toggle="tooltip" title="" target="blanck" data-original-title="Enviar Comprobantes"> <button class="btn btn-success btn-xs" onclick="EnviarComprobante(' . $reg->idventa . ')"><i class="fa fa-whatsapp"></i></button></a>' .
+					$enviarComprobante .
 					'') .
 
 
@@ -847,6 +869,19 @@ switch ($_GET["op"]) {
 			
 		break;
 
+		case 'selectCliente5':
+
+			$id=$_GET['id'];
+
+			require_once "../modelos/Persona.php";
+			$persona = new Persona();
+
+			$rspta = $persona->listarc4($id);
+
+ 			echo json_encode($rspta);
+			
+		break;
+
 	case 'listarNC':
 
 		$fecha_inicio = $_REQUEST["fecha_inicio"];
@@ -909,7 +944,7 @@ switch ($_GET["op"]) {
 					'<button class="btn btn-warning btn-xs" onclick="mostrar(' . $reg->idventa . ')"><i class="fa fa-eye"></i></button>') .
 					$pdf .
 					$ticket .
-					'<a target="_blank" data-toggle="tooltip" title="" target="blanck" data-original-title="Enviar Comprobantes"> <button class="btn btn-success btn-xs" onclick="EnviarComprobante(' . $reg->idventa . ')"><i class="fa fa-whatsapp"></i></button></a>'
+					''
 			);
 		}
 		$results = array(
@@ -1037,12 +1072,11 @@ switch ($_GET["op"]) {
 			$data[] = array(
 				"0" => (($reg->stock == 0) ? '<button class="btn btn-danger" onclick="nostock()"> <span class="fa fa-shopping-cart"></span></button>' : '<button class="btn btn-success" onclick="agregarDetalle(' . $reg->idproducto . ',\'' . $reg->nombre . '\',1,0,\'' . $reg->precio_venta . '\',\'' . $reg->preciocigv . '\',\'' . $reg->precioB . '\',\'' . $reg->precioC . '\',\'' . $reg->precioD . '\',\'' . $reg->stock . '\',\'' . $reg->proigv . '\',\'' . $reg->unidadmedida . '\')"><span class="fa fa-shopping-cart"></span></button>'),
 				"1" => $reg->nombre,
-				"2" => ($reg->fecha != $fechaActual) ? $reg->fecha : '<span class="badge bg-red">' . $reg->fecha . '</span>',
-				"3" => $reg->unidadmedida,
-				"4" => $reg->categoria,
-				"5" => $reg->stock,
-				"6" => $reg->precio_venta,
-				"7" => $reg->descripcion
+				"2" => $reg->unidadmedida,
+				"3" => $reg->categoria,
+				"4" => $reg->stock,
+				"5" => '<span class="badge bg-green">'.$reg->precio_venta.'</span>',
+				"6" => $reg->precio_compra
 
 			);
 		}
@@ -1110,6 +1144,13 @@ switch ($_GET["op"]) {
 
 		break;
 
+	case 'mostrarUltimoCliente':
+
+		$rspta = $venta->mostrarUltimoCliente();
+		echo json_encode($rspta);
+
+		break;
+
 	case 'listarDetalleVenta':
 
 		$rspta = $venta->ventadetalle($idventa);
@@ -1127,7 +1168,8 @@ switch ($_GET["op"]) {
 				"5" => $reg->preciocigv,
 				"6" => $reg->stock,
 				"7" => $reg->proigv,
-				"8" => $reg->unidadmedida
+				"8" => $reg->unidadmedida,
+				"9" => $reg->nombre_producto
 			);
 		}
 

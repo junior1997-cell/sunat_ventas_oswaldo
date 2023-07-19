@@ -142,8 +142,8 @@ $regcc = $rsptacc->fetch_object();
         echo "<tr>";
         echo "<td>".$regd->cantidad."</td>";
         echo "<td>".$regd->producto;
-        echo "<td>".$regd->precio_venta;
-        echo "<td align='right'>S/ ".$regd->subtotal."</td>";
+        echo "<td>".number_format($regd->precio_venta, 2, ",", ".");
+        echo "<td align='right'>S/ ".number_format($regd->subtotal, 2, ",", ".")."</td>";
         echo "</tr>";
         $cantidad+=$regd->cantidad;
         $subtotal+=$regd->subtotal;
@@ -156,7 +156,7 @@ $regcc = $rsptacc->fetch_object();
     <td>&nbsp;</td>
     <td align="right"><b>SUBTOTAL:</b></td>
     <td align="right"><b>S/  <?php
-        echo $subtotal;  
+        echo number_format($subtotal, 2, ",", ".");  
         ?></b>
     </td>
     </tr>
@@ -166,7 +166,7 @@ $regcc = $rsptacc->fetch_object();
     <td>&nbsp;</td>
     <td align="right"><b>ABONOS:</b></td>
     <td align="right"><b>S/  <?php
-        $xd=round(($regcc->abonototal),2); 
+        $xd=round(number_format($regcc->abonototal, 2, ",", "."),2);
         echo $xd;  
         ?>  
         </b>
@@ -177,33 +177,12 @@ $regcc = $rsptacc->fetch_object();
         <td>&nbsp;</td>
         <td>&nbsp;</td>
         <td align="right"><b>DEUDA:</b></td>
-        <td align="right"><b>S/  <?php echo $reg->total_venta - $xd;  ?></b>
+        <td align="right"><b>S/  <?php echo number_format($reg->total_venta - $xd, 2, ",", ".");  ?></b>
         </td>
     </tr>
-
-    <tr>
-        <td colspan="4">
-        <br> 
-            SON: <?php 
-            echo $con_letra=strtoupper($V->ValorEnLetras($reg->total_venta,"SOLES")); 
-            ?> 
-        </td>
-    </tr>
-
-    <tr>
-    <td colspan="4" align="center">rZXl92gf7fJ+YiH4XBq4wh/mcg0=        
-        <br><img src="../files/qr/2031.png" width="50" height="50">
-    </td>
-    </tr>
-
-    <tr>
-      <td colspan="3">Nº de productos: <?php echo $cantidad; ?></td>
     </tr>
     <tr>
       <td colspan="4" align="center">&nbsp;</td>
-    </tr>      
-    <tr>
-      <td colspan="4" align="center"><b>¡Gracias por su compra!</b></td>
     </tr>
     <tr>
       <td colspan="4" align="center">Tu Negocio</td>

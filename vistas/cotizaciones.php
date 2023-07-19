@@ -90,6 +90,7 @@ if (!isset($_SESSION["nombre"])) {
                     <th>Documento</th>
                     <th>Número</th>
                     <th>Total Venta</th>
+                    <th>Nota</th>
                     <th>Estado</th>
                     <th>Acciones</th>
                   </thead>
@@ -102,6 +103,7 @@ if (!isset($_SESSION["nombre"])) {
                     <th>Documento</th>
                     <th>Número</th>
                     <th>Total Venta</th>
+                    <th>Nota</th>
                     <th>Estado</th>
                     <th>Acciones</th>
                   </tfoot>
@@ -178,7 +180,7 @@ if (!isset($_SESSION["nombre"])) {
                     <label>Forma de Pago:</label>
                     <div class="input-group">
                       <span class="input-group-addon"><i class="fa fa-file"></i></span>
-                      <select name="formapago" id="formapago" class="form-control selectpicker" data-live-search="true" title="Seleccione Forma de Pago">
+                      <select name="formapago" id="formapago" class="form-control selectpicker" data-live-search="true" title="Seleccione Forma de Pago" required>
                         <option value="Contado">Contado</option>
                         <option value="Crédito a 7 días">Crédito a 7 días</option>
                         <option value="Crédito a 15 días">Crédito a 15 días</option>
@@ -187,6 +189,7 @@ if (!isset($_SESSION["nombre"])) {
                         <option value="Crédito a 60 días">Crédito a 60 días</option>
                         <option value="Crédito a 90 días">Crédito a 90 días</option>
                         <option value="Crédito a 120 días">Crédito a 120 días</option>
+                        <option value="50% anticipado y 50% antes de salir de planta">50% anticipado y 50% antes de salir de planta</option>
                         <option value="Contraentrega">Contraentrega</option>
                         <option value="Transferencia">Transferencia</option>
                         <option value="Yape">Yape</option>
@@ -200,10 +203,23 @@ if (!isset($_SESSION["nombre"])) {
 
                   <div class="form-group col-lg-3 col-md-6 col-sm-6 col-xs-12">
 
+                    <label>¿Precios con IGV?</label>
+                    <div class="input-group">
+                      <span class="input-group-addon"><i class="fa fa-file"></i></span>
+                      <select name="igv" id="igv" class="form-control selectpicker" data-live-search="true" title="Seleccione Información" onchange="preciosIGV(this.value);" required>
+                        <option value="Si">Si</option>
+                        <option value="No">No</option>
+                      </select>
+                    </div>
+                    
+                  </div>
+
+                  <div class="form-group col-lg-3 col-md-6 col-sm-6 col-xs-12">
+
                     <label>Tiempo de producción:</label>
                     <div class="input-group">
                       <span class="input-group-addon"><i class="fa fa-file"></i></span>
-                      <select name="tiempoproduccion" id="tiempoproduccion" class="form-control selectpicker" data-live-search="true" title="Seleccione Tiempo de Producción">
+                      <select name="tiempoproduccion" id="tiempoproduccion" class="form-control selectpicker" data-live-search="true" title="Seleccione Tiempo de Producción" required>
                         <option value="2 días despues de contar con la aprobación y abono">2 días despues de contar con la aprobación y abono</option>
                         <option value="3 días despues de contar con la aprobación y abono">3 días despues de contar con la aprobación y abono</option>
                         <option value="4 días despues de contar con la aprobación y abono">4 días despues de contar con la aprobación y abono</option>
@@ -242,7 +258,7 @@ if (!isset($_SESSION["nombre"])) {
                   <div class="col-lg-12 modal-body table-responsive">
                     <table id="detalles" class="table table-striped table-bordered table-condensed table-hover" width="100%">
                       <thead>
-                        <th>Producto</th>
+                        <th style="width: 450px;">Producto</th>
                         <th>UM</th>
                         <th>Cantidad</th>
                         <th>Precio Venta</th>
@@ -279,14 +295,18 @@ if (!isset($_SESSION["nombre"])) {
                   </div>
 
                   <div class="form-group col-lg-6 col-md-2 col-sm-6 col-xs-12">
-                    <label>Atención a:</label>
-                    <input style="border-color: #99C0E7;" type="text" class="form-control" name="titulo" id="titulo" maxlength="150" placeholder="Título">
+                    <label>Nota:</label>
+                    <input style="border-color: #99C0E7;" type="text" class="form-control" name="titulo" id="titulo" maxlength="150" placeholder="Nota" required>
                   </div>
 
                   <div class="form-group col-lg-6 col-md-2 col-sm-6 col-xs-12">
-                    <label>Validez:</label>
-                    <textarea style="letter-spacing: 1px; padding: 10px; max-width: 100%; line-height: 1.5; border-radius: 5px; border: 1px solid #ccc; box-shadow: 1px 1px 1px #999;" type="text" class="form-control" name="nota" id="nota" rows="2" cols="25">
-                    </textarea>
+                    <label>Validez de la cotización:</label>
+                    <select name="nota" id="nota" class="form-control selectpicker" data-live-search="true" title="Seleccione Tiempo de Producción" required>
+                        <option value="3 Días calendario">3 Días calendario</option>
+                        <option value="7 Días calendario">7 Días calendario</option>
+                        <option value="15 Días calendario">15 Días calendario</option>
+                        <option value="30 Días calendario">30 Días calendario</option>
+                      </select>
                   </div>
 
                   <div class="form-group col-lg-6 col-md-2 col-sm-6 col-xs-12" hidden>
@@ -315,7 +335,7 @@ if (!isset($_SESSION["nombre"])) {
 
     <!-- Modal -->
     <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-dialog" style="width: 1000px">
+      <div class="modal-dialog modal-lg">
         <div class="modal-content panel panel-primary">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>

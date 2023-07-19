@@ -35,7 +35,7 @@
 
 			$factura = mysqli_fetch_assoc($query);
 
-			$query_productos = mysqli_query($conexion,"SELECT a.nombre as producto,um.nombre as unidadmedida,CASE WHEN a.codigo = 'SIN CODIGO' THEN '-' ELSE a.codigo END as codigo,d.cantidad,d.precio_compra,d.precio_venta,(d.cantidad*d.precio_compra) as subtotal FROM detalle_compra d INNER JOIN producto a ON d.idproducto=a.idproducto INNER JOIN unidad_medida um ON a.idunidad_medida = um.idunidad_medida WHERE d.idcompra='$idventa'");
+			$query_productos = mysqli_query($conexion,"SELECT a.nombre as producto,um.nombre as unidadmedida, d.nombre_producto,CASE WHEN a.codigo = 'SIN CODIGO' THEN '-' ELSE a.codigo END as codigo,d.cantidad,d.precio_compra,d.precio_venta,(d.cantidad*d.precio_compra) as subtotal FROM detalle_compra d INNER JOIN producto a ON d.idproducto=a.idproducto INNER JOIN unidad_medida um ON a.idunidad_medida = um.idunidad_medida WHERE d.idcompra='$idventa'");
 			$result_detalle = mysqli_num_rows($query_productos);
 
 			ob_start();

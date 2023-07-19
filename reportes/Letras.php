@@ -60,8 +60,8 @@ function ValorEnLetras($x, $Moneda )
        $s = $s . " " . $Frc. "/100"; 
        //$s = $s . " " . $Frc . "/100"; 
     } 
-    $letrass=$Signo . $s . " CENTIMOS"; 
-    return ($Signo . $s . " CENTIMOS"); 
+    $letrass=$Signo . $s . " SOLES"; 
+    return ($Signo . $s . " SOLES"); 
     
 } 
 

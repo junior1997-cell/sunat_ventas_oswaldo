@@ -31,7 +31,7 @@ function generarReporte(){
 	var fecha_fin = $("#fecha_fin").val();
 	var idcliente = $("#idcliente").val();
 	var idsucursal = $("#idsucursal2").val();
-	window.open(origin+'/'+lastPath+'/'+'reportes/rptventasxcliente.php?fechai='+fecha_inicio + '&fechaf='+fecha_fin + '&idcliente='+idcliente + '&idsucursal='+idsucursal);
+	window.open(origin+'/'+lastPath+'/'+'reportes/rptventasxclientec.php?fechai='+fecha_inicio + '&fechaf='+fecha_fin + '&idcliente='+idcliente + '&idsucursal='+idsucursal);
 }
 
 //Función Listar
@@ -68,7 +68,7 @@ function listar()
 					}
 				},
 		"bDestroy": true,
-		"iDisplayLength": 5,//Paginación
+		"iDisplayLength":10,//Paginación
 	    "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
 	}).DataTable();
 }

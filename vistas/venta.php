@@ -75,7 +75,7 @@ if (!isset($_SESSION["nombre"])) {
               <!-- centro -->
               <div class="panel-body table-responsive" id="listadoregistros">
                 <button class="btn btn-primary" id="btnagregar" onclick="mostrarform(true)"><i class="fa fa-plus"> Nuevo</i></button>
-                <a href="../reportes/rptventas.php" target="_blank"><button class="btn btn-danger"><i class="fa fa-file"></i> Reporte</button></a>
+                <button class="btn btn-danger" id="btnGenerarReporte" onclick="generarReporte();"><i class="fa fa-file"></i> Reporte</button>
                 <br><br>
                 <div class="form-group col-lg-3 col-md-3 col-sm-3 col-xs-12">
                   <label>Fecha Inicio</label>
@@ -118,7 +118,7 @@ if (!isset($_SESSION["nombre"])) {
                 </div>
                 <table id="tbllistado" class="table table-striped table-bordered table-condensed table-hover dataTable" cellpadding="0" cellspacing="0" aria-describedby="tblIngresos_info" width="100%" role="grid" style="width: 100%;">
                   <thead>
-                    <th>Fecha</th>
+                    <th>ID</th>
                     <th>Cliente / N° Documento</th>
                     <th>Sucursal</th>
                     <th>Número</th>
@@ -152,7 +152,7 @@ if (!isset($_SESSION["nombre"])) {
 
                   <div class="col-lg-12" style="padding-left: 0px;">
 
-                    <div class="form-group col-lg-3 col-md-4 col-sm-4 col-xs-12">
+                    <div class="form-group col-lg-4 col-md-4 col-sm-4 col-xs-12">
                       <label>Almacén:</label>
                       <div class="input-group">
                         <span class="input-group-addon"><i class="fa fa-laptop"></i></span>
@@ -161,14 +161,16 @@ if (!isset($_SESSION["nombre"])) {
                       </div>
                     </div>
 
-                     <div class="form-group col-lg-3 col-md-4 col-sm-4 col-xs-12">
+                  </div>
+
+                  <div class="form-group col-lg-6 col-md-4 col-sm-4 col-xs-12">
                     <label>Personal:</label>
                     <div class="input-group">
 
-                        <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                      <span class="input-group-addon"><i class="fa fa-user"></i></span>
 
-                        <select id="idpersonal" name="idpersonal" class="form-control selectpicker" data-live-search="true" title="Seleccione Trabajador" required></select>
-                        
+                      <select id="idpersonal" name="idpersonal" class="form-control selectpicker" data-live-search="true" title="Seleccione Trabajador" required></select>
+
                     </div>
                   </div>
 
@@ -182,12 +184,6 @@ if (!isset($_SESSION["nombre"])) {
 
                     </div>
                   </div>
-
-
-                  </div>
-
-                 
-                  
 
 
                   <div class="form-group col-lg-3 col-md-4 col-sm-4 col-xs-12">
@@ -205,7 +201,7 @@ if (!isset($_SESSION["nombre"])) {
                     <label>Tipo Comprobante:</label>
                     <div class="input-group">
                       <span class="input-group-addon"><i class="fa fa-file"></i></span>
-                      <select name="tipo_comprobante" id="tipo_comprobante" class="form-control selectpicker" onchange="limpiarDetalle();" required>
+                      <select name="tipo_comprobante" id="tipo_comprobante" class="form-control selectpicker" onchange="limpiarDetalle(this.value);" required>
                       </select>
                     </div>
                   </div>
@@ -229,7 +225,7 @@ if (!isset($_SESSION["nombre"])) {
                     </div>
                   </div>
 
-                  <div class="form-group col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                  <div class="form-group col-lg-4 col-md-3 col-sm-3 col-xs-12">
                     <label><i class="fa fa-barcode"></i> Códig de barras:</label>
                     <div class="input-group">
                       <span class="input-group-addon">
@@ -241,16 +237,6 @@ if (!isset($_SESSION["nombre"])) {
 
                   </div>
 
-                  <div class="form-group col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                      <label>Importar Cotizaciones:</label>
-                      <div class="input-group">
-                        <span class="input-group-addon"><i class="fa fa-file"></i></span>
-                        <select id="comprobanteReferencia" name="comprobanteReferencia" class="form-control selectpicker" data-live-search="true" onchange="mostrarE();" title="Seleccionar Comprobante">
-                        </select>
-
-                      </div>
-                    </div>
-
                   <div class="form-group col-lg-6 col-md-3 col-sm-3 col-xs-12" style="padding-top: 24px;">
                     <a data-toggle="modal" href="#myModal">
                       <button id="btnAgregarArt" type="button" class="btn btn-danger" onclick="listarArticulos();"> <span class="fa fa-search"></span> Seleccionar Productos</button>
@@ -260,16 +246,24 @@ if (!isset($_SESSION["nombre"])) {
                     </a>
                   </div>
 
-                  
+                  <div class="col-lg-12" style="padding-left: 0px;">
 
-                    
+                    <div class="form-group col-lg-3 col-md-4 col-sm-4 col-xs-12">
+                      <label>Importar Cotizaciones:</label>
+                      <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-file"></i></span>
+                        <select id="comprobanteReferencia" name="comprobanteReferencia" class="form-control selectpicker" data-live-search="true" onchange="mostrarE();" title="Seleccionar Comprobante">
+                        </select>
 
-                  
+                      </div>
+                    </div>
+
+                  </div>
 
                   <div class="col-lg-12 modal-body table-responsive">
                     <table id="detalles" class="table table-striped table-bordered table-condensed table-hover" width="100%">
                       <thead>
-                        <th>Producto</th>
+                        <th style="text-align:center;width: 400px;">Producto</th>
                         <th>UM</th>
                         <th>Cantidad</th>
                         <th>Precio Venta</th>
@@ -325,29 +319,38 @@ if (!isset($_SESSION["nombre"])) {
                     </div>
                   </div>
 
-                  <div class="form-group col-lg-2 col-md-4 col-sm-4 col-xs-12" style="padding-top: 25px;">
-                    <label>¿Venta al crédito?</label>
-                    <div class="input-group">
-                      <select id="tipopago" name="tipopago" class="form-control" data-live-search="true" required>
-                        <option value="No">No</option>
-                        <option value="Si">Sí</option>
-                      </select>
-                    </div>
-                  </div>
+                  <div class="row">
 
-                  <div class="form-group col-lg-10 col-md-4 col-sm-4 col-xs-12" style="padding-top: 25px;" id="formapagoocultar">
-                    <label>Forma de pago:</label>
-                    <div class="input-group">
-                      <select id="formapago" name="formapago" class="form-control" data-live-search="true" required>
-                        <option value="Efectivo">Efectivo</option>
-                        <option value="Transferencia">Transferencia bancaria</option>
-                        <option value="Tarjeta">Tarjeta POS</option>
-                        <option value="Yape">Yape</option>
-                        <option value="Plin">Plin</option>
-                        <option value="Reposicion">Reposición</option>
-                        <option value="Costo0">Costo 0</option>
-                      </select>
+                    <div class="form-group col-lg-2" style="padding-left: 28px;">
+
+                      <label>¿Venta al crédito?</label>
+                      <div class="input-group">
+                        <select id="tipopago" name="tipopago" class="form-control" data-live-search="true" required>
+                          <option value="No">No</option>
+                          <option value="Si">Sí</option>
+                        </select>
+                      </div>
+
                     </div>
+
+                    <div class="form-group col-lg-4" style="padding-left: 28px;">
+
+                      <label>Forma de pago:</label>
+                      <div class="input-group col-lg-12">
+                        <select id="formapago" name="formapago" class="form-control" data-live-search="true" required>
+                          <option value="Efectivo">Efectivo</option>
+                          <option value="Transferencia">Transferencia bancaria</option>
+                          <option value="Tarjeta">Tarjeta POS</option>
+                          <option value="Deposito">Depósito</option>
+                          <option value="Yape">Yape</option>
+                          <option value="Plin">Plin</option>
+                          <option value="Reposicion">Reposición</option>
+                          <option value="Costo0">Costo 0</option>
+                        </select>
+                      </div>
+
+                    </div>
+
                   </div>
 
                   <div class="row">
@@ -365,12 +368,12 @@ if (!isset($_SESSION["nombre"])) {
 
                       <label>Monto Pagado:</label>
                       <div class="input-group">
-                        <input style="border-color: #FFC7BB; text-align:center" type="text" class="form-control" id="montoPagado" name="montoPagado" value="0">
+                        <input style="border-color: #FFC7BB; text-align:center" type="text" class="form-control" id="montoPagado" name="montoPagado" value="0" onkeyup="calcularDeuda();">
                       </div>
 
                     </div>
 
-                    <div class="form-group col-lg-2" style="padding-left: 28px; display: none;" id="n3">
+                    <div class="form-group col-lg-2" style="padding-left: 50px; display: none;" id="n3">
 
                       <label>Monto Deuda:</label>
                       <div class="input-group">
@@ -383,15 +386,6 @@ if (!isset($_SESSION["nombre"])) {
 
                   <div class="row">
 
-                    <div class="form-group col-lg-2" style="padding-left: 28px; display: none;">
-
-                      <label>Fecha Depósito:</label>
-                      <div class="input-group">
-                        <input style="border-color: #FFC7BB; text-align:center" type="date" class="form-control" id="fechaDepostivo" name="fechaDepostivo">
-                      </div>
-
-                    </div>
-
                     <div class="form-group col-lg-2" style="padding-left: 28px; display: none;" id="n6">
 
                       <label># de Operación:</label>
@@ -401,7 +395,26 @@ if (!isset($_SESSION["nombre"])) {
 
                     </div>
 
-                    
+                    <div class="form-group col-lg-2" style="padding-left: 28px; display: none;" id="fechadeposito">
+
+                      <label>Fecha Depósito:</label>
+                      <div class="input-group">
+                        <input style="border-color: #FFC7BB; text-align:center" type="date" class="form-control" id="fechaDepostivo" name="fechaDepostivo">
+                      </div>
+
+                    </div>
+
+                    <div class="form-group col-lg-2" style="padding-left: 50px; display: none;" id="banco">
+
+                      <label>Banco:</label>
+                      <div class="input-group col-lg-12">
+                      <select id="banco" name="banco" class="form-control selectpicker" data-live-search="true" title="Seleccione Banco">
+                          <option value="BCP">BCP</option>
+                          <option value="BBVA">BBVA</option>
+                          <option value="INTERBANK">INTERBANK</option>
+                        </select>
+                      </div>
+                    </div>
 
                   </div>
 
@@ -418,14 +431,14 @@ if (!isset($_SESSION["nombre"])) {
 
                     <div class="form-group col-lg-2" style="padding-left: 28px;">
 
-                       <label>Total Recibido S/.</label>
-                        <div class="input-group">
-                          <input style="border-color: #FFC7BB; text-align:center" type="text" class="form-control" id="totalrecibido" name="totalrecibido" placeholder="Monto recibido" onkeyup="calcularVuelto();">
-                        </div>
+                      <label>Total Recibido S/.</label>
+                      <div class="input-group">
+                        <input style="border-color: #FFC7BB; text-align:center" type="text" class="form-control" id="totalrecibido" name="totalrecibido" placeholder="Monto recibido" onkeyup="calcularVuelto();">
+                      </div>
 
                     </div>
 
-                    <div class="form-group col-lg-2" style="padding-left: 28px;">
+                    <div class="form-group col-lg-2" style="padding-left: 50px;">
 
                       <label>Vuelto S/.</label>
                       <div class="input-group">
@@ -462,7 +475,7 @@ if (!isset($_SESSION["nombre"])) {
 
     <!-- Modal -->
     <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-dialog" style="width: 1000px">
+      <div class="modal-dialog modal-lg">
         <div class="modal-content panel panel-primary">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -505,23 +518,23 @@ if (!isset($_SESSION["nombre"])) {
 
     <!-- Modal -->
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-dialog" style="width: 1000px">
+      <div class="modal-dialog modal-lg">
         <div class="modal-content panel panel-primary">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
             <h4 class="modal-title">Seleccione un Producto</h4>
           </div>
+
           <div class="modal-body table-responsive">
             <table id="tblarticulos" class="table table-striped table-bordered table-condensed table-hover" width="100%">
               <thead>
                 <th style="width:10px">Opciones</th>
                 <th>Nombre</th>
-                <th>Fecha Vencimiento</th>
                 <th>UM</th>
                 <th>Categoria</th>
                 <th>Stock</th>
-                <th>Precio Venta</th>
-                <th style="width:40px">Descripción</th>
+                <th>P. Venta</th>
+                <th>P. Compra</th>
               </thead>
               <tbody>
 
@@ -529,12 +542,11 @@ if (!isset($_SESSION["nombre"])) {
               <tfoot>
                 <th style="width:10px">Opciones</th>
                 <th>Nombre</th>
-                <th>Fecha Vencimiento</th>
                 <th>UM</th>
                 <th>Categoria</th>
                 <th>Stock</th>
-                <th>Precio Venta</th>
-                <th style="width:40px">Descripción</th>
+                <th>P. Venta</th>
+                <th>P. Compra</th>
               </tfoot>
             </table>
           </div>

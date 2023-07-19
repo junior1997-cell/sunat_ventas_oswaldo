@@ -268,7 +268,7 @@ $pdf->Cell(76,2, utf8_decode('    Representación Impresa de la ') .$regv->tipo_
 //Convertimos el total en letras
 require_once "Letras.php";
 $V=new EnLetras(); 
-$con_letra=strtoupper($V->ValorEnLetras($regv->total_venta,"SOLES"));
+$con_letra=strtoupper($V->ValorEnLetras($regv->total_venta,"CON"));
 
 $pdf->Ln();
 $pdf->Ln();

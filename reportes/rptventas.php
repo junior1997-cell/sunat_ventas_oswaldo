@@ -15,6 +15,9 @@ if ($_SESSION['ventas']==1)
 
 //Inlcuímos a la clase PDF_MC_Table
 require('PDF_MC_Table.php');
+
+$fecha_inicio = $_GET['fechai'];
+$fecha_fin = $_GET['fechaf'];
  
 //Instanciamos la clase para generar el documento pdf
 $pdf=new PDF_MC_Table();
@@ -47,7 +50,7 @@ $pdf->Ln(10);
 require_once "../modelos/Venta.php";
 $venta = new Venta();
 
-$rspta = $venta->listarTodo();
+$rspta = $venta->listarTodo($fecha_inicio, $fecha_fin);
 
 //Table with rows and columns
 $pdf->SetWidths(array(21,48,51,25,20,20));
@@ -58,12 +61,32 @@ while($reg= $rspta->fetch_object())
     $personal = $reg->personal;
     $cliente = $reg->cliente;
     $tipo_comprobante = $reg->tipo_comprobante;
-    $num_comprobante = $reg->num_comprobante;
-    $total_venta = $reg->total_venta;
+    $num_comprobante = $reg->num_comprobante;{
+        
+    if($reg->deudatotal >= 0 AND $reg->deudatotal != NULL){
+      $total_venta = $reg->abonototal;
+    }else{
+      $total_venta = $reg->total_venta;
+    }
+
  	
  	$pdf->SetFont('Arial','',10);
     $pdf->Row(array($fecha,utf8_decode($personal),utf8_decode($cliente),$tipo_comprobante,$num_comprobante,$total_venta));
+    
+    $totalVenta += $total_venta;
+    
+    }
 }
+
+$pdf->Ln(4);
+
+$pdf->SetFillColor(200, 200, 200);
+$pdf->SetTextColor(0);
+
+
+$pdf->SetFont('Arial', 'B', 10);
+
+$pdf->Cell(185, 7, "TOTAL    :   $totalVenta", 0, 0, 'C', 1);
  
 //Mostramos el documento pdf
 $pdf->Output();

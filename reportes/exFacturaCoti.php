@@ -162,7 +162,7 @@ $pdf->Ln();
 //Convertimos el total en letras
 require_once "Letras.php";
 $V=new EnLetras(); 
-$con_letra=strtoupper($V->ValorEnLetras($regv->total_venta,"SOLES"));
+$con_letra=strtoupper($V->ValorEnLetras($regv->total_venta,"CON"));
 
 $pdf->SetFont('Arial','');
 $pdf->Cell(77,2, '',0,0,'C');
@@ -220,8 +220,8 @@ $pdf->Ln();
 // //Mostramos el impuesto
 // $pdf->addTVAs( $regv->impuesto, $subtotal ,$regv->total_venta,"S/ ");
 // $pdf->addCadreEurosFrancs("IGV"." $regv->impuesto %");
-$pdf->Output("documentos/".utf8_decode("Cotizacion")."-".$regv->num_comprobante.".pdf","F");
-$pdf->Output("documentos/".utf8_decode("Cotizacion")."-".$regv->num_comprobante.".pdf","I");
+$pdf->Output("documentos/".utf8_decode("Cotizacion")."-".$regv->num_comprobante."-".$regv->serie_comprobante.".pdf","F");
+$pdf->Output("documentos/".utf8_decode("Cotizacion")."-".$regv->num_comprobante."-".$regv->serie_comprobante.".pdf","I");
 
 
 

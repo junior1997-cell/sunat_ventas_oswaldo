@@ -35,7 +35,7 @@
 
 			$factura = mysqli_fetch_assoc($query);
 
-			$query_productos = mysqli_query($conexion,"SELECT a.nombre as producto,um.nombre as unidadmedida,CASE WHEN a.codigo = 'SIN CODIGO' THEN '-' ELSE a.codigo END as codigo,d.cantidad,d.precio_compra,d.precio_venta,(d.cantidad*d.precio_compra) as subtotal FROM detalle_compra d INNER JOIN producto a ON d.idproducto=a.idproducto INNER JOIN unidad_medida um ON a.idunidad_medida = um.idunidad_medida WHERE d.idcompra='$idventa'");
+			$query_productos = mysqli_query($conexion,"SELECT a.nombre as producto,um.nombre as unidadmedida,CASE WHEN a.codigo = 'SIN CODIGO' THEN '-' ELSE a.codigo END as codigo,d.cantidad,d.precio_compra,d.precio_venta,d.nombre_producto,(d.cantidad*d.precio_compra) as subtotal FROM detalle_compra d INNER JOIN producto a ON d.idproducto=a.idproducto INNER JOIN unidad_medida um ON a.idunidad_medida = um.idunidad_medida WHERE d.idcompra='$idventa'");
 			$result_detalle = mysqli_num_rows($query_productos);
 
 			ob_start();
@@ -52,7 +52,7 @@
 			// Render the HTML as PDF
 			$dompdf->render();
 			// Output the generated PDF to Browser
-			$dompdf->stream('Comprobante_'.$idventa.'.pdf',array('Attachment'=>0));
+			$dompdf->stream($factura['tipo_comprobante'].'-N°_'.$factura['num_comprobante'].'-'.$factura['serie_comprobante'].'.pdf',array('Attachment'=>0));
 			exit;
 		}
 	}

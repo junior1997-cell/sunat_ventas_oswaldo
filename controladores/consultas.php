@@ -501,6 +501,28 @@ if (!isset($_SESSION["nombre"])) {
 
 			break;
 
+		case 'totalT':
+
+			$fecha_inicio = $_REQUEST["fecha_inicio"];
+			$fecha_fin = $_REQUEST["fecha_fin"];
+			$idsucursal = $_REQUEST["idsucursal"];
+
+			$rspta = $consulta->totalT($fecha_inicio, $fecha_fin, $idsucursal);
+			echo json_encode($rspta);
+
+			break;
+
+		case 'totalEC':
+
+			$fecha_inicio = $_REQUEST["fecha_inicio"];
+			$fecha_fin = $_REQUEST["fecha_fin"];
+			$idsucursal = $_REQUEST["idsucursal"];
+
+			$rspta = $consulta->totalEC($fecha_inicio, $fecha_fin, $idsucursal);
+			echo json_encode($rspta);
+
+			break;
+
 		case 'totalStocksBajos':
 
 			$rspta = $consulta->totalStocksBajos();
