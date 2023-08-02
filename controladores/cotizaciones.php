@@ -52,30 +52,29 @@ switch ($_GET["op"]) {
 			$rspta = $venta->editar($idcotizacion, $idsucursal, $idcliente, $idpersonal, $tipo_comprobante, $serie_comprobante, $num_comprobante, $fecha, $total_venta, $titulo, $saludo, $nota, $igv, $formapago, $tiempoproduccion, $_POST["idproducto"], $_POST["cantidad"], $_POST["precio_venta"], $_POST["descuento"]);
 			echo $rspta ? "Datos editados correctamente" : "No se pudo editar la Cotización";
 		}
-
-		break;
+	break;
 
 	case 'guardarCliente':
 		if (empty($idpersona)) {
 			$rspta = $persona->insertar($tipo_persona, $nombre, $tipo_documento, $num_documento, $direccion, $telefono, $email, $fecha_hora);
 			echo $rspta ? "Cliente registrado" : "Cliente no se pudo registrar";
 		}
-		break;
+	break;
 
 	case 'eliminar':
 		$rspta = $venta->eliminar($idcotizacion);
 		echo $rspta ? "Cotización Eliminada" : "Cotización No Se Puedo Eliminar";
-		break;
+	break;
 
 	case 'mostrar':
 		$rspta = $venta->mostrar($idcotizacion);
 		echo json_encode($rspta);
-		break;
+	break;
 
 	case 'desistir':
 		$rspta = $venta->desistir($idcotizacion);
 		echo $rspta ? "Operación Exitosa" : "Operación no se pudo realizar";
-		break;
+	break;
 
 	case 'mostrardetalle':
 
@@ -104,12 +103,11 @@ switch ($_GET["op"]) {
 			echo '. ' . $reg->nombre . ',  CANTIDAD:  ' . $reg->cantidad . '     ';
 			$c = $c + 1;
 		}
+	break;
 
-		break;
+	//_______________________________________________________________________________________________________
 
-		//_______________________________________________________________________________________________________
-
-		//opcion para mostrar la numeracion y la serie_comprobante de la ticket
+	//opcion para mostrar la numeracion y la serie_comprobante de la ticket
 	case 'mostrar_num_ticket':
 		$idsucursal = $_REQUEST["idsucursal"];
 		//mostrando el numero de boleta de la tabla comprobantes
@@ -149,7 +147,8 @@ switch ($_GET["op"]) {
 		}
 		//$num = (int)$numerof; 
 		//echo json_encode($numerof);
-		break;
+	break;
+
 	case 'mostrar_s_ticket':
 		$idsucursal = $_REQUEST["idsucursal"];
 		//mostrando el numero de factura de la tabla comprobantes
@@ -187,10 +186,9 @@ switch ($_GET["op"]) {
 		} else {
 			echo json_encode($num_s_ticket);
 		}
-		break; //fin de opcion de mostrar num_comprobante y serie_comprobante del ticket
+	break; //fin de opcion de mostrar num_comprobante y serie_comprobante del ticket
 
-		//______________________________________________________________________________________________
-
+	//______________________________________________________________________________________________
 
 	case 'listarDetalle':
 
@@ -237,8 +235,7 @@ switch ($_GET["op"]) {
          <th>TOTAL</th>
          <th><h4 id="total">' . $smoneda . ' ' . $total . '</h4><input type="hidden" name="total_venta" id="total_venta"></th>
        </tfoot>';
-
-		break;
+	break;
 
 	case 'listarDetalleCotizacion':
 
@@ -262,9 +259,7 @@ switch ($_GET["op"]) {
 		}
 
 		echo json_encode($data);
-
-
-		break;
+	break;
 
 	case 'listar':
 
@@ -323,7 +318,7 @@ switch ($_GET["op"]) {
 			"aaData" => $data
 		);
 		echo json_encode($results);
-		break;
+	break;
 
 	case 'selectCliente':
 		require_once "../modelos/Persona.php";
@@ -334,7 +329,7 @@ switch ($_GET["op"]) {
 		while ($reg = $rspta->fetch_object()) {
 			echo '<option value=' . $reg->idpersona . '>' . $reg->nombre . ' - ' . $reg->num_documento . '</option>';
 		}
-		break;
+	break;
 
 	case 'selectProducto':
 		require_once "../modelos/Producto.php";
@@ -347,7 +342,7 @@ switch ($_GET["op"]) {
 		while ($reg = $rspta->fetch_object()) {
 			echo '<option value=' . $reg->idproducto . '>' . $reg->nombre . '</option>';
 		}
-		break;
+	break;
 
 	case 'selectVendedor':
 		require_once "../modelos/Persona.php";
@@ -360,7 +355,7 @@ switch ($_GET["op"]) {
 		while ($reg = $rspta->fetch_object()) {
 			echo '<option value=' . $reg->idpersonal . '>' . $reg->nombre . ' - ' . $reg->num_documento . '</option>';
 		}
-		break;
+	break;
 
 	case 'listarArticulos':
 
@@ -391,8 +386,7 @@ switch ($_GET["op"]) {
 			"aaData" => $data
 		);
 		echo json_encode($results);
-
-		break;
+	break;
 
 	case 'selectComprobante':
 		require_once "../modelos/Comprobantes.php";
@@ -403,7 +397,7 @@ switch ($_GET["op"]) {
 		while ($reg = $rspta->fetch_object()) {
 			echo '<option value=' . $reg->nombre . '>' . $reg->nombre . '</option>';
 		}
-		break;
+	break;
 
 	case 'selectCotizaciones':
 		require_once "../modelos/Cotizaciones.php";
@@ -414,7 +408,7 @@ switch ($_GET["op"]) {
 		while ($reg = $rspta->fetch_object()) {
 			echo '<option value=' . $reg->idcotizacion . '>' . $reg->serie_comprobante . '-' . $reg->num_comprobante . '</option>';
 		}
-		break;
+	break;
 
 	case 'buscarProducto':
 
@@ -423,6 +417,5 @@ switch ($_GET["op"]) {
 		$rspta = $venta->buscarProducto($codigo);
 		//Codificar el resultado utilizando json
 		echo json_encode($rspta);
-
-		break;
+	break;
 }

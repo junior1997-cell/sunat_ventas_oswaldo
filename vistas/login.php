@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>MATERIALES CUPISNIQUE S.A.C.</title>
+  <title>JDL TECNOLOGY S.A.C.</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <!-- Bootstrap 3.3.5 -->
@@ -28,7 +28,7 @@
   <div class="login-box">
     <div class="login-logo">
       <a>
-        <h2><b>MATERIALES CUPISNIQUE S.A.C.</b></h2>
+        <h2><b>JDL TECNOLOGY S.A.C.</b></h2>
       </a>
     </div><!-- /.login-logo -->
     <div class="loginBox">

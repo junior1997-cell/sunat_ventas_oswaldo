@@ -3,13 +3,13 @@
 define("DB_HOST", "localhost");
 
 //nombre de la base de datos
-define("DB_NAME", "medsfacc_ferreteriasp");
+define("DB_NAME", "sunat_ventas_oswaldo");
 
 //nombre de usuario de base de datos
-define("DB_USERNAME", "medsfacc_usermurruparquitectos");
+define("DB_USERNAME", "root");
 
 //conraseña del usuario de base de datos
-define("DB_PASSWORD", "MURRUPARQUITECTOS");
+define("DB_PASSWORD", "");
 
 //codificacion de caracteres
 define("DB_ENCODE", "utf8");

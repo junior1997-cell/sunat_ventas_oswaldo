@@ -32,10 +32,10 @@ class Venta
 		if ($serie_comprobante == "-" and $num_comprobante == "-") {
 			$tipo_comprobante = "Anular";
 		}
-		
-		if($num_comprobante == '' || $num_comprobante == null){
 
-			$numc="SELECT serie_comprobante, num_comprobante FROM venta WHERE tipo_comprobante='$tipo_comprobante' 
+		if ($num_comprobante == '' || $num_comprobante == null) {
+
+			$numc = "SELECT serie_comprobante, num_comprobante FROM venta WHERE tipo_comprobante='$tipo_comprobante' 
 			AND idsucursal = '$idsucursal'
 			ORDER BY idventa DESC limit 1";
 
@@ -49,15 +49,14 @@ class Venta
 				$v = $regn->num_comprobante;
 			}
 
-			if($v != '' || $v != null){
+			if ($v != '' || $v != null) {
 				$serie_comprobante = $c;
 				$num = $v + 1;
 				$length = 7;
-				$num_comprobante= substr(str_repeat(0, $length).$num, - $length);
-			}else{
+				$num_comprobante = substr(str_repeat(0, $length) . $num, -$length);
+			} else {
 				$num_comprobante = '0000001';
 			}
-
 		}
 
 		$existeComprobante = "SELECT * FROM venta v WHERE v.serie_comprobante = '$serie_comprobante' AND v.num_comprobante = '$num_comprobante' AND v.idsucursal = '$idsucursal'";
@@ -85,14 +84,12 @@ class Venta
 				$var2 = $reg->num_comprobante;
 			}
 
-			if($var2 > 0){
+			if ($var2 > 0) {
 
 				$num_comprobante = $var2 + 1;
 
 				$num_comprobante = str_pad($num_comprobante, 7, "0", STR_PAD_LEFT);
-
 			}
-
 		}
 
 		$fechaActual = date('y-m-d h:i:s');
@@ -146,7 +143,6 @@ class Venta
 
 			$sql6 = "UPDATE cotizacion SET estado= 'VENDIDO' WHERE idcotizacion='$comprobanteReferencia'";
 			ejecutarConsulta($sql6);
-
 		}
 
 		if ($tipopago == 'Si') {
@@ -202,7 +198,6 @@ class Venta
 
 		$sql2 = "DELETE FROM detalle_venta WHERE idventa='$idventa'";
 		return ejecutarConsulta($sql2);
-
 	}
 
 	public function cambiarEstado($idventa, $estado)
@@ -211,12 +206,14 @@ class Venta
 		return ejecutarConsulta($sql);
 	}
 
-	public function updateBoleta($idventa){
+	public function updateBoleta($idventa)
+	{
 		$sql = "UPDATE venta SET estado='Boleta Emitida' WHERE idventa='$idventa'";
 		return ejecutarConsulta($sql);
 	}
 
-	public function updateFactura($idventa){
+	public function updateFactura($idventa)
+	{
 		$sql = "UPDATE venta SET estado='Factura Emitida' WHERE idventa='$idventa'";
 		return ejecutarConsulta($sql);
 	}
@@ -234,11 +231,11 @@ class Venta
 		return ejecutarConsulta($sql);
 	}
 
-	public function mostrarUltimoCliente(){
+	public function mostrarUltimoCliente()
+	{
 
 		$sql = "SELECT * FROM persona order by idpersona desc limit 1";
 		return ejecutarConsultaSimpleFila($sql);
-
 	}
 
 	public function listarDetalle($idventa)
@@ -424,7 +421,7 @@ class Venta
 		return ejecutarConsulta($sql);
 	}
 
-    public function listarTodo($fecha_inicio, $fecha_fin)
+	public function listarTodo($fecha_inicio, $fecha_fin)
 	{
 
 		$sql = "SELECT v.idventa,DATE(v.fecha_hora) as fecha,v.idcliente,p.nombre as cliente,u.idpersonal,u.nombre as personal, v.tipo_comprobante,v.serie_comprobante,v.num_comprobante,v.total_venta,v.ventacredito,v.impuesto,v.dov_Nombre,v.estado, cc.deudatotal, cc.abonototal FROM venta v 

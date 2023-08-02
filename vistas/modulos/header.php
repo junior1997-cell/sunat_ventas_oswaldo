@@ -21,16 +21,19 @@ if (empty($regn)) {
   <title><?php echo $nombrenegocio; ?> | Administrable</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+
+  <!-- Icono  -->
+  <link rel="apple-touch-icon" href="../files/plantilla/logo-short.ico">
+  <link rel="shortcut icon" href="../files/plantilla/logo-short.ico">
+
   <!-- Bootstrap 3.3.5 -->
   <link rel="stylesheet" href="../public/css/bootstrap.min.css">
   <!-- Font Awesome -->
   <link rel="stylesheet" href="../public/css/font-awesome.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="../public/css/AdminLTE.min.css">
-  <!-- AdminLTE Skins. Choose a skin from the css/skins
-         folder instead of downloading all of them to reduce the load. -->
+  <!-- AdminLTE Skins. Choose a skin from the css/skins  folder instead of downloading all of them to reduce the load. -->
   <link rel="stylesheet" href="../public/css/_all-skins.min.css">
-  <link rel="apple-touch-icon" href="../public/img/apple-touch-icon.png">
 
   <!-- DATATABLES -->
   <link rel="stylesheet" type="text/css" href="../public/datatables/jquery.dataTables.min.css">
@@ -42,6 +45,9 @@ if (empty($regn)) {
   <!-- sweetalert2 -->
   <link rel="stylesheet" href="../public/css/sweetalert.min.css" />
 
+  <!-- sweetalert2 -->
+  <link rel="stylesheet" href="../public/css/style_new.css" />
+
   <!-- Switchery -->
   <link rel="stylesheet" href="../public/css/switchery.css">
 
@@ -49,7 +55,7 @@ if (empty($regn)) {
 
 </head>
 
-<body class="hold-transition skin-red sidebar-mini">
+<body class="hold-transition skin-red sidebar-mini sidebar-collapse">
 
   <div class="wrapper">
 

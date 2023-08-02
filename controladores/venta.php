@@ -66,35 +66,34 @@ switch ($_GET["op"]) {
 			echo $rspta ? "Venta actuzalizada" : "Venta no se puedo actualizar";
 		}
 
-		break;
+	break;
 
 	case 'guardarCliente':
 		if (empty($idpersona)) {
 			$rspta = $persona->insertar($tipo_persona, $nombre, $tipo_documento, $num_documento, $direccion, $telefono, $email, $fecha_hora);
 			echo $rspta ? "Cliente registrado" : "Cliente no se pudo registrar";
 		}
-		break;
-
+	break;
 
 	case 'anular':
 		$rspta = $venta->anular($idventa);
 		echo $rspta ? "Venta anulado correctamente" : "No se pudo anular el Venta";
-		break;
+	break;
 
 	case 'updateFactura':
 		$rspta = $venta->updateBoleta($idventa);
 		echo json_encode($rspta);
-		break;
+	break;
 
 	case 'updateBoleta':
 		$rspta = $venta->updateFactura($idventa);
 		echo json_encode($rspta);
-		break;
+	break;
 
 	case 'mostrar':
 		$rspta = $venta->mostrar($idventa);
 		echo json_encode($rspta);
-		break;
+	break;
 
 	case 'mostrardetalle':
 
@@ -124,10 +123,10 @@ switch ($_GET["op"]) {
 			$c = $c + 1;
 		}
 
-		break;
+	break;
 
-		//_______________________________________________________________________________________________________
-		//opcion para mostrar la numeracion y la serie_comprobante de la factura
+	//_______________________________________________________________________________________________________
+	//opcion para mostrar la numeracion y la serie_comprobante de la factura
 	case 'mostrarf':
 
 		$idsucursal = $_REQUEST["idsucursal"];
@@ -171,7 +170,7 @@ switch ($_GET["op"]) {
 		}
 		//$num = (int)$numerof; 
 		//echo json_encode($numerof);
-		break;
+	break;
 
 	case 'mostrars':
 
@@ -212,9 +211,9 @@ switch ($_GET["op"]) {
 		} else {
 			echo json_encode($nums);
 		}
-		break; //opcion para mostrar la numeracion y la serie_comprobante de la factura
+	break; //opcion para mostrar la numeracion y la serie_comprobante de la factura
 
-		//opcion para mostrar la numeracion y la serie_comprobante de la boleta
+	//opcion para mostrar la numeracion y la serie_comprobante de la boleta
 	case 'mostrar_num_boleta':
 
 		$idsucursal = $_REQUEST["idsucursal"];
@@ -257,7 +256,8 @@ switch ($_GET["op"]) {
 		}
 		//$num = (int)$numerof; 
 		//echo json_encode($numerof);
-		break;
+	break;
+
 	case 'mostrar_serie_boleta':
 		//mostrando el numero de factura de la tabla comprobantes
 		require_once "../modelos/Comprobantes.php";
@@ -297,9 +297,9 @@ switch ($_GET["op"]) {
 		} else {
 			echo json_encode($nums_bol);
 		}
-		break; //fin de opcion de mostrar num_comprobante y serie_comprobante de boleta
+	break; //fin de opcion de mostrar num_comprobante y serie_comprobante de boleta
 
-		//opcion para mostrar la numeracion y la serie_comprobante de la ticket
+	//opcion para mostrar la numeracion y la serie_comprobante de la ticket
 	case 'mostrar_num_ticket':
 
 		$idsucursal = $_REQUEST["idsucursal"];
@@ -341,7 +341,8 @@ switch ($_GET["op"]) {
 		}
 		//$num = (int)$numerof; 
 		//echo json_encode($numerof);
-		break;
+	break;
+
 	case 'mostrar_s_ticket':
 
 		$idsucursal = $_REQUEST["idsucursal"];
@@ -381,9 +382,9 @@ switch ($_GET["op"]) {
 		} else {
 			echo json_encode($num_s_ticket);
 		}
-		break; //fin de opcion de mostrar num_comprobante y serie_comprobante del ticket
+	break; //fin de opcion de mostrar num_comprobante y serie_comprobante del ticket
 
-		//opcion para mostrar la numeracion y la serie_comprobante de la boleta
+	//opcion para mostrar la numeracion y la serie_comprobante de la boleta
 	case 'mostrar_num_nc':
 
 		$idsucursal = $_REQUEST["idsucursal"];
@@ -426,7 +427,7 @@ switch ($_GET["op"]) {
 		}
 		//$num = (int)$numerof; 
 		//echo json_encode($numerof);
-		break;
+	break;
 
 	case 'mostrar_serie_nc':
 
@@ -467,9 +468,9 @@ switch ($_GET["op"]) {
 		} else {
 			echo json_encode($nums_bol);
 		}
-		break; //fin de opcion de mostrar num_comprobante y serie_comprobante de boleta
+	break; //fin de opcion de mostrar num_comprobante y serie_comprobante de boleta
 
-		//opcion para mostrar la numeracion y la serie_comprobante de la boleta
+	//opcion para mostrar la numeracion y la serie_comprobante de la boleta
 	case 'mostrar_num_ncb':
 
 		$idsucursal = $_REQUEST["idsucursal"];
@@ -512,7 +513,7 @@ switch ($_GET["op"]) {
 		}
 		//$num = (int)$numerof; 
 		//echo json_encode($numerof);
-		break;
+	break;
 
 	case 'mostrar_serie_ncb':
 
@@ -553,15 +554,15 @@ switch ($_GET["op"]) {
 		} else {
 			echo json_encode($nums_bol);
 		}
-		break; //fin de opcion de mostrar num_comprobante y serie_comprobante de boleta
+	break; //fin de opcion de mostrar num_comprobante y serie_comprobante de boleta
 
-		//______________________________________________________________________________________________
+	//______________________________________________________________________________________________
 
 	case 'cambiarEstado':
 		$venta = new Venta();
 		$rspta = $venta->cambiarEstado($idventa, $estadoS);
 		echo $rspta ? "Producto Actualizado" : "Producto no se puede actualizar";
-		break;
+	break;
 
 	case 'listarDetalle':
 
@@ -612,7 +613,7 @@ switch ($_GET["op"]) {
          <th><h4 id="total">' . $smoneda . ' ' . $total . '</h4><input type="hidden" name="total_venta" id="total_venta"></th>
        </tfoot>';
 
-		break;
+	break;
 
 	case 'listar':
 
@@ -679,15 +680,15 @@ switch ($_GET["op"]) {
 				$estado = '<span class="badge bg-red">RECHAZADO</span>';
 				$pdf = '<a target="_blank" href="' . $url2 . $reg->idventa . '" data-toggle="tooltip" title="" target="blanck" data-original-title="PDF"> <button class="btn btn-info btn-xs"><i class="fa fa-file"></i></button></a>';
 				$ticket = '<a target="_blank" href="' . $url1 . $reg->idventa . '" data-toggle="tooltip" title="" target="blanck" data-original-title="Ticket"> <button class="btn btn-primary btn-xs"><i class="fa fa-file-text"></i></button></a>';
-			} else if($reg->estado == 'Activado'){
+			} else if ($reg->estado == 'Activado') {
 				$estado = '<span class="badge bg-blue">ACTIVADO</span>';
 				$pdf = '<a target="_blank" href="' . $url2 . $reg->idventa . '" data-toggle="tooltip" title="" target="blanck" data-original-title="PDF"> <button class="btn btn-info btn-xs"><i class="fa fa-file"></i></button></a>';
 				$ticket = '<a target="_blank" href="' . $url1 . $reg->idventa . '" data-toggle="tooltip" title="" target="blanck" data-original-title="Ticket"> <button class="btn btn-primary btn-xs"><i class="fa fa-file-text"></i></button></a>';
-			} else if($reg->estado == 'Boleta Emitida'){
+			} else if ($reg->estado == 'Boleta Emitida') {
 				$estado = '<span class="badge bg-yellow">BOLETA EMITIDA</span>';
 				$pdf = '<a target="_blank" href="' . $url2 . $reg->idventa . '" data-toggle="tooltip" title="" target="blanck" data-original-title="PDF"> <button class="btn btn-info btn-xs"><i class="fa fa-file"></i></button></a>';
 				$ticket = '<a target="_blank" href="' . $url1 . $reg->idventa . '" data-toggle="tooltip" title="" target="blanck" data-original-title="Ticket"> <button class="btn btn-primary btn-xs"><i class="fa fa-file-text"></i></button></a>';
-			} else{
+			} else {
 				$estado = '<span class="badge bg-yellow">FACTURA EMITIDA</span>';
 				$pdf = '<a target="_blank" href="' . $url2 . $reg->idventa . '" data-toggle="tooltip" title="" target="blanck" data-original-title="PDF"> <button class="btn btn-info btn-xs"><i class="fa fa-file"></i></button></a>';
 				$ticket = '<a target="_blank" href="' . $url1 . $reg->idventa . '" data-toggle="tooltip" title="" target="blanck" data-original-title="Ticket"> <button class="btn btn-primary btn-xs"><i class="fa fa-file-text"></i></button></a>';
@@ -776,7 +777,7 @@ switch ($_GET["op"]) {
 			"aaData" => $data
 		);
 		echo json_encode($results);
-		break;
+	break;
 
 	case 'selectSucursal3':
 		require_once "../modelos/Venta.php";
@@ -793,7 +794,7 @@ switch ($_GET["op"]) {
 		while ($reg = $rspta->fetch_object()) {
 			echo '<option value=' . $reg->idsucursal . '>' . $reg->nombre . '</option>';
 		}
-		break;
+	break;
 
 	case 'selectSucursal':
 		require_once "../modelos/Venta.php";
@@ -804,7 +805,7 @@ switch ($_GET["op"]) {
 		while ($reg = $rspta->fetch_object()) {
 			echo '<option value=' . $reg->idsucursal . '>' . $reg->nombre . '</option>';
 		}
-		break;
+	break;
 
 	case 'selectSucursal2':
 		require_once "../modelos/Venta.php";
@@ -817,7 +818,7 @@ switch ($_GET["op"]) {
 		while ($reg = $rspta->fetch_object()) {
 			echo '<option value=' . $reg->idsucursal . '>' . $reg->nombre . '</option>';
 		}
-		break;
+	break;
 
 	case 'selectCliente':
 		require_once "../modelos/Persona.php";
@@ -828,7 +829,7 @@ switch ($_GET["op"]) {
 		while ($reg = $rspta->fetch_object()) {
 			echo '<option value=' . $reg->idpersona . '>' . $reg->nombre . ' - ' . $reg->num_documento . '</option>';
 		}
-		break;
+	break;
 
 	case 'selectCliente2':
 		require_once "../modelos/Persona.php";
@@ -841,46 +842,46 @@ switch ($_GET["op"]) {
 		while ($reg = $rspta->fetch_object()) {
 			echo '<option value=' . $reg->idpersona . '>' . $reg->nombre . ' - ' . $reg->num_documento . '</option>';
 		}
-		break;
+	break;
 
-		case 'selectCliente3':
+	case 'selectCliente3':
 
-			$numero=$_GET['numero'];
+		$numero = $_GET['numero'];
 
-			require_once "../modelos/Persona.php";
-			$persona = new Persona();
+		require_once "../modelos/Persona.php";
+		$persona = new Persona();
 
-			$rspta = $persona->listarc2($numero);
+		$rspta = $persona->listarc2($numero);
 
- 			echo json_encode($rspta);
-			
-		break;
+		echo json_encode($rspta);
 
-		case 'selectCliente4':
+	break;
 
-			$numero=$_GET['numero'];
+	case 'selectCliente4':
 
-			require_once "../modelos/Persona.php";
-			$persona = new Persona();
+		$numero = $_GET['numero'];
 
-			$rspta = $persona->listarc3($numero);
+		require_once "../modelos/Persona.php";
+		$persona = new Persona();
 
- 			echo json_encode($rspta);
-			
-		break;
+		$rspta = $persona->listarc3($numero);
 
-		case 'selectCliente5':
+		echo json_encode($rspta);
 
-			$id=$_GET['id'];
+	break;
 
-			require_once "../modelos/Persona.php";
-			$persona = new Persona();
+	case 'selectCliente5':
 
-			$rspta = $persona->listarc4($id);
+		$id = $_GET['id'];
 
- 			echo json_encode($rspta);
-			
-		break;
+		require_once "../modelos/Persona.php";
+		$persona = new Persona();
+
+		$rspta = $persona->listarc4($id);
+
+		echo json_encode($rspta);
+
+	break;
 
 	case 'listarNC':
 
@@ -954,7 +955,7 @@ switch ($_GET["op"]) {
 			"aaData" => $data
 		);
 		echo json_encode($results);
-		break;
+	break;
 
 	case 'selectProducto2':
 		require_once "../modelos/Producto.php";
@@ -967,7 +968,7 @@ switch ($_GET["op"]) {
 		while ($reg = $rspta->fetch_object()) {
 			echo '<option value=' . $reg->idproducto . '>' . $reg->nombre . '</option>';
 		}
-		break;
+	break;
 
 	case 'selectProducto':
 		require_once "../modelos/Producto.php";
@@ -980,7 +981,7 @@ switch ($_GET["op"]) {
 		while ($reg = $rspta->fetch_object()) {
 			echo '<option value=' . $reg->idproducto . '>' . $reg->nombre . '</option>';
 		}
-		break;
+	break;
 
 	case 'selectProductoS':
 		require_once "../modelos/Producto.php";
@@ -993,7 +994,7 @@ switch ($_GET["op"]) {
 		while ($reg = $rspta->fetch_object()) {
 			echo '<option value=' . $reg->idproducto . '>' . $reg->nombre . '</option>';
 		}
-		break;
+	break;
 
 	case 'selectProductoDesempaquetar':
 		require_once "../modelos/Producto.php";
@@ -1004,7 +1005,7 @@ switch ($_GET["op"]) {
 		while ($reg = $rspta->fetch_object()) {
 			echo '<option value=' . $reg->idproducto . '>' . $reg->nombre . ' - ' . $reg->unidad . '</option>';
 		}
-		break;
+	break;
 
 	case 'selectVendedor':
 		require_once "../modelos/Persona.php";
@@ -1017,7 +1018,7 @@ switch ($_GET["op"]) {
 		while ($reg = $rspta->fetch_object()) {
 			echo '<option value=' . $reg->idpersonal . '>' . $reg->nombre . '</option>';
 		}
-		break;
+	break;
 
 	case 'listarArticulos2':
 
@@ -1053,7 +1054,7 @@ switch ($_GET["op"]) {
 		);
 		echo json_encode($results);
 
-		break;
+	break;
 
 	case 'listarArticulos':
 
@@ -1075,7 +1076,7 @@ switch ($_GET["op"]) {
 				"2" => $reg->unidadmedida,
 				"3" => $reg->categoria,
 				"4" => $reg->stock,
-				"5" => '<span class="badge bg-green">'.$reg->precio_venta.'</span>',
+				"5" => '<span class="badge bg-green">' . $reg->precio_venta . '</span>',
 				"6" => $reg->precio_compra
 
 			);
@@ -1088,7 +1089,7 @@ switch ($_GET["op"]) {
 		);
 		echo json_encode($results);
 
-		break;
+	break;
 
 	case 'selectComprobante':
 		require_once "../modelos/Comprobantes.php";
@@ -1099,7 +1100,7 @@ switch ($_GET["op"]) {
 		while ($reg = $rspta->fetch_object()) {
 			echo '<option value=' . $reg->nombre . '>' . $reg->nombre . '</option>';
 		}
-		break;
+	break;
 
 	case 'selectComprobante2':
 		require_once "../modelos/Comprobantes.php";
@@ -1110,7 +1111,7 @@ switch ($_GET["op"]) {
 		while ($reg = $rspta->fetch_object()) {
 			echo '<option value=' . $reg->nombre . '>' . $reg->nombre . '</option>';
 		}
-		break;
+	break;
 
 	case 'selectDocumentos':
 		require_once "../modelos/Comprobantes.php";
@@ -1121,7 +1122,7 @@ switch ($_GET["op"]) {
 		while ($reg = $rspta->fetch_object()) {
 			echo '<option value=' . $reg->idventa . '>' . $reg->serie_comprobante . '-' . $reg->num_comprobante . '</option>';
 		}
-		break;
+	break;
 
 	case 'selectMotivos':
 		require_once "../modelos/Comprobantes.php";
@@ -1132,7 +1133,7 @@ switch ($_GET["op"]) {
 		while ($reg = $rspta->fetch_object()) {
 			echo '<option value=' . $reg->id . '>' . $reg->descripcion . '</option>';
 		}
-		break;
+	break;
 
 	case 'buscarProducto':
 
@@ -1142,14 +1143,14 @@ switch ($_GET["op"]) {
 		//Codificar el resultado utilizando json
 		echo json_encode($rspta);
 
-		break;
+	break;
 
 	case 'mostrarUltimoCliente':
 
 		$rspta = $venta->mostrarUltimoCliente();
 		echo json_encode($rspta);
 
-		break;
+	break;
 
 	case 'listarDetalleVenta':
 
@@ -1176,5 +1177,5 @@ switch ($_GET["op"]) {
 		echo json_encode($data);
 
 
-		break;
+	break;
 }

@@ -60,8 +60,7 @@ public function editar($idcotizacion,$idsucursal,$idcliente,$idpersonal,$tipo_co
 }
 
 //Implementamos un método para desactivar categorías
-public function eliminar($idcotizacion)
-{
+public function eliminar($idcotizacion){
 	$sql="UPDATE cotizacion SET condicion='0' WHERE idcotizacion='$idcotizacion'";
 	return ejecutarConsulta($sql);
 }
@@ -136,68 +135,54 @@ public function ventadetalle($idcotizacion){
 }
 
 //funcion para selecciolnar el numero de factura
-public function numero_venta(){
-		 
-		    $sql="SELECT num_comprobante FROM venta WHERE tipo_comprobante='Factura' ORDER BY idventa DESC limit 1 ";
- 			return ejecutarConsulta($sql);
-		  
+public function numero_venta(){		 
+	$sql="SELECT num_comprobante FROM venta WHERE tipo_comprobante='Factura' ORDER BY idventa DESC limit 1 ";
+ 	return ejecutarConsulta($sql);		  
 }
 
 //funcion para seleccionar la serie de la factura
-public function numero_serie(){
-		 
-		    $sql="SELECT serie_comprobante ,num_comprobante FROM venta WHERE tipo_comprobante='Factura' ORDER BY idventa DESC limit 1";
-
-return ejecutarConsulta($sql);
+public function numero_serie(){		 
+	$sql="SELECT serie_comprobante ,num_comprobante FROM venta WHERE tipo_comprobante='Factura' ORDER BY idventa DESC limit 1";
+	return ejecutarConsulta($sql);
 }
 
 //funcion para selecciolnar el numero de boleta
-public function numero_venta_boleta(){
-		 
-		    $sql="SELECT num_comprobante FROM venta WHERE tipo_comprobante='Boleta' ORDER BY idventa DESC limit 1 ";
- 			return ejecutarConsulta($sql);
-		  
+public function numero_venta_boleta(){		 
+	$sql="SELECT num_comprobante FROM venta WHERE tipo_comprobante='Boleta' ORDER BY idventa DESC limit 1 ";
+ 	return ejecutarConsulta($sql);		  
 }
+
 //funcion para seleccionar la serie de la boleta
-public function numero_serie_boleta(){
-		 
-		    $sql="SELECT serie_comprobante ,num_comprobante FROM venta WHERE tipo_comprobante='Boleta' ORDER BY idventa DESC limit 1";
-
-return ejecutarConsulta($sql);
+public function numero_serie_boleta(){		 
+	$sql="SELECT serie_comprobante ,num_comprobante FROM venta WHERE tipo_comprobante='Boleta' ORDER BY idventa DESC limit 1";
+	return ejecutarConsulta($sql);
 }
 
 //funcion para selecciolnar el numero de ticket
-public function numero_venta_ticket(){
-		 
-		    $sql="SELECT num_comprobante FROM venta WHERE tipo_comprobante='Ticket' ORDER BY idventa DESC limit 1 ";
- 			return ejecutarConsulta($sql);
-		  
+public function numero_venta_ticket(){		 
+	$sql="SELECT num_comprobante FROM venta WHERE tipo_comprobante='Ticket' ORDER BY idventa DESC limit 1 ";
+ 	return ejecutarConsulta($sql);		  
 }
-//funcion para seleccionar la serie de la ticket
-public function numero_serie_ticket(){
-		 
-		    $sql="SELECT serie_comprobante ,num_comprobante FROM venta WHERE tipo_comprobante='Ticket' ORDER BY idventa DESC limit 1";
 
-return ejecutarConsulta($sql);
+//funcion para seleccionar la serie de la ticket
+public function numero_serie_ticket(){		 
+	$sql="SELECT serie_comprobante ,num_comprobante FROM venta WHERE tipo_comprobante='Ticket' ORDER BY idventa DESC limit 1";
+	return ejecutarConsulta($sql);
 }
 
 //funcion para selecciolnar el numero de ticket
-public function numero_venta_cotizacion($idsucursal){
-		 
-		    $sql="SELECT num_comprobante FROM cotizacion WHERE tipo_comprobante='Cotización' AND idsucursal = '$idsucursal' ORDER BY idcotizacion DESC limit 1";
- 			return ejecutarConsulta($sql);
-		  
+public function numero_venta_cotizacion($idsucursal){		 
+	$sql="SELECT num_comprobante FROM cotizacion WHERE tipo_comprobante='Cotización' AND idsucursal = '$idsucursal' ORDER BY idcotizacion DESC limit 1";
+ 	return ejecutarConsulta($sql);		  
 }
+
 //funcion para seleccionar la serie de la ticket
-public function numero_serie_cotizacion($idsucursal){
-		 
-		    $sql="SELECT serie_comprobante ,num_comprobante FROM cotizacion WHERE tipo_comprobante='Cotización' AND idsucursal = '$idsucursal' ORDER BY idcotizacion DESC limit 1";
-
-return ejecutarConsulta($sql);
+public function numero_serie_cotizacion($idsucursal){		 
+	$sql="SELECT serie_comprobante ,num_comprobante FROM cotizacion WHERE tipo_comprobante='Cotización' AND idsucursal = '$idsucursal' ORDER BY idcotizacion DESC limit 1";
+	return ejecutarConsulta($sql);
 }
 
-public function buscarProducto($codigo)
-{
+public function buscarProducto($codigo){
 	$sql="SELECT * FROM producto WHERE codigo='$codigo'";
 	return ejecutarConsultaSimpleFila($sql);
 }
