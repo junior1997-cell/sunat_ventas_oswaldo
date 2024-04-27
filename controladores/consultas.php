@@ -644,7 +644,7 @@ if (!isset($_SESSION["nombre"])) {
 
 				echo '<li>
 					<a href="venta.php">
-                      <i class="fa fa-warning text-yellow"></i> Comprobante: ' . $reg->tipo_comprobante . ' - ' . $reg->serie_comprobante . ' - ' . $reg->num_comprobante . '
+                      <i class="fa fa-warning text-yellow"></i> ' . $reg->tipo_comprobante . ' - ' . $reg->serie_comprobante . ' - ' . $reg->num_comprobante . '
                     </a>
                   </li>';
 			}

@@ -8,23 +8,23 @@
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <!-- Bootstrap 3.3.5 -->
-  <link rel="stylesheet" href="public/css/bootstrap.min.css">
+  <link rel="stylesheet" href="../public/css/bootstrap.min.css">
 
   <!-- Font Awesome -->
-  <link rel="stylesheet" href="public/css/font-awesome.css">
+  <link rel="stylesheet" href="../public/css/font-awesome.css">
 
   <!-- Theme style -->
-  <link rel="stylesheet" href="public/css/AdminLTE.min.css">
+  <link rel="stylesheet" href="../public/css/AdminLTE.min.css">
   <!-- iCheck -->
-  <link rel="stylesheet" href="public/css/blue.css">
+  <link rel="stylesheet" href="../public/css/blue.css">
 
-  <link rel="stylesheet" href="public/css/style.css">
+  <link rel="stylesheet" href="../public/css/style.css">
 
   <!-- sweetalert2 -->
-  <link rel="stylesheet" href="public/css/sweetalert.min.css" />
+  <link rel="stylesheet" href="../public/css/sweetalert.min.css" />
 </head>
 
-<body class="hold-transition login-page" style="background-image: url(files/fondo.png); background-size: 100% 100%; background-attachment: fixed;">
+<body class="hold-transition login-page" style="background-image: url(../files/fondo.png); background-size: 100% 100%; background-attachment: fixed;">
   <div class="login-box">
     <div class="login-logo">
       <a>
@@ -57,16 +57,16 @@
   </div><!-- /.login-box -->
 
   <!-- jQuery -->
-  <script src="public/js/jquery-3.1.1.min.js"></script>
+  <script src="../public/js/jquery-3.1.1.min.js"></script>
   <!-- Bootstrap 3.3.5 -->
-  <script src="public/js/bootstrap.min.js"></script>
+  <script src="../public/js/bootstrap.min.js"></script>
   <!-- Bootbox -->
-  <script src="public/js/bootbox.min.js"></script>
+  <script src="../public/js/bootbox.min.js"></script>
 
-  <script type="text/javascript" src="vistas/js/login.js"></script>
+  <script type="text/javascript" src="../vistas/js/login.js"></script>
 
   <!-- sweetalert2 -->
-  <script src="public/js/sweetalert.min.js"></script>
+  <script src="../public/js/sweetalert.min.js"></script>
 </body>
 
 </html>

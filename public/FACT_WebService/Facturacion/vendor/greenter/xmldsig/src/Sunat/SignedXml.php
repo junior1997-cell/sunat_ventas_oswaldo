@@ -288,7 +288,7 @@ class SignedXml
      */
     private function getDocXml($content)
     {
-        $doc = new \DOMDocument();
+        $doc = new \DOMDocument(); #var_dump($content); die;
         $doc->loadXML($content);
 
         return $doc;
